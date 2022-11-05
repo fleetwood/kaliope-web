@@ -19,7 +19,7 @@ const MainLayout = ({
   children,
   className
 }: MainLayoutProps) => (
-  <div className={`m-auto border-2 sm:border-red-300 lg:border-yellow-200 xl:border-emerald-300 ${className}`}>
+  <div className={`m-auto text-gray-400 border-2 sm:border-red-300 lg:border-yellow-200 xl:border-emerald-300 ${className}`}>
     <Head>
       <title>{`Kaliope ${pageTitle || "[WEB]"}`}</title>
     </Head>
