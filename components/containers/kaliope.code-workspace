@@ -1,0 +1,14 @@
+{
+    "folders": [
+        {
+            "path": "../.."
+        },
+        {
+            "path": "../../../kaliope-server"
+        }
+    ],
+    "launch": {
+        "version": "0.2.0",
+        "configurations": []
+    }
+}
