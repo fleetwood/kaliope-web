@@ -1,28 +1,34 @@
 import Link from "next/link";
+import Router from "next/router";
 import React, { FormEvent, useState } from "react";
 import MainLayout from "../components/layouts/MainLayout";
 import { createUser } from "../firebase/AuthContext";
-import { errorMessage } from "../types/props";
+import {
+  FirebaseErrors,
+  IFirebaseErrorCode,
+  convertToFirebaseError,
+} from "../utils/FirebaseErrors";
 
 const Register = () => {
   const [email,setEmail] = useState('')
   const [password,setPassword] = useState('')
-  const [error, setError] = useState<errorMessage>()
+  const [error, setError] = useState<IFirebaseErrorCode>()
   
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(undefined);
+    let error = FirebaseErrors.registerSubmit;
     try {
-      console.log('REGISTER: CREATING USER',email,password)
-      const user = await createUser(email,password);
+      const user = await createUser(email, password);
+      if (user) {
+        Router.push("./");
+        return;
+      }
     } catch (e) {
-      console.log('FAILED CREATE USER', e);
-      //todo: handle errors better
-      setError({
-        message: "User create failed",
-        code: "123",
-      });
+      console.log('REGISTER FAIL',e)
+      error = convertToFirebaseError(e, error);
     }
+    setError(error);
   };
   
   return (

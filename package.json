@@ -3,6 +3,7 @@
   "scripts": {
     "watch": "tsc -w",
     "dev": "next dev",
+    "dev:debug": "next dev --inspect-brk=5858",
     "build": "next build",
     "start": "next start"
   },

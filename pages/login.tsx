@@ -1,28 +1,30 @@
-import Link from "next/link";
 import { FormEvent, useState } from "react";
+import Link from "next/link";
+import Router from "next/router";
 import MainLayout from "../components/layouts/MainLayout";
 import { login } from "../firebase/AuthContext";
-import { errorMessage } from "../types/props";
+import { FirebaseErrors, IFirebaseErrorCode, convertToFirebaseError } from "../utils/FirebaseErrors";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<errorMessage>();
+  const [error, setError] = useState<IFirebaseErrorCode>();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(undefined);
+    let error = FirebaseErrors.loginSubmit;
     try {
-      console.log("LOGIN: LOGIN USER", email, password);
       const user = await login(email, password);
+      if (user) {
+        Router.push("./");
+        return;
+      }
     } catch (e) {
-      console.log("FAILED LOGIN USER", e);
-      //todo: handle errors better
-      setError({
-        message: "User login failed",
-        code: "123",
-      });
+      console.log('LOGIN FAIL',e);
+      error = convertToFirebaseError(e, error);
     }
+    setError(error)
   };
 
   return (
@@ -50,7 +52,7 @@ const Login = () => {
             />
           </div>
 
-          {error && <div className="text-red-400 italic">{error.message}</div>}
+          {error && <div className="text-red-400 italic">{error.code }: {error.message}</div>}
 
           <button className="bg-orange-600 hover:bg-orange-500 text-gray-200 hover:text-white p-2 w-full transition-colors duration-200 ease-in-out">
             Sign In
