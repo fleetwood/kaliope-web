@@ -1,13 +1,15 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import MainLayout from './../components/layouts/MainLayout'
 import { UserAuth } from '../firebase/AuthContext';
 import Link from 'next/link';
 import Router from 'next/router';
 import { convertToFirebaseError, FirebaseErrors, IFirebaseErrorCode } from '../utils/FirebaseErrors';
+import { av, UserAvatar } from '../components/dynamicElements/userAvatar';
 
 const Account = () => {
     const { user, logout, login, googleLogin } = UserAuth()
     const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState<IFirebaseErrorCode>();
 
@@ -45,12 +47,19 @@ const Account = () => {
         }
     }
 
+    useEffect(() => {
+        if(user) {
+            setName(user.displayName || user.email)
+        }
+    },[user])
+
     return (
-        <MainLayout sectionTitle="Account" subTitle={user ? user.email : 'Please login'}>
+        <MainLayout sectionTitle="Account" subTitle={user ? name : 'Please login'}>
             {error && <div className="text-red-400 italic">{error.code}: {error.message}</div>}
             {user && (
                 <div>
-                    <h1>Welcome back {user.email}</h1>
+                    <UserAvatar size={av.xxl} />
+                    <h1>Welcome back {name}</h1>
                     <button onClick={handleLogout} className="bg-orange-600 hover:bg-orange-500 text-gray-200 hover:text-white p-2 my-2 transition-colors duration-200 ease-in-out">Logout</button>
                     <pre id="json">
                         {JSON.stringify(user, undefined, 2)}
