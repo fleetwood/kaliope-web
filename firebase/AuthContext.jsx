@@ -15,6 +15,10 @@ export const signout = () => signOut(firebaseAuth)
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({})
+
+  const logout = () => {
+    return signOut(firebaseAuth)
+  }
   
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(firebaseAuth, (currentUser) => {
@@ -26,7 +30,7 @@ export const AuthContextProvider = ({ children }) => {
 
 
   return (
-    <UserContext.Provider value={{user, onAuthStateChanged}}>{children}</UserContext.Provider>
+    <UserContext.Provider value={{user, onAuthStateChanged, logout}}>{children}</UserContext.Provider>
   );
 };
 
