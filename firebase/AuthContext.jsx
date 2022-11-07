@@ -42,7 +42,6 @@ export const AuthContextProvider = ({ children }) => {
       googleLogin,
       logout,
       createUser,
-
     }}>{children}</UserContext.Provider>
   );
 };
