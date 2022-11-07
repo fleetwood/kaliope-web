@@ -2,7 +2,7 @@ import Link from "next/link";
 import Router from "next/router";
 import React, { FormEvent, useState } from "react";
 import MainLayout from "../components/layouts/MainLayout";
-import { createUser } from "../firebase/AuthContext";
+import { UserAuth } from "../firebase/AuthContext";
 import {
   FirebaseErrors,
   IFirebaseErrorCode,
@@ -10,6 +10,7 @@ import {
 } from "../utils/FirebaseErrors";
 
 const Register = () => {
+  const {createUser} = UserAuth()
   const [email,setEmail] = useState('')
   const [password,setPassword] = useState('')
   const [error, setError] = useState<IFirebaseErrorCode>()
