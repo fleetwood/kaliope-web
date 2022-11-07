@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
 import FeedItem from "./feedItem";
-import LeftMenu from "./leftMenu";
 
 type MainContentProps = {
   className?: string;
