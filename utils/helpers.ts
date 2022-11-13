@@ -1,14 +1,14 @@
-export const URLify = (string) => {
-  const urls = string.match(
+export const URLify = (content:string) => {
+  const urls = content.match(
     /((((ftp|https?):\/\/)|(w{3}\.))[\-\w@:%_\+.~#?,&\/\/=]+)/g
   );
   if (urls) {
-    urls.forEach(function (url) {
-      string = string.replace(
+    urls.forEach(function (url:string) {
+      content = content.replace(
         url,
         '<a target="_blank" href="' + url + '">' + url + "</a>"
       );
     });
   }
-  return string.replace("(", "<br/>(");
+  return content.replace("(", "<br/>(");
 };
