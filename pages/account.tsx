@@ -4,7 +4,7 @@ import { UserAuth } from '../firebase/AuthContext';
 import Link from 'next/link';
 import Router from 'next/router';
 import { convertToFirebaseError, FirebaseErrors, IFirebaseErrorCode } from '../utils/FirebaseErrors';
-import { av, UserAvatar } from '../components/dynamicElements/userAvatar';
+import { av, UserAvatar } from '../components/ui/userAvatar';
 
 const Account = () => {
     const { user, logout, login, googleLogin } = UserAuth()

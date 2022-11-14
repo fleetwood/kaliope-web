@@ -2,7 +2,7 @@ import Link from "next/link";
 import { AwesomeIcon, CircleQuestionIcon, ClipboardIcon, CopyIcon } from "../../assets/icons";
 import { HeroIcon } from "../../assets/svgs";
 import { UserAuth } from "../../firebase/AuthContext";
-import { av, UserAvatar } from "../dynamicElements/userAvatar";
+import { av, UserAvatar } from "../ui/userAvatar";
 import ShrinkableNavItem from "./shrinkableNavItem";
 
 const UserMenu = () => {

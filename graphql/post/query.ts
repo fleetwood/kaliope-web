@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Post } from "kaliope-types/models/post";
 
 const mainPosts = `
 query Posts($orderBy: [PostOrderByWithRelationInput!], $take: Int, $cursor: PostWhereUniqueInput) {
@@ -92,46 +93,48 @@ query Posts($orderBy: [PostOrderByWithRelationInput!], $take: Int, $cursor: Post
   }
 }`;
 
-export class PostAuthor {
-  uid!: string;
-  email!: string;
-  emailVerified?: boolean;
-  isAnonymous?: boolean;
-  displayName?: string;
-  photoURL?: string;
+// export class PostAuthor {
+//   uid!: string;
+//   email!: string;
+//   emailVerified?: boolean;
+//   isAnonymous?: boolean;
+//   displayName?: string;
+//   photoURL?: string;
 
-  constructor(response: any) {
-    this.uid = response.uid;
-    this.email = response.email;
-    this.emailVerified = response.emailVerified;
-    this.isAnonymous = response.isAnonymous;
-    this.displayName = response.displayName;
-    this.photoURL = response.photoURL;
-  }
-}
+//   constructor(response: any) {
+//     this.uid = response.uid;
+//     this.email = response.email;
+//     this.emailVerified = response.emailVerified;
+//     this.isAnonymous = response.isAnonymous;
+//     this.displayName = response.displayName;
+//     this.photoURL = response.photoURL;
+//   }
+// }
 
-export class Post {
-  postid!: string;
-  created_at!: string;
-  updated_at!: string;
-  title!: string;
-  subtitle?: string;
-  header_image?: string;
-  content!: string;
-  author!: PostAuthor;
+// export class Post {
+//   postid!: string;
+//   created_at!: string;
+//   updated_at!: string;
+//   title!: string;
+//   subtitle?: string;
+//   header_image?: string;
+//   content!: string;
+//   authorId!: string;
+//   author!: PostAuthor;
 
-  constructor(response: any) {
-    this.postid = response.postid;
-    this.created_at = response.created_at;
-    this.updated_at = response.updated_at;
-    this.title = response.title;
-    this.subtitle = response.subtitle;
-    this.content = response.content;
-    this.header_image = response.header_image;
-    this.author = new PostAuthor(response.author);
-  }
-}
-export const getMainPosts: () => Promise<Array<Post>> = async () => {
+//   constructor(response: any) {
+//     this.postid = response.postid;
+//     this.created_at = response.created_at;
+//     this.updated_at = response.updated_at;
+//     this.title = response.title;
+//     this.subtitle = response.subtitle;
+//     this.content = response.content;
+//     this.header_image = response.header_image;
+//     this.author = new PostAuthor(response.author);
+//     this.authorId = response.authorId
+//   }
+// }
+export const postsFeed: () => Promise<Array<Post>> = async () => {
   const graphql = {
     query: mainPosts,
     variables: {
@@ -144,10 +147,7 @@ export const getMainPosts: () => Promise<Array<Post>> = async () => {
     },
   };
   try {
-    // const query = await axios.post("http://localhost:4001/graphql", graphql);
-    const results = await (await axios.post("http://localhost:4001/graphql", graphql)).data.data.posts;
-    // const results: [Post] = query.data.data.map((p: any) => new Post(p));
-    return results;
+    return await (await axios.post("http://localhost:4001/graphql", graphql)).data.data.posts;
   } catch (e) {
     throw e;
   }
