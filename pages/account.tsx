@@ -58,7 +58,7 @@ const Account = () => {
             {error && <div className="text-red-400 italic">{error.code}: {error.message}</div>}
             {user && (
                 <div>
-                    <UserAvatar size={av.xxl} />
+                    <UserAvatar author={user} size={av.xxl} />
                     <h1>Welcome back {name}</h1>
                     <button onClick={handleLogout} className="bg-orange-600 hover:bg-orange-500 text-gray-200 hover:text-white p-2 my-2 transition-colors duration-200 ease-in-out">Logout</button>
                     <pre id="json">

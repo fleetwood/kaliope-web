@@ -2,7 +2,7 @@ import { Post } from "kaliope-types/models/post";
 import { useEffect, useState } from "react";
 import Spinner from "../ui/spinner";
 
-import { postsFeed } from "./../../graphql/post/query";
+import { mainFeed } from "../../graphql/post/mainFeed";
 import FeedPost from "./posts/feedPost";
 
 const MainContent = () => {
@@ -10,7 +10,7 @@ const MainContent = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchData = async () =>
-    postsFeed()
+    mainFeed()
       .then((results:Array<Post>) => {
         if (results) {
           setPosts(results)
