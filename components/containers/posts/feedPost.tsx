@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Post } from "kaliope-types/models/post";
-import { User } from "kaliope-types/models/user";
+import { Post, User } from "@prisma/client";
+import { useEffect, useState } from "react";
 import FeedPostAuthor from "../user/feedPostAuthor";
 
 export type PostProps = {
@@ -14,7 +13,17 @@ const FeedPost = (props:PostProps) => {
   useEffect(() => {
     if (props.post) {
       setPost(props.post);
-      setAuthor(props.post.author)
+      // prismaClient.user.findUnique({
+      //   where: {
+      //     uid: post?.authorId
+      //   }
+      // })
+      // .then(result => {
+      //   if (!result || result === null) {
+      //     throw('Error finding user')
+      //   }
+      //   setAuthor(result!)
+      // })
     }
   }, [author, post]);
   return (

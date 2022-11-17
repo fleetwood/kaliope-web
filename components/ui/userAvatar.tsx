@@ -1,6 +1,6 @@
+import { User } from "@prisma/client";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { User } from "kaliope-types/models/user";
 
 export enum av {
   xs = 12,

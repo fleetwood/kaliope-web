@@ -13,7 +13,6 @@ export const UserContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({})
-
   const googleAuth = new GoogleAuthProvider();
     googleAuth.addScope('profile');
     googleAuth.addScope('email');

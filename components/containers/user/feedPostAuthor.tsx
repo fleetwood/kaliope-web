@@ -1,4 +1,4 @@
-import { User } from "kaliope-types/models/user";
+import { User } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { UserAvatar } from "../../ui/userAvatar";
 

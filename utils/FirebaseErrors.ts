@@ -3,12 +3,7 @@ export type IFirebaseErrorCode = {
     message: string
 }
 
-export type IFirebaseErrorCodes = {
-    [key: string]: any;
-    code: IFirebaseErrorCode
-}
-
-export const FirebaseErrors: IFirebaseErrorCodes = {
+export const FirebaseErrors = {
   wrongPassword: {
     code: "auth/wrong-password",
     message: "Password incorrect",
@@ -36,11 +31,7 @@ export const FirebaseErrors: IFirebaseErrorCodes = {
   generic: {
     code: "unknown",
     message: "An unknown error has ocurred",
-  },
-  code: {
-    code: "",
-    message: "",
-  },
+  }
 };
 
 export const convertToFirebaseError = (
