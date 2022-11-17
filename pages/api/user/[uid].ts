@@ -11,7 +11,7 @@ export type IUserResponse = {
 
 export default async function handle (req:NextApiRequest, res:NextApiResponse<IUserResponse>) {
     const uid = req.query.uid || ''
-    log('API',uid)
+    log('/api/user/[uid]',uid)
     try {
         const user = await prisma.user.findUnique({
             where: {
@@ -26,7 +26,7 @@ export default async function handle (req:NextApiRequest, res:NextApiResponse<IU
                 }
             }
         })
-        log('\tAPI Result',user)
+        // log('\tAPI Result',user)
         res.status(200).json({user})
     }
     catch(e) {

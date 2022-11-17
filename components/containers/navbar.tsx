@@ -14,12 +14,12 @@ const Navbar = ({ className }: classnameProps) => {
       <div
         className={`mx-auto max-w-5xl space-x-6 text-gray-300 mr-2 my-2 flex`}
       >
-        <ShrinkableNavItem href="./" title="Home" icon={HouseIcon}  className={navbarClass} />
+        <ShrinkableNavItem href="/" title="Home" icon={HouseIcon}  className={navbarClass} />
         {!user && (
-          <ShrinkableNavItem href="./login" title="Login" icon={UserIcon}  className={navbarClass} />
+          <ShrinkableNavItem href="/login" title="Login" icon={UserIcon}  className={navbarClass} />
         )}
         {user && (
-          <ShrinkableNavItem href="./account" title="Account" icon={GearsIcon} className={navbarClass}  />
+          <ShrinkableNavItem href="/account" title="Account" icon={GearsIcon} className={navbarClass}  />
         )}
       </div>
     </nav>
