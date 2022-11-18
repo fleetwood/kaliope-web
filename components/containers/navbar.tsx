@@ -1,4 +1,4 @@
-import { UserIcon, GearsIcon, HouseIcon } from "../../assets/icons";
+import { UserIcon, GearsIcon, HouseIcon } from "../ui/icons";
 import { classnameProps } from "../../types/props";
 import { UserAuth } from "../../firebase/AuthContext";
 import ShrinkableNavItem from "./shrinkableNavItem";
@@ -9,7 +9,7 @@ const Navbar = ({ className }: classnameProps) => {
 
   return (
     <nav
-      className={`${className} sticky top-0 border-b-[1px] bg-gray-800 border-gray-700 mx-auto flex max-w-5xl flex-col items-center justify-center`}
+      className={`${className} sticky top-0 border-b-[1px] bg-gray-800 border-gray-700 mx-auto flex max-w-5xl flex-col items-center justify-center z-50`}
     >
       <div
         className={`mx-auto max-w-5xl space-x-6 text-gray-300 mr-2 my-2 flex`}

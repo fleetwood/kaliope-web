@@ -8,7 +8,7 @@ export const FirebaseErrors = {
     code: "auth/wrong-password",
     message: "Password incorrect",
   },
-  notFound: {
+  userNotFound: {
     code: "auth/user-not-found",
     message: "User not found",
   },
@@ -27,6 +27,10 @@ export const FirebaseErrors = {
   weakPassword: {
     code: "auth/weak-password",
     message: " Password must be at least 6 characters",
+  },
+  postNotfound: {
+    code: "api/post-not-found",
+    message: "Post not found",
   },
   generic: {
     code: "unknown",

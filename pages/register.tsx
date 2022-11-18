@@ -8,6 +8,7 @@ import {
   IFirebaseErrorCode,
   convertToFirebaseError,
 } from "../utils/FirebaseErrors";
+import { log } from "../utils/helpers";
 
 const Register = () => {
   const {createUser} = UserAuth()
@@ -26,7 +27,7 @@ const Register = () => {
         return;
       }
     } catch (e) {
-      console.log('REGISTER FAIL',e)
+      log('REGISTER FAIL',e)
       error = convertToFirebaseError(e, error);
     }
     setError(error);

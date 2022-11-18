@@ -1,58 +1,57 @@
 import { Post, User } from "@prisma/client";
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import { FeedPost } from "../../../pages/api/post";
+import { CommentIcon, HeartIcon, QuoteLeftIcon, ShareIcon } from "../../ui/icons";
+import ShrinkableNavItem from "../shrinkableNavItem";
 import FeedPostAuthor from "../user/feedPostAuthor";
 
 export type PostProps = {
-  post: Post
-}
+  post: FeedPost;
+};
 
-const FeedPost = (props:PostProps) => {
-  const [author, setAuthor] = useState<User>();
-  const [post, setPost] = useState<Post>();
+const FeedPostItem = (props: PostProps) => {
+  const { post } = props;
 
-  useEffect(() => {
-    if (props.post) {
-      setPost(props.post);
-      // prismaClient.user.findUnique({
-      //   where: {
-      //     uid: post?.authorId
-      //   }
-      // })
-      // .then(result => {
-      //   if (!result || result === null) {
-      //     throw('Error finding user')
-      //   }
-      //   setAuthor(result!)
-      // })
-    }
-  }, [author, post]);
   return (
-    <div className="relative col-span-2 rounded-3xl border border-gray-100 p-4 mb-4 shadow-2xl shadow-cyan-900/10 after:absolute after:inset-0 after:right-8 after:ml-auto after:mt-auto after:h-px after:w-2/3 after:bg-gradient-to-l after:from-transparent after:via-cyan-300 after:to-transparent dark:border-gray-700 dark:bg-gray-800 dark:shadow-none dark:after:via-gray-400">
-      <div className="flex flex-row items-center gap-4">
-        {author && 
-        <div className="flex flex-row">
-          <FeedPostAuthor author={author} />
-        </div>}
-        <div className="flex flex-row">
-        {post && post.title &&
-          <h1 className="text-gray-500 dark:text-gray-300">
-            {post.title}
-          </h1>
-        }
+    <div className="rounded-3xl border border-gray-100 p-8 mb-4 shadow-2xl shadow-cyan-900/10  dark:border-gray-700 dark:bg-gray-800 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900">
+      <div className="items-center gap-4">
+        {post?.author && <FeedPostAuthor author={post.author} />}
+        {post?.title && (
+          <div className="border-t-slate-300 border border-l-0 border-r-0 border-b-0 mt-10 pt-5">
+            <h1 className="text-sky-500 dark:text-sky-300 font-extralight text-3xl ">
+              {post.title}
+            </h1>
+          </div>
+        )}
         {post && post.subtitle && (
-            <h2 className="text-gray-500 dark:text-gray-300">
-              {post.subtitle}
+          <div>
+            <h2 className="mt-5 p-2 bg-slate-800 italic text-slate-500">
+             {QuoteLeftIcon} {post.subtitle}
             </h2>
-          )}
-        </div>
+          </div>
+        )}
       </div>
       {post && post.content && (
-        <div className="mb-6 mt-4 text-gray-600 dark:text-gray-200">
-          {post.content}
-        </div>
+        <>
+          <div className="mt-5 px-5 pb-5 text-justify border-b-[1px] border-slate-300 text-gray-600 dark:text-gray-400">
+            {post.content}
+          </div>
+          <div className={`flex items-justify justify-between pt-2 mx-8 space-x-6 text-gray-300`}>
+          <ShrinkableNavItem icon={HeartIcon} href={`/post/${post.postid}`} title="1265" />
+          <ShrinkableNavItem icon={CommentIcon} href={`/post/${post.postid}`} title="183" />
+          <ShrinkableNavItem icon={ShareIcon} href={`/post/${post.postid}`} title="48" />
+                      
+            <Link
+              className="mx-2 right-5 text-pink-300 underline"
+              href={`/post/${post.postid}`}
+            >
+              Read More...
+            </Link>
+          </div>
+        </>
       )}
     </div>
   );
 };
 
-export default FeedPost;
+export default FeedPostItem;

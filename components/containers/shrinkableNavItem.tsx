@@ -17,8 +17,10 @@ const ShrinkableNavItem = (props:ShrinkableNavItemProps) => {
   return (
 
   <Link href={href} passHref target={t} className={`
-  text-gray-200 
-  hover:text-cyan-300
+  text-sky-200 
+  hover:text-gray-200
+  hover:shadow
+  rounded-3xl p-2
   transition-colors ease-linear duration-200
   flex space-x-1 ${className}
   `}>

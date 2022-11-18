@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AwesomeIcon, CircleQuestionIcon, ClipboardIcon } from "../../assets/icons";
+import { AwesomeIcon, CircleQuestionIcon, ClipboardIcon } from "../ui/icons";
 import { UserAuth } from "../../firebase/AuthContext";
 import { av, UserAvatar } from "../ui/userAvatar";
 import ShrinkableNavItem from "./shrinkableNavItem";
@@ -13,7 +13,7 @@ const UserMenu = () => {
       {user && (
         <li>
           <Link href='./account'>
-            <UserAvatar author={user} size={av.sm} />{user.displayName ? user.displayName : ''}
+            <UserAvatar author={user} size={av.xxl} />
           </Link>
         </li>
         )}

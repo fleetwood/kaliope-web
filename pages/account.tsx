@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Router from 'next/router';
 import { convertToFirebaseError, FirebaseErrors, IFirebaseErrorCode } from '../utils/FirebaseErrors';
 import { av, UserAvatar } from '../components/ui/userAvatar';
+import { log } from '../utils/helpers';
 
 const Account = () => {
     const { user, logout, login, googleLogin } = UserAuth()
@@ -19,7 +20,7 @@ const Account = () => {
             await logout()
             Router.push('./')
         } catch (e) {
-            console.log('logout error', e);
+            log('logout error', e);
             setError(convertToFirebaseError(e));
         }
     }
@@ -31,7 +32,7 @@ const Account = () => {
         try {
             await googleLogin()
         } catch (e) {
-            console.log('LOGIN FAIL', e);
+            log('LOGIN FAIL', e);
             setError(convertToFirebaseError(e, error));
         }
     }
@@ -42,7 +43,7 @@ const Account = () => {
         try {
             await googleLogin()
         } catch (e) {
-            console.log('GOOGLE LOGIN FAIL', e);
+            log('GOOGLE LOGIN FAIL', e);
             setError(convertToFirebaseError(e, error));
         }
     }

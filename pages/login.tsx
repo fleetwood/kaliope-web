@@ -4,6 +4,7 @@ import Router from "next/router";
 import MainLayout from "../components/layouts/MainLayout";
 import { UserAuth } from "../firebase/AuthContext";
 import { FirebaseErrors, IFirebaseErrorCode, convertToFirebaseError } from "../utils/FirebaseErrors";
+import { log } from "../utils/helpers";
 
 const Login = () => {
   const {login, googleLogin} = UserAuth();
@@ -22,7 +23,7 @@ const Login = () => {
         return;
       }
     } catch (e) {
-      console.log('LOGIN FAIL',e);
+      log('LOGIN FAIL',e);
       error = convertToFirebaseError(e, error);
     }
     setError(error)
@@ -40,7 +41,7 @@ const Login = () => {
       }
     }
     catch(e) {
-      console.log('GGOLE LOGIN FAIL',e)
+      log('GOOGLE LOGIN FAIL',e)
       error=convertToFirebaseError(e,error)
     }
     setError(error)

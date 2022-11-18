@@ -26,7 +26,6 @@ export default async function handle (req:NextApiRequest, res:NextApiResponse<IU
                 }
             }
         })
-        // log('\tAPI Result',user)
         res.status(200).json({user})
     }
     catch(e) {

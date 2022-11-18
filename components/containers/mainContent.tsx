@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
-import Spinner from "../ui/spinner";
-import FeedPost from "./posts/feedPost";
-import { Post } from ".prisma/client";
-import { log } from "../../utils/helpers";
-import { FirebaseErrors, IFirebaseErrorCode } from "../../utils/FirebaseErrors";
+import { IFirebaseErrorCode } from "../../utils/FirebaseErrors";
 import { __host__ } from "../../utils/constants";
-import { IPostFeedResponse } from "../../pages/api/post";
+import { FeedPost, IPostFeedResponse } from "../../pages/api/post";
+import PageStatus from "./pageStatus";
+import FeedPostItem from "./posts/feedPost";
 
 export default function MainContent(props?: IPostFeedResponse) {
-  const [posts, setPosts] = useState<Array<Post>>([]);
+  const [posts, setPosts] = useState<Array<FeedPost>>([]);
   const [error, setError] = useState<IFirebaseErrorCode>();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -20,19 +18,13 @@ export default function MainContent(props?: IPostFeedResponse) {
     } else {
       setError(props?.error || undefined);
     }
-  }, [posts, error]);
+  }, [props]);
 
   return (
     <div className="mx-auto max-w-5xl px-8 lg:px-0">
-      {isLoading && <Spinner height={4} width={4} />}
+      <PageStatus isLoading={isLoading} error={error} />
 
-      {error && (
-        <div className="text-red-400 italic">
-          {error.code}: {error.message}
-        </div>
-      )}
-
-      {posts && posts.map((post) => <FeedPost post={post} />)}
+      {posts && posts.map((post) => <FeedPostItem post={post} key={post.postid} />)}
     </div>
   );
 };
