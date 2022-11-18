@@ -6,6 +6,7 @@ import { jsonify, log, logError } from "../../../utils/helpers"
 
 export type FullPost = Post & {
     author: User
+    posts: FullPost[]
 }
 
 export type IPostResponse = {
@@ -24,6 +25,11 @@ export default async function handle (req:NextApiRequest, res:NextApiResponse<IP
                 },
                 include: {
                     author: true,
+                    posts: {
+                        include: {
+                            author:true
+                        }
+                    }
                 }
             })
             res.end(res.status(200).json({post}))

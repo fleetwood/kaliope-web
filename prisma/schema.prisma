@@ -1,0 +1,203 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("REACT_APP_DATABASE_URL")
+}
+
+model Image {
+  imageid      String     @id @default(uuid())
+  created_at   DateTime?  @default(now()) @db.Timestamptz(0)
+  updated_at   DateTime?  @default(now()) @db.Timestamptz(0)
+  url          String     @db.VarChar(255)
+  title        String?    @db.VarChar(255)
+  description  String?    @db.VarChar(255)
+  metadata     Json?
+  galleryid    String?
+  imageGallery Gallery    @relation("image_gallery", fields: [imageid], references: [galleryid])
+  agencyLogo   Agency?    @relation("agency_logo")
+  book         Book?      @relation("book_cover")
+  character    Character? @relation("character_avatar")
+}
+
+model Gallery {
+  galleryid   String     @id @default(uuid())
+  created_at  DateTime?  @default(now()) @db.Timestamptz(0)
+  updated_at  DateTime?  @default(now()) @db.Timestamptz(0)
+  url         String     @db.VarChar(255)
+  title       String?    @db.VarChar(255)
+  description String?    @db.VarChar(255)
+  chapterid   String?    @unique
+  characterid String?    @unique
+  userid      String?    @unique
+  agencyid    String?    @unique
+  agency      Agency?    @relation("agency_gallery", fields: [agencyid], references: [agencyid])
+  user        User?      @relation("user_gallery", fields: [userid], references: [uid])
+  chapter     Chapter?   @relation("chapter_gallery")
+  character   Character? @relation("character_gallery")
+  images      Image?     @relation("image_gallery")
+}
+
+model Agency {
+  agencyid    String    @id @default(uuid())
+  created_at  DateTime? @default(now()) @db.Timestamptz(0)
+  updated_at  DateTime? @default(now()) @db.Timestamptz(0)
+  description String
+  logoid      String?   @unique
+  logo        Image?    @relation("agency_logo", fields: [logoid], references: [imageid])
+  galleries   Gallery?  @relation("agency_gallery")
+}
+
+model Chapter {
+  chapterid        String      @id @default(uuid())
+  created_at       DateTime?   @default(now()) @db.Timestamptz(0)
+  updated_at       DateTime?   @default(now()) @db.Timestamptz(0)
+  chapterOrder     Int
+  bookid           String      @unique
+  galleryid        String      @unique
+  book             Book        @relation("book_chapters", fields: [bookid], references: [bookid])
+  imageGallery     Gallery     @relation("chapter_gallery", fields: [galleryid], references: [galleryid])
+  chapter_comments Comment[]   @relation("chapter_comments")
+  characters       Character[] @relation("chapter_characters")
+}
+
+model Character {
+  characterid  String    @id @default(uuid())
+  created_at   DateTime? @default(now()) @db.Timestamptz(0)
+  updated_at   DateTime? @default(now()) @db.Timestamptz(0)
+  bookid       String    @unique
+  name         String
+  description  String
+  avatarid     String?   @unique
+  galleryid    String    @unique
+  avatar       Image?    @relation("character_avatar", fields: [avatarid], references: [imageid])
+  book         Book      @relation("book_characters", fields: [bookid], references: [bookid])
+  imageGallery Gallery   @relation("character_gallery", fields: [galleryid], references: [galleryid])
+  comments     Comment[] @relation("character_comments")
+  chapters     Chapter[] @relation("chapter_characters")
+}
+
+model Book {
+  bookid          String       @id @default(uuid())
+  authorid        String       @db.VarChar(255)
+  created_at      DateTime?    @default(now()) @db.Timestamptz(0)
+  updated_at      DateTime?    @default(now()) @db.Timestamptz(0)
+  title           String       @db.VarChar(512)
+  description     String
+  coverid         String?      @unique
+  synopsis        String?
+  tagline         String?
+  author          User         @relation("user_books", fields: [authorid], references: [uid])
+  cover           Image?       @relation("book_cover", fields: [coverid], references: [imageid])
+  book_ratings    BookRating[] @relation("book_ratings")
+  book_chapters   Chapter?     @relation("book_chapters")
+  book_characters Character?   @relation("book_characters")
+  book_comments   Comment[]    @relation("book_comments")
+  reviewers       Group?       @relation("book_reviewers")
+  genres          Genre[]      @relation("book_genre")
+}
+
+model Genre {
+  genreid    String    @id @default(uuid())
+  icon       String    @db.VarChar(255)
+  label      String    @db.VarChar(255)
+  created_at DateTime? @default(now()) @db.Timestamptz(0)
+  updated_at DateTime? @default(now()) @db.Timestamptz(0)
+  books      Book[]    @relation("book_genre")
+}
+
+model BookRating {
+  bookratingid String    @id @default(uuid())
+  authorid     String
+  bookid       String
+  created_at   DateTime? @default(now()) @db.Timestamptz(0)
+  updated_at   DateTime? @default(now()) @db.Timestamptz(0)
+  author       User      @relation("user_ratings", fields: [authorid], references: [uid])
+  book         Book      @relation("book_ratings", fields: [bookid], references: [bookid])
+}
+
+model Comment {
+  commentid   String    @id @default(uuid())
+  authorid    String
+  created_at  DateTime? @default(now()) @db.Timestamptz(0)
+  updated_at  DateTime? @default(now()) @db.Timestamptz(0)
+  content     String
+  bookid      String
+  chapterid   String
+  characterid String
+  author      User      @relation("user_comments", fields: [authorid], references: [uid])
+  book        Book      @relation("book_comments", fields: [bookid], references: [bookid])
+  chapter     Chapter   @relation("chapter_comments", fields: [chapterid], references: [chapterid])
+  character   Character @relation("character_comments", fields: [characterid], references: [characterid])
+}
+
+model Post {
+  postid       String    @id @default(uuid())
+  created_at   DateTime? @default(now()) @db.Timestamptz(0)
+  updated_at   DateTime? @default(now()) @db.Timestamptz(0)
+  title        String    @db.VarChar(255)
+  subtitle     String?   @db.VarChar(255)
+  header_image String?   @db.VarChar(255)
+  content      String
+  authorId     String
+  threadid     String?   @unique
+  author       User      @relation("user_posts", fields: [authorId], references: [uid])
+  thread       Post?     @relation("post_thread", fields: [threadid], references: [postid])
+  posts        Post?     @relation("post_thread")
+}
+
+model Group {
+  groupid       String            @id @default(uuid())
+  created_at    DateTime?         @default(now()) @db.Timestamptz(0)
+  updated_at    DateTime?         @default(now()) @db.Timestamptz(0)
+  title         String
+  description   String?
+  ownerid       String
+  bookreview    String?           @unique @map("bookid")
+  book          Book?             @relation("book_reviewers", fields: [bookreview], references: [bookid])
+  owner         User              @relation("group_owner", fields: [ownerid], references: [uid])
+  memberships   GroupMembership[] @relation("group_memberships")
+  userBlocked   User[]            @relation("user_blocked")
+  userBlocks    User[]            @relation("user_blocks")
+  userFollowers User[]            @relation("user_followers")
+  userFollows   User[]            @relation("user_follows")
+}
+
+model GroupMembership {
+  membershipid String    @id @default(uuid())
+  created_at   DateTime? @default(now()) @db.Timestamptz(0)
+  updated_at   DateTime? @default(now()) @db.Timestamptz(0)
+  level        Int       @default(0)
+  groupParent  String
+  memberId     String    @map("userid")
+  group        Group     @relation("group_memberships", fields: [groupParent], references: [groupid])
+  member       User      @relation("user_membership", fields: [memberId], references: [uid])
+}
+
+model User {
+  uid            String            @id @unique(map: "user_uid_unique")
+  email          String            @unique(map: "user_email_unique")
+  emailVerified  Boolean?          @default(false)
+  isAnonymous    Boolean?          @default(true)
+  displayName    String?
+  photoURL       String?
+  createdAt      DateTime?         @default(now()) @db.Timestamptz(0)
+  lastLoginAt    DateTime?         @default(now()) @db.Timestamptz(0)
+  blockedGroup   String?
+  blocksGroup    String?
+  followersGroup String?
+  followsGroup   String?
+  blocked        Group?            @relation("user_blocked", fields: [blockedGroup], references: [groupid])
+  blocks         Group?            @relation("user_blocks", fields: [blocksGroup], references: [groupid])
+  followers      Group?            @relation("user_followers", fields: [followersGroup], references: [groupid])
+  follows        Group?            @relation("user_follows", fields: [followsGroup], references: [groupid])
+  books          Book[]            @relation("user_books")
+  ratings        BookRating[]      @relation("user_ratings")
+  comments       Comment[]         @relation("user_comments")
+  galleries      Gallery?          @relation("user_gallery")
+  ownedGroups    Group[]           @relation("group_owner")
+  memberships    GroupMembership[] @relation("user_membership")
+  posts          Post[]            @relation("user_posts")
+}

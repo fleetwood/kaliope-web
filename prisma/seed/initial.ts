@@ -106,7 +106,7 @@ async function main() {
       uid: "KaryRarigKaryRarig",
       email: "KaryRarig@test.com",
       displayName: "Kary Rarig",
-      photoURL: "https://xsgames.co/randomusers/assets/avatars/female/55.jpg",
+      photoURL: "https://xsgames.co/randomusers/assets/avatars/female/53.jpg",
       createdAt: now(),
       lastLoginAt: now(),
       posts: { create: mockPosts(50) }

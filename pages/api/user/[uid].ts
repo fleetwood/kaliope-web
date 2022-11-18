@@ -23,7 +23,24 @@ export default async function handle (req:NextApiRequest, res:NextApiResponse<IU
                     orderBy: {
                         updated_at: "desc"
                     }
-                }
+                },
+                books: {
+                    include: {
+                        book_characters: true,
+                        book_chapters: true,
+                        book_comments: true,
+                        book_ratings: true
+                    }
+                },
+                comments: {
+                    take: 10,
+                    orderBy: {
+                        updated_at: "desc"
+                    }
+                },
+                followers: true,
+                follows: true,
+                blocks: true
             }
         })
         res.status(200).json({user})

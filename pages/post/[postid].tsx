@@ -1,22 +1,22 @@
-import { User } from "@prisma/client";
-import { subtle } from "crypto";
 import { GetServerSideProps } from "next";
 import { useEffect, useState } from "react";
+import FeedPostItem from "../../components/containers/posts/feedPost";
+import Section from "../../components/containers/section";
 import MainLayout from "../../components/layouts/MainLayout";
 import { av, UserAvatar } from "../../components/ui/userAvatar";
 import { __host__, __port__ } from "../../utils/constants";
-import {
-  FirebaseErrors,
-  IFirebaseErrorCode,
-} from "../../utils/FirebaseErrors";
-import { jsonify } from "../../utils/helpers";
+import { FirebaseErrors, IFirebaseErrorCode } from "../../utils/FirebaseErrors";
 import { FullPost, IPostResponse } from "../api/post/[postid]";
 
-export const getServerSideProps: GetServerSideProps<IPostResponse|{}> = async (ctx) => {
+export const getServerSideProps: GetServerSideProps<
+  IPostResponse | {}
+> = async (ctx) => {
   const { postid } = ctx.query;
 
   if (postid) {
-    const result = await (await fetch(`http://${__host__}:3000/api/post/${postid}`)).json();
+    const result = await (
+      await fetch(`http://${__host__}:3000/api/post/${postid}`)
+    ).json();
     return { props: { ...result } };
   }
   return { props: {} };
@@ -33,26 +33,33 @@ export default function PostPage(props?: IPostResponse) {
     } else if (props?.error) {
       setError(props.error);
     } else {
-        setError(FirebaseErrors.generic)
+      setError(FirebaseErrors.generic);
     }
   }, [post, error]);
 
   return (
-    <MainLayout
-      sectionTitle={post?.title || "User Profile"}
-      subTitle={post?.subtitle||undefined}
-    >
+    <MainLayout sectionTitle={''}>
       {error && (
         <div className="text-red-400 italic">
           {error.code}: {error.message}
         </div>
       )}
       {post && (
-        <div>
-          <UserAvatar author={post.author} size={av.xxl} />
-          {post.content}
-        </div>
+          <UserAvatar author={post.author} size={av.xl} />
       )}
+
+        <div className="py-1">
+            {post && 
+            <Section sectionTitle={post?.title} subTitle={post?.subtitle||undefined}>            
+            {post?.content}
+            </Section>
+          }
+          </div>
+        <>
+          {post?.posts?.map((p) => (
+            <FeedPostItem post={p} key={p.postid} />
+          ))}
+        </>
     </MainLayout>
   );
 }

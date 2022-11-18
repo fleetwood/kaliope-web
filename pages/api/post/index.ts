@@ -18,6 +18,7 @@ export default async function handle (req:NextApiRequest, res:NextApiResponse<IP
         const posts = await prisma.post.findMany({
             include: {
                 author: true,
+                posts: true,
             },
             take: 10,
             orderBy: {
