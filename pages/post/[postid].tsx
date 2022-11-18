@@ -6,6 +6,7 @@ import MainLayout from "../../components/layouts/MainLayout";
 import { av, UserAvatar } from "../../components/ui/userAvatar";
 import { __host__, __port__ } from "../../utils/constants";
 import { FirebaseErrors, IFirebaseErrorCode } from "../../utils/FirebaseErrors";
+import { jsonify } from "../../utils/helpers";
 import { FullPost, IPostResponse } from "../api/post/[postid]";
 
 export const getServerSideProps: GetServerSideProps<
@@ -50,15 +51,22 @@ export default function PostPage(props?: IPostResponse) {
 
         <div className="py-1">
             {post && 
-            <Section sectionTitle={post?.title} subTitle={post?.subtitle||undefined}>            
-            {post?.content}
+            <Section sectionTitle={post?.title} subTitle={post?.subtitle||undefined}>
+              <div className="text-yellow-100 italic">{post?.postid}</div>            
+              <>
+              {post?.content}
+              </>
             </Section>
           }
           </div>
         <>
-          {post?.posts?.map((p) => (
+        <div>{post?.posts.length}</div>
+          {post?.posts && post.posts.length>0 && post.posts.map((p) => (
             <FeedPostItem post={p} key={p.postid} />
           ))}
+          <pre>
+            {jsonify(post?.posts)}
+          </pre>
         </>
     </MainLayout>
   );

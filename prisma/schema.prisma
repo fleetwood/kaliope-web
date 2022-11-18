@@ -142,10 +142,10 @@ model Post {
   header_image String?   @db.VarChar(255)
   content      String
   authorId     String
-  threadid     String?   @unique
+  threadid     String?
   author       User      @relation("user_posts", fields: [authorId], references: [uid])
   thread       Post?     @relation("post_thread", fields: [threadid], references: [postid])
-  posts        Post?     @relation("post_thread")
+  posts        Post[]     @relation("post_thread")
 }
 
 model Group {
