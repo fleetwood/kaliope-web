@@ -206,7 +206,7 @@ async function main() {
           data: {
             posts: {
               connectOrCreate: {
-                where: { threadid: post.postid },
+                where: { postid: post.postid },
                 create: {
                   created_at: now(),
                   updated_at: now(),

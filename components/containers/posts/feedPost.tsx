@@ -1,12 +1,12 @@
 import { Post, User } from "@prisma/client";
 import Link from "next/link";
-import { FeedPost } from "../../../pages/api/post";
+import { FullPost } from "../../../pages/api/post/[postid]";
 import { CommentIcon, HeartIcon, QuoteLeftIcon, ShareIcon } from "../../ui/icons";
 import ShrinkableNavItem from "../shrinkableNavItem";
 import FeedPostAuthor from "../user/feedPostAuthor";
 
 export type PostProps = {
-  post: FeedPost;
+  post: FullPost | Post
 };
 
 const FeedPostItem = (props: PostProps) => {
@@ -15,7 +15,7 @@ const FeedPostItem = (props: PostProps) => {
   return (
     <div className="rounded-3xl border border-gray-100 p-8 mb-4 shadow-2xl shadow-cyan-900/10  dark:border-gray-700 dark:bg-gray-800 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900">
       <div className="items-center gap-4">
-        {post?.author && <FeedPostAuthor author={post.author} />}
+        {"author" in post  && post?.author && <FeedPostAuthor author={post.author} />}
         {post?.title && (
           <div className="border-t-slate-300 border border-l-0 border-r-0 border-b-0 mt-10 pt-5">
             <h1 className="text-sky-500 dark:text-sky-300 font-extralight text-3xl ">

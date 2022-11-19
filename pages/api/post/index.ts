@@ -9,7 +9,10 @@ export type FeedPost = Post & {
 }
 
 export type IPostFeedResponse = {
-  posts?: FeedPost[];
+  posts?: (Post & {
+    author: User;
+    posts: Post[];
+})[];
   error?: IFirebaseErrorCode;
 };
 
