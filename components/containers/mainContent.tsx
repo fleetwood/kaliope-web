@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { IFirebaseErrorCode } from "../../utils/FirebaseErrors";
 import { __host__ } from "../../utils/constants";
-import { FeedPost, IPostFeedResponse } from "../../pages/api/post";
+import { PostFeedResponse } from "../../pages/api/post";
 import PageStatus from "./pageStatus";
 import FeedPostItem from "./posts/feedPost";
+import { FullPost } from "../../pages/api/post/[postid]";
 
-export default function MainContent(props?: IPostFeedResponse) {
-  const [posts, setPosts] = useState<Array<FeedPost>>([]);
+export default function MainContent(props?: PostFeedResponse) {
+  const [posts, setPosts] = useState<Array<FullPost>>([]);
   const [error, setError] = useState<IFirebaseErrorCode>();
   const [isLoading, setIsLoading] = useState(true);
 

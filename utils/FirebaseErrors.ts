@@ -52,3 +52,7 @@ export const convertToFirebaseError = (
 
   return defaultTo || FirebaseErrors.generic;
 };
+
+export type IErrorResponse = {
+  error?: IFirebaseErrorCode
+}

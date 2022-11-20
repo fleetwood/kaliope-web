@@ -5,6 +5,7 @@ import { now, log, logError } from "./../../utils/helpers";
 const prisma = new PrismaClient();
 
 import { LoremIpsum } from "lorem-ipsum";
+import { randomUUID } from "crypto";
 const lorem = new LoremIpsum({
   sentencesPerParagraph: {
     max: 5,
@@ -193,7 +194,6 @@ async function main() {
       where: { uid: u.uid },
       include: { posts: true },
     });
-    log(`\tUser has ${user?.posts.length} posts`)
     user?.posts.forEach(async (post) => {
       let replier = await prisma.user.findUnique({
         where: { uid: users[rand(users.length - 1)].uid },
@@ -201,32 +201,22 @@ async function main() {
       let count = rand(1,5),
         total = count;
       do{
-        await prisma.post.update({
-          where: { postid: post.postid },
+        await prisma.post.create({
           data: {
-            posts: {
-              connectOrCreate: {
-                where: { postid: post.postid },
-                create: {
-                  created_at: now(),
-                  updated_at: now(),
-                  authorId: replier!.uid,
-                  title: sentences(),
-                  subtitle: subtitleMaybe(),
-                  content: lorem.generateParagraphs(rand(2)),
-                },
-              },
-            },
+            created_at: now(),
+            updated_at: now(),
+            authorId: replier!.uid,
+            title: sentences(),
+            subtitle: subtitleMaybe(),
+            threadParentId: post.postid,
+            content: lorem.generateParagraphs(rand(2)),
           }
         });
-        all++
-        log(`\t\tCreated reply from ${replier!.displayName} to ${user?.displayName} (${post.postid}) `)
       }
       while (--count > 0);
       log(`\tCreated ${total} replies`)
     });
   });
-  log(`Created ${all} replies total`)
 }
 main()
   .then(async () => {

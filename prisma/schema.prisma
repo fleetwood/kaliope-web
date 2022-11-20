@@ -134,18 +134,18 @@ model Comment {
 }
 
 model Post {
-  postid       String    @id @default(uuid())
-  created_at   DateTime? @default(now()) @db.Timestamptz(0)
-  updated_at   DateTime? @default(now()) @db.Timestamptz(0)
-  title        String    @db.VarChar(255)
-  subtitle     String?   @db.VarChar(255)
-  header_image String?   @db.VarChar(255)
-  content      String
-  authorId     String
-  threadid     String?
-  author       User      @relation("user_posts", fields: [authorId], references: [uid])
-  thread       Post?     @relation("post_thread", fields: [threadid], references: [postid])
-  posts        Post[]     @relation("post_thread")
+  postid         String    @id @default(uuid())
+  created_at     DateTime? @default(now()) @db.Timestamptz(0)
+  updated_at     DateTime? @default(now()) @db.Timestamptz(0)
+  title          String    @db.VarChar(255)
+  subtitle       String?   @db.VarChar(255)
+  header_image   String?   @db.VarChar(255)
+  content        String
+  authorId       String
+  author         User      @relation("user_posts", fields: [authorId], references: [uid])
+  threadParentId String?
+  threadParent   Post?     @relation("post_thread", fields: [threadParentId], references: [postid])
+  thread         Post[]    @relation("post_thread")
 }
 
 model Group {

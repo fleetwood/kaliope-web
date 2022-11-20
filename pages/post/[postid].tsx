@@ -1,17 +1,16 @@
-import { Post, Prisma, User } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { useEffect, useState } from "react";
+import PageStatus from "../../components/containers/pageStatus";
 import FeedPostItem from "../../components/containers/posts/feedPost";
 import Section from "../../components/containers/section";
 import MainLayout from "../../components/layouts/MainLayout";
 import { av, UserAvatar } from "../../components/ui/userAvatar";
 import { __host__, __port__ } from "../../utils/constants";
-import { FirebaseErrors, IFirebaseErrorCode } from "../../utils/FirebaseErrors";
 import { jsonify } from "../../utils/helpers";
-import { IPostResponse } from "../api/post/[postid]";
+import { FullPost, FullPostResponse } from "../api/post/[postid]";
 
 export const getServerSideProps: GetServerSideProps<
-  IPostResponse | {}
+  FullPostResponse | {}
 > = async (ctx) => {
   const { postid } = ctx.query;
 
@@ -24,34 +23,19 @@ export const getServerSideProps: GetServerSideProps<
   return { props: {} };
 };
 
-export default function PostPage(props?: IPostResponse) {
-  const [post, setPost] = useState<
-    | (Post & {
-        author: User;
-        posts: Post[];
-      })
-    | undefined
-  >();
-  const [error, setError] = useState<IFirebaseErrorCode>();
+export default function PostPage(props?: FullPostResponse) {
+  const [post, setPost] = useState<(FullPost) | undefined>();
 
   useEffect(() => {
-    if (props?.post) {
-      setError(undefined);
-      setPost(props.post);
-    } else if (props?.error) {
-      setError(props.error);
-    } else {
-      setError(FirebaseErrors.generic);
+    if(props?.post) {
+      setPost(props.post)
     }
-  }, [post, error]);
+  },[post])
 
   return (
     <MainLayout sectionTitle={""}>
-      {error && (
-        <div className="text-red-400 italic">
-          {error.code}: {error.message}
-        </div>
-      )}
+      <PageStatus error={props?.error} watch={post} />
+      
       {post && <UserAvatar author={post.author} size={av.xl} />}
 
       <div className="py-1">
@@ -66,13 +50,11 @@ export default function PostPage(props?: IPostResponse) {
         )}
       </div>
       <>
-        <div>{post?.posts.length}</div>
-        {post?.posts &&
-          post.posts.length > 0 &&
-          post.posts.map((p) => <FeedPostItem post={p} key={p.postid} />)}
+        <pre>Thread count: {jsonify(post?._count.thread)}</pre>
+        {post?.thread &&
+          post.thread.map((p) => <FeedPostItem post={p} key={p.postid} />)}
 
-        <pre>{jsonify(post)}</pre>
-        <pre>{jsonify(post?.posts)}</pre>
+        <pre>{jsonify(post?.thread)}</pre>
       </>
     </MainLayout>
   );

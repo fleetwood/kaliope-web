@@ -1,28 +1,17 @@
-import { Post, User } from "@prisma/client"
 import type { NextApiRequest, NextApiResponse } from "next"
 import { prisma } from "../../../prisma/prismaContext"
-import { IFirebaseErrorCode } from "../../../utils/FirebaseErrors"
-import { jsonify, log, logError } from "../../../utils/helpers"
+import { IErrorResponse } from "../../../utils/FirebaseErrors";
+import { jsonify, logError } from "../../../utils/helpers"
+import { FullPost, FullPostRelations } from "./[postid]"
 
-export type FeedPost = Post & {
-    author: User
-}
+export type PostFeedResponse = IErrorResponse & {
+    posts?: FullPost[]
+  };
 
-export type IPostFeedResponse = {
-  posts?: (Post & {
-    author: User;
-    posts: Post[];
-})[];
-  error?: IFirebaseErrorCode;
-};
-
-export default async function handle (req:NextApiRequest, res:NextApiResponse<IPostFeedResponse>) {
+export default async function handle (req:NextApiRequest, res:NextApiResponse<PostFeedResponse>) {
     try {
         const posts = await prisma.post.findMany({
-            include: {
-                author: true,
-                posts: true,
-            },
+            ...FullPostRelations,
             take: 10,
             orderBy: {
                 updated_at: "desc"
