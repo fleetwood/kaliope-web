@@ -71,7 +71,7 @@ const FeedPostItem = (props: PostProps) => {
           </div>
         </>
       )}
-      {post?.thread && post.thread.map((p) => <ThreadPostItem {...p} />)}
+      {post?.thread && post.thread.map((p) => <ThreadPostItem {...p} key={p.postid} />)}
     </div>
   );
 };

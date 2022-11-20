@@ -2,6 +2,7 @@ import { GetServerSideProps } from "next";
 import { useEffect, useState } from "react";
 import PageStatus from "../../components/containers/pageStatus";
 import FeedPostItem from "../../components/containers/posts/feedPost";
+import ThreadPostItem from "../../components/containers/posts/threadPost";
 import Section from "../../components/containers/section";
 import MainLayout from "../../components/layouts/MainLayout";
 import { av, UserAvatar } from "../../components/ui/userAvatar";
@@ -52,7 +53,7 @@ export default function PostPage(props?: FullPostResponse) {
       <>
         <pre>Thread count: {jsonify(post?._count.thread)}</pre>
         {post?.thread &&
-          post.thread.map((p) => <FeedPostItem post={p} key={p.postid} />)}
+          post.thread.map((p) => <ThreadPostItem {...p} />)}
 
         <pre>{jsonify(post?.thread)}</pre>
       </>

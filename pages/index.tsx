@@ -11,7 +11,7 @@ export const getServerSideProps: GetServerSideProps<PostFeedResponse|{}> = async
 const Home: NextPage = (props:PostFeedResponse) => {
   
   return (
-  <MainLayout sectionTitle="Kaliope Web" subTitle="the writer's site">
+  <MainLayout className="scroll-smooth" sectionTitle="Kaliope Web" subTitle="the writer's site">
       <MainContent {...props} />
     </MainLayout>
   );

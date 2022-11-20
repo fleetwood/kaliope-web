@@ -9,10 +9,12 @@ export type PostFeedResponse = IErrorResponse & {
   };
 
 export default async function handle (req:NextApiRequest, res:NextApiResponse<PostFeedResponse>) {
+    const skip = req.query.c ? Number(req.query.c) : 0
     try {
         const posts = await prisma.post.findMany({
             ...FullPostRelations,
             take: 10,
+            skip, 
             orderBy: {
                 updated_at: "desc"
             }

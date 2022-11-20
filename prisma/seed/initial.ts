@@ -69,12 +69,10 @@ const confirm = async (user: any) => {
 async function main() {
   const tamiko = await prisma.user.create({
     data: {
-      uid: "TamikoRittenburgTamikoRittenburg",
+      uid: randomUUID(),
       email: "TamikoRittenburg@test.com",
       displayName: "Tamiko Rittenburg",
       photoURL: "https://xsgames.co/randomusers/assets/avatars/female/68.jpg",
-      createdAt: now(),
-      lastLoginAt: now(),
       posts: { create: mockPosts(51) },
     },
   });
@@ -82,12 +80,10 @@ async function main() {
 
   const delinda = await prisma.user.create({
     data: {
-      uid: "DelindaLicupDelindaLicup",
+      uid: randomUUID(),
       email: "DelindaLicup@test.com",
       displayName: "Delinda Licup",
       photoURL: "https://xsgames.co/randomusers/assets/avatars/female/62.jpg",
-      createdAt: now(),
-      lastLoginAt: now(),
       posts: { create: mockPosts(105) },
     },
   });
@@ -95,12 +91,10 @@ async function main() {
 
   const julian = await prisma.user.create({
     data: {
-      uid: "JulianTaillonJulianTaillon",
+      uid: randomUUID(),
       email: "JulianTaillon@test.com",
       displayName: "Julian Taillon",
-      photoURL: "https://xsgames.co/randomusers/assets/avatars/female/81.jpg",
-      createdAt: now(),
-      lastLoginAt: now(),
+      photoURL: "https://xsgames.co/randomusers/assets/avatars/female/61.jpg",
       posts: { create: mockPosts(45) },
     },
   });
@@ -108,25 +102,25 @@ async function main() {
 
   const kitty = await prisma.user.create({
     data: {
-      uid: "KittyBrattaKittyBratta",
+      uid: randomUUID(),
       email: "KittyBratta@test.com",
       displayName: "Kitty Bratta",
       photoURL: "https://xsgames.co/randomusers/assets/avatars/female/36.jpg",
-      createdAt: now(),
-      lastLoginAt: now(),
-      posts: { create: mockPosts(5000) },
+      
+      
+      posts: { create: mockPosts(500) },
     },
   });
   await confirm(kitty);
 
   const kary = await prisma.user.create({
     data: {
-      uid: "KaryRarigKaryRarig",
+      uid: randomUUID(),
       email: "KaryRarig@test.com",
       displayName: "Kary Rarig",
       photoURL: "https://xsgames.co/randomusers/assets/avatars/female/53.jpg",
-      createdAt: now(),
-      lastLoginAt: now(),
+      
+      
       posts: { create: mockPosts(50) },
     },
   });
@@ -139,8 +133,8 @@ async function main() {
       email: "elvis.walsh@ethereal.email",
       displayName: "Elvis Walsh",
       photoURL: faker.image.avatar(),
-      createdAt: now(),
-      lastLoginAt: now(),
+      
+      
       posts: { create: mockPosts(50) },
     },
   });
@@ -148,12 +142,12 @@ async function main() {
 
   const wei = await prisma.user.create({
     data: {
-      uid: "WeiGonyawWeiGonyaw",
+      uid: randomUUID(),
       email: "WeiGonyaw@test.com",
       displayName: "Wei Gonyaw",
       photoURL: "https://xsgames.co/randomusers/assets/avatars/female/12.jpg",
-      createdAt: now(),
-      lastLoginAt: now(),
+      
+      
       posts: { create: mockPosts(5) },
     },
   });
@@ -161,12 +155,12 @@ async function main() {
 
   const marisha = await prisma.user.create({
     data: {
-      uid: "MarishaKealyMarishaKealy",
+      uid: randomUUID(),
       email: "MarishaKealy@test.com",
       displayName: "Marisha Kealy",
       photoURL: "https://xsgames.co/randomusers/assets/avatars/female/23.jpg",
-      createdAt: now(),
-      lastLoginAt: now(),
+      
+      
       posts: { create: mockPosts(5) },
     },
   });
@@ -174,12 +168,12 @@ async function main() {
 
   const nydia = await prisma.user.create({
     data: {
-      uid: "NydiaGrazziniNydiaGrazzini",
+      uid: randomUUID(),
       email: "NydiaGrazzini@test.com",
       displayName: "Nydia Grazzini",
       photoURL: "https://xsgames.co/randomusers/assets/avatars/female/98.jpg",
-      createdAt: now(),
-      lastLoginAt: now(),
+      
+      
       posts: { create: mockPosts(5) },
     },
   });
