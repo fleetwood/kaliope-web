@@ -9,8 +9,8 @@ datasource db {
 
 model Image {
   imageid      String     @id @default(uuid())
-  created_at   DateTime?  @default(now()) @db.Timestamptz(0)
-  updated_at   DateTime?  @default(now()) @db.Timestamptz(0)
+  created_at   DateTime?  @db.Timestamptz(0)
+  updated_at   DateTime?  @db.Timestamptz(0)
   url          String     @db.VarChar(255)
   title        String?    @db.VarChar(255)
   description  String?    @db.VarChar(255)
@@ -24,8 +24,8 @@ model Image {
 
 model Gallery {
   galleryid   String     @id @default(uuid())
-  created_at  DateTime?  @default(now()) @db.Timestamptz(0)
-  updated_at  DateTime?  @default(now()) @db.Timestamptz(0)
+  created_at  DateTime?  @db.Timestamptz(0)
+  updated_at  DateTime?  @db.Timestamptz(0)
   url         String     @db.VarChar(255)
   title       String?    @db.VarChar(255)
   description String?    @db.VarChar(255)
@@ -42,8 +42,8 @@ model Gallery {
 
 model Agency {
   agencyid    String    @id @default(uuid())
-  created_at  DateTime? @default(now()) @db.Timestamptz(0)
-  updated_at  DateTime? @default(now()) @db.Timestamptz(0)
+  created_at  DateTime? @db.Timestamptz(0)
+  updated_at  DateTime? @db.Timestamptz(0)
   description String
   logoid      String?   @unique
   logo        Image?    @relation("agency_logo", fields: [logoid], references: [imageid])
@@ -52,8 +52,8 @@ model Agency {
 
 model Chapter {
   chapterid        String      @id @default(uuid())
-  created_at       DateTime?   @default(now()) @db.Timestamptz(0)
-  updated_at       DateTime?   @default(now()) @db.Timestamptz(0)
+  created_at       DateTime?   @db.Timestamptz(0)
+  updated_at       DateTime?   @db.Timestamptz(0)
   chapterOrder     Int
   bookid           String      @unique
   galleryid        String      @unique
@@ -65,8 +65,8 @@ model Chapter {
 
 model Character {
   characterid  String    @id @default(uuid())
-  created_at   DateTime? @default(now()) @db.Timestamptz(0)
-  updated_at   DateTime? @default(now()) @db.Timestamptz(0)
+  created_at   DateTime? @db.Timestamptz(0)
+  updated_at   DateTime? @db.Timestamptz(0)
   bookid       String    @unique
   name         String
   description  String
@@ -82,8 +82,8 @@ model Character {
 model Book {
   bookid          String       @id @default(uuid())
   authorid        String       @db.VarChar(255)
-  created_at      DateTime?    @default(now()) @db.Timestamptz(0)
-  updated_at      DateTime?    @default(now()) @db.Timestamptz(0)
+  created_at      DateTime?    @db.Timestamptz(0)
+  updated_at      DateTime?    @db.Timestamptz(0)
   title           String       @db.VarChar(512)
   description     String
   coverid         String?      @unique
@@ -103,8 +103,8 @@ model Genre {
   genreid    String    @id @default(uuid())
   icon       String    @db.VarChar(255)
   label      String    @db.VarChar(255)
-  created_at DateTime? @default(now()) @db.Timestamptz(0)
-  updated_at DateTime? @default(now()) @db.Timestamptz(0)
+  created_at DateTime? @db.Timestamptz(0)
+  updated_at DateTime? @db.Timestamptz(0)
   books      Book[]    @relation("book_genre")
 }
 
@@ -112,8 +112,8 @@ model BookRating {
   bookratingid String    @id @default(uuid())
   authorid     String
   bookid       String
-  created_at   DateTime? @default(now()) @db.Timestamptz(0)
-  updated_at   DateTime? @default(now()) @db.Timestamptz(0)
+  created_at   DateTime? @db.Timestamptz(0)
+  updated_at   DateTime? @db.Timestamptz(0)
   author       User      @relation("user_ratings", fields: [authorid], references: [uid])
   book         Book      @relation("book_ratings", fields: [bookid], references: [bookid])
 }
@@ -121,8 +121,8 @@ model BookRating {
 model Comment {
   commentid   String    @id @default(uuid())
   authorid    String
-  created_at  DateTime? @default(now()) @db.Timestamptz(0)
-  updated_at  DateTime? @default(now()) @db.Timestamptz(0)
+  created_at  DateTime? @db.Timestamptz(0)
+  updated_at  DateTime? @db.Timestamptz(0)
   content     String
   bookid      String
   chapterid   String
@@ -135,8 +135,8 @@ model Comment {
 
 model Post {
   postid       String    @id @default(uuid())
-  created_at   DateTime? @default(now()) @db.Timestamptz(0)
-  updated_at   DateTime? @default(now()) @db.Timestamptz(0)
+  created_at   DateTime? @db.Timestamptz(0)
+  updated_at   DateTime? @db.Timestamptz(0)
   title        String    @db.VarChar(255)
   subtitle     String?   @db.VarChar(255)
   header_image String?   @db.VarChar(255)
@@ -150,8 +150,8 @@ model Post {
 
 model Group {
   groupid       String            @id @default(uuid())
-  created_at    DateTime?         @default(now()) @db.Timestamptz(0)
-  updated_at    DateTime?         @default(now()) @db.Timestamptz(0)
+  created_at    DateTime?         @db.Timestamptz(0)
+  updated_at    DateTime?         @db.Timestamptz(0)
   title         String
   description   String?
   ownerid       String
@@ -167,8 +167,8 @@ model Group {
 
 model GroupMembership {
   membershipid String    @id @default(uuid())
-  created_at   DateTime? @default(now()) @db.Timestamptz(0)
-  updated_at   DateTime? @default(now()) @db.Timestamptz(0)
+  created_at   DateTime? @db.Timestamptz(0)
+  updated_at   DateTime? @db.Timestamptz(0)
   level        Int       @default(0)
   groupParent  String
   memberId     String    @map("userid")
@@ -183,8 +183,8 @@ model User {
   isAnonymous    Boolean?          @default(true)
   displayName    String?
   photoURL       String?
-  createdAt      DateTime?         @default(now()) @db.Timestamptz(0)
-  lastLoginAt    DateTime?         @default(now()) @db.Timestamptz(0)
+  createdAt      DateTime?         @db.Timestamptz(0)
+  lastLoginAt    DateTime?         @db.Timestamptz(0)
   blockedGroup   String?
   blocksGroup    String?
   followersGroup String?

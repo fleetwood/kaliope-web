@@ -1,6 +1,6 @@
 import { PrismaClient, User } from "@prisma/client";
 import { faker } from "@faker-js/faker";
-import { now, log, logError } from "./../../utils/helpers";
+import { now, log, logError, todo } from "./../../utils/helpers";
 
 const prisma = new PrismaClient();
 
@@ -24,14 +24,34 @@ function rand(min: number = 0, max: number = 1) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+
+const ymd = (date:Date) => {
+  let year = date.getFullYear();
+  let month = (1 + date.getMonth()).toString().padStart(2, '0');
+  let day = date.getDate().toString().padStart(2, '0');
+  let hour = date.getHours().toString().padStart(2, '0');
+  let min = date.getMinutes().toString().padStart(2, '0');
+  let sec = date.getSeconds().toString().padStart(2, '0');
+  return year + '-' + month + '-' + day +' '+hour+":"+min+":"+sec;
+}
+
+let currentDate = 1653600240000;
+const date = () => { return new Date(currentDate+=rand(100000,2000000)) }
 const sentences = (total: number = 1) => lorem.generateSentences(total);
 const subtitleMaybe = (): string | null => (rand() > 0 ? sentences(1) : null);
 
+type mockPost = {
+  title: string
+  subtitle?: string | null
+  content: string
+  created_at: Date
+  updated_at: Date
+}
+
 const mockPosts = (
   total: number = 1
-): { title: string; subtitle?: string | null; content: string }[] => {
-  const posts: { title: string; subtitle?: string | null; content: string }[] =
-    [];
+): mockPost[] => {
+  const posts:mockPost[] = [];
   total = rand(1, total);
   for (let i = 1; i <= total; i++) {
     let r = rand(2);
@@ -39,6 +59,8 @@ const mockPosts = (
       title: sentences(),
       subtitle: subtitleMaybe(),
       content: lorem.generateParagraphs(rand(1, 3)),
+      created_at: date(),
+      updated_at: date()
     });
   }
   return posts;
@@ -51,7 +73,9 @@ const mockUserPosts = (
   user: User;
   title: string;
   subtitle?: string | null;
-  content: string;
+  content: string,
+  created_at: Date,
+  updated_at: Date
 }[] => {
   return mockPosts(total).map((m) => {
     return { ...m, user: users[rand(users.length - 1)] };
@@ -197,8 +221,8 @@ async function main() {
       do{
         await prisma.post.create({
           data: {
-            created_at: now(),
-            updated_at: now(),
+            created_at: date(),
+            updated_at: date(),
             authorId: replier!.uid,
             title: sentences(),
             subtitle: subtitleMaybe(),
@@ -215,6 +239,7 @@ async function main() {
 main()
   .then(async () => {
     await prisma.$disconnect();
+    todo('MAKE SURE CREATED_AT AND UPDATED_AT ARE RETURN TO NULL VALUES')
   })
   .catch(async (e) => {
     logError("SEEDING FAILED!!!", e);

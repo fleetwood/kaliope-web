@@ -6,7 +6,14 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        peace: ["Peace", "sans-serif"],
+        passion: ["Passion", "sans-serif"],
+        passionBlack: ["PassionBlack", "sans-serif"],
+        passionBold: ["PassionBold", "sans-serif"],
+      }
+    },
   },
   plugins: [],
 }

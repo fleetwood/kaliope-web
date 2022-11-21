@@ -5,3 +5,90 @@
 body {
     background-color: rgb(17 24 39)
 }
+
+@font-face {
+    font-family: 'Peace';
+    src: url('./../assets//fonts/Peace\ Sans\ Webfont.ttf');
+}
+
+@font-face {
+    font-family: 'Passion';
+    src: url('./../assets/fonts/PassionOne-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'PassionBold';
+    src: url('./../assets/fonts/PassionOne-Bold.ttf');
+}
+
+@font-face {
+    font-family: 'PassionBlack';
+    src: url('./../assets/fonts/PassionOne-Black.ttf');
+}
+
+@layer components {
+    .stroke-white {
+        -webkit-text-stroke-width: 0.5px;
+        -webkit-text-stroke-color: #ffffff;
+        -webkit-text-fill-color: #00000000;
+    }
+
+    .stroke-gray {
+        -webkit-text-stroke-width: 0.5px;
+        -webkit-text-stroke-color: #64748b;
+        -webkit-text-fill-color: #00000000;
+    }
+
+    .stroke-black {
+        -webkit-text-stroke-width: 0.5px;
+        -webkit-text-stroke-color: #000;
+        -webkit-text-fill-color: rgba(0, 0, 0, 0);
+    }
+
+    .feed-author-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 2px 2px;
+        grid-auto-flow: row;
+        grid-template-areas:
+            "feed-author-avatar feed-author-username feed-author-username feed-author-username feed-author-username"
+            "feed-author-avatar feed-author-follow feed-author-followers feed-author-posts feed-author-books"
+    }
+
+    .feed-author-avatar {
+        grid-area: feed-author-avatar;
+    }
+
+    .feed-author-username {
+        grid-area: feed-author-username;
+    }
+
+    .feed-author-follow {
+        grid-area: feed-author-follow;
+    }
+
+    .feed-author-followers {
+        grid-area: feed-author-followers;
+    }
+
+    .feed-author-posts {
+        grid-area: feed-author-posts;
+    }
+
+    .feed-author-books {
+        grid-area: feed-author-books;
+    }
+
+    .hover-trigger .hover-target {
+        display: none;
+    }
+
+    .hover-trigger:hover .hover-target {
+        display: inline-block;
+    }
+
+    .hover-trigger:hover .hover-toggle {
+        display: none;
+    }
+}
