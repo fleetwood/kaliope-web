@@ -1,6 +1,5 @@
 node_modules
-
-.next
 .next/
-dist/
 .env
+tsconfig.tsbuildinfo
+yarn.lock

@@ -1,22 +1,114 @@
-import React, { useEffect } from 'react';
-import MainLayout from './../components/layouts/MainLayout'
-import { UserAuth } from '../firebase/AuthContext';
-import Link from 'next/link';
+import React, { FormEvent, useEffect, useState } from "react";
+import MainLayout from "./../components/layouts/MainLayout";
+import { UserAuth } from "../firebase/AuthContext";
+import Link from "next/link";
+import Router from "next/router";
+import {
+  convertToFirebaseError,
+  FirebaseErrors,
+  IFirebaseErrorCode,
+} from "../utils/FirebaseErrors";
+import { log } from "../utils/helpers";
+import PageStatus from "../components/containers/pageStatus";
+import UserAccount from "../components/containers/user/userAccount";
 
 const Account = () => {
-    const {user} = UserAuth()
-    return (
-    <MainLayout sectionTitle="Account" subTitle={user ? user.email : 'Please login'}>
-        {user && (
-            <><h1>Welcome back {user.email}</h1>
-            <pre id="json">
-            {JSON.stringify(user, undefined, 2)}
-            </pre></>
-        )}
-        {!user && (
-            <h4><Link href="./login">Login here</Link></h4>
-        )}
+  const { user, logout, login, googleLogin } = UserAuth();
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<IFirebaseErrorCode>();
+
+  const handleLogout = async () => {
+    setError(undefined);
+    try {
+      await logout();
+      Router.push("./");
+    } catch (e) {
+      log("logout error", e);
+      setError(convertToFirebaseError(e));
+    }
+  };
+
+  const handleLogin = async (e: FormEvent) => {
+    e.preventDefault();
+    setError(undefined);
+    try {
+      await login(email, password);
+    } catch (e) {
+      log("LOGIN FAIL", e);
+      setError(convertToFirebaseError(e, FirebaseErrors.loginSubmit));
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setError(undefined);
+    try {
+      await googleLogin();
+    } catch (e) {
+      log("GOOGLE LOGIN FAIL", e);
+      setError(convertToFirebaseError(e, FirebaseErrors.loginSubmit));
+    }
+  };    
+
+  return (
+    <MainLayout sectionTitle="Account" subTitle={user ? name : "Please login"}>
+      <PageStatus error={error} watch={user} />
+      {user && (
+        <>
+        <UserAccount user={user} />
+            <button
+            onClick={handleLogout}
+            className="bg-orange-600 hover:bg-orange-500 text-gray-200 hover:text-white p-2 my-2 transition-colors duration-200 ease-in-out"
+            >
+            Logout
+            </button>
+        </>
+      )}
+      {!user && (
+        <form className="space-y-4 m-0" onSubmit={handleLogin}>
+          <div className="flex flex-col py-2">
+            <label>Email address</label>
+            <input
+              type={"email"}
+              onChange={(e) => setEmail(e.target.value)}
+              className="bg-gray-800 border-[1px] border-gray-500 text-gray-300 p-2"
+            />
+          </div>
+          <div className="flex flex-col py-2">
+            <label>Password</label>
+            <input
+              type={"password"}
+              onChange={(e) => setPassword(e.target.value)}
+              className="bg-gray-800 border-[1px] border-gray-500 text-gray-300 p-2"
+            />
+          </div>
+
+          {error && (
+            <div className="text-red-400 italic">
+              {error.code}: {error.message}
+            </div>
+          )}
+
+          <button className="bg-orange-600 hover:bg-orange-500 text-gray-200 hover:text-white p-2 w-full transition-colors duration-200 ease-in-out">
+            Sign In
+          </button>
+
+          <button
+            onClick={handleGoogleLogin}
+            className="bg-blue-600 hover:bg-blue-500 text-gray-200 hover:text-white p-2 w-full transition-colors duration-200 ease-in-out"
+          >
+            Google Login
+          </button>
+
+          <p className="mt-12">
+            Don't have an account yet?{" "}
+            <Link href="./register">Register now</Link>
+          </p>
+        </form>
+      )}
     </MainLayout>
-)}
+  );
+};
 
 export default Account;
