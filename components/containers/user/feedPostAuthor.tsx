@@ -1,6 +1,5 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { faBookOpen, faComments, faUserGroup, faUsers } from "@fortawesome/free-solid-svg-icons";
-import { User } from "@prisma/client";
 import Link from "next/link";
 import { FullUser } from "../../../types/user/FullUser";
 import { valToLabel } from "../../../utils/helpers";

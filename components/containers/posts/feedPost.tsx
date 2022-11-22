@@ -22,7 +22,7 @@ const FeedPostItem = (props: FullPost) => {
         }
         {post?.title && 
           <div className="border-t-slate-300 border border-l-0 border-r-0 border-b-0 mt-10 pt-5">
-            <>{post.postid}</>
+            {/* <>{post.postid}</> */}
             <h1 className="text-sky-500 dark:text-sky-300 font-extralight text-3xl ">
               {post.title}
             </h1>
