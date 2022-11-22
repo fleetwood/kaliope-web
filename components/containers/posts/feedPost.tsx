@@ -1,8 +1,5 @@
-import { Post, User } from "@prisma/client";
 import Link from "next/link";
 import { FullPost } from "../../../types/post/FullPost";
-import { FullUser } from "../../../types/user/FullUser";
-import { jsonify } from "../../../utils/helpers";
 import {
   CommentIcon,
   HeartIcon,
