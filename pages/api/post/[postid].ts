@@ -1,32 +1,11 @@
-import { Prisma } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../../prisma/prismaContext";
+import { FullPostRelations, FullPostResponse } from "../../../types/post/FullPost";
 import {
   convertToFirebaseError,
   FirebaseErrors,
-  IErrorResponse,
 } from "../../../utils/FirebaseErrors";
 import { logError } from "../../../utils/helpers";
-
-export const FullPostRelations = Prisma.validator<Prisma.PostArgs>()({
-    include: {
-        _count: {
-            select: {thread: true}
-        },
-      author: true,
-      thread: {
-        include: {
-            author: true
-        }
-      }
-    }
-})
-
-export type FullPost = Prisma.PostGetPayload<typeof FullPostRelations>
-
-export type FullPostResponse = IErrorResponse & {
-  post?: FullPost
-};
 
 export default async function handle(
   req: NextApiRequest,
@@ -40,7 +19,7 @@ export default async function handle(
         ...FullPostRelations,
         where: {
           postid: postid.toString(),
-        }
+        },
       });
       if (post !== undefined && post !== null) {
         return res.status(200).json({ post });

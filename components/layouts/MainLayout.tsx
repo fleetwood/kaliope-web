@@ -1,4 +1,3 @@
-import Head from "next/head";
 import { ReactNode } from "react";
 import UserMenu from "../containers/userMenu";
 import Navbar from "../containers/navbar";
@@ -23,7 +22,6 @@ type MainLayoutProps = {
 
 const MainLayout = ({
   variant,
-  pageTitle,
   sectionTitle,
   subTitle,
   children,
@@ -41,26 +39,23 @@ const MainLayout = ({
     border-2 sm:border-red-300 lg:border-yellow-200 xl:border-emerald-300 
     ${className}`
     }>
-      <Head>
-        <title>{`Kaliope ${pageTitle || "[WEB]"}`}</title>
-      </Head>
       <div className="col-span-2">
         {user && (
           <UserMenu />
         )}
       </div>
+
       <div className="col-span-8">
         <Navbar className="" />
         {useLeftMenu && <UserMenu />}
         {isMain && (
-          <div className="py-1">
-            <Section sectionTitle={sectionTitle} subTitle={subTitle}>
-              {children}
-            </Section>
-          </div>
+          <Section sectionTitle={sectionTitle} subTitle={subTitle}>
+            {children}
+          </Section>
         )}
         <Footer className="" />
       </div>
+      
       <div className="col-span-2 mr-0 text-right"></div>
     </div>
   );

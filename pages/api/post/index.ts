@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import { prisma } from "../../../prisma/prismaContext"
+import { FullPost, FullPostRelations } from "../../../types/post/FullPost";
 import { IErrorResponse } from "../../../utils/FirebaseErrors";
 import { jsonify, log, logError } from "../../../utils/helpers"
-import { FullPost, FullPostRelations } from "./[postid]"
 
 export type PostFeedResponse = IErrorResponse & {
     posts?: FullPost[]
@@ -15,6 +15,9 @@ export default async function handle (req:NextApiRequest, res:NextApiResponse<Po
             ...FullPostRelations,
             take: 10,
             skip, 
+            where: {
+                threadParentId: null
+            },
             orderBy: [{
                 updated_at: "desc"
             }]

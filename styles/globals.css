@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-    background-color: rgb(17 24 39)
-}
-
 @font-face {
     font-family: 'Peace';
     src: url('./../assets//fonts/Peace\ Sans\ Webfont.ttf');

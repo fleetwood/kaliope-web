@@ -1,18 +1,15 @@
 import { GetServerSideProps } from "next";
 import { useEffect, useState } from "react";
 import PageStatus from "../../components/containers/pageStatus";
-import FeedPostItem from "../../components/containers/posts/feedPost";
 import ThreadPostItem from "../../components/containers/posts/threadPost";
 import Section from "../../components/containers/section";
 import MainLayout from "../../components/layouts/MainLayout";
 import { av, UserAvatar } from "../../components/ui/userAvatar";
+import { FullPostResponse, FullPost } from "../../types/post/FullPost";
 import { __host__, __port__ } from "../../utils/constants";
 import { jsonify } from "../../utils/helpers";
-import { FullPost, FullPostResponse } from "../api/post/[postid]";
 
-export const getServerSideProps: GetServerSideProps<
-  FullPostResponse | {}
-> = async (ctx) => {
+export const getServerSideProps: GetServerSideProps<FullPostResponse | {}> = async (ctx) => {
   const { postid } = ctx.query;
 
   if (postid) {
