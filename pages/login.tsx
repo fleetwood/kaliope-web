@@ -2,10 +2,12 @@ import { FormEvent, useState } from "react";
 import Link from "next/link";
 import Router from "next/router";
 import MainLayout from "../components/layouts/MainLayout";
-import { login } from "../firebase/AuthContext";
+import { UserAuth } from "../firebase/AuthContext";
 import { FirebaseErrors, IFirebaseErrorCode, convertToFirebaseError } from "../utils/FirebaseErrors";
+import { log } from "../utils/helpers";
 
 const Login = () => {
+  const {login, googleLogin} = UserAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<IFirebaseErrorCode>();
@@ -21,11 +23,29 @@ const Login = () => {
         return;
       }
     } catch (e) {
-      console.log('LOGIN FAIL',e);
+      log('LOGIN FAIL',e);
       error = convertToFirebaseError(e, error);
     }
     setError(error)
   };
+
+  const handleGoogleLogin = async (e: FormEvent) => {
+    e.preventDefault();
+    setError(undefined)
+    let error = FirebaseErrors.loginSubmit
+    try {
+      const user = await googleLogin();
+      if (user) {
+          Router.push("./");
+          return;
+      }
+    }
+    catch(e) {
+      log('GOOGLE LOGIN FAIL',e)
+      error=convertToFirebaseError(e,error)
+    }
+    setError(error)
+  }
 
   return (
     <MainLayout
@@ -58,7 +78,7 @@ const Login = () => {
             Sign In
           </button>
 
-          <button className="bg-blue-600 hover:bg-blue-500 text-gray-200 hover:text-white p-2 w-full transition-colors duration-200 ease-in-out">
+          <button onClick={handleGoogleLogin} className="bg-blue-600 hover:bg-blue-500 text-gray-200 hover:text-white p-2 w-full transition-colors duration-200 ease-in-out">
             Google Login
           </button>
         </form>
