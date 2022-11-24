@@ -60,7 +60,7 @@ const Login = () => {
             <input
               type={"email"}
               onChange={(e) => setEmail(e.target.value)}
-              className="bg-gray-800 border-[1px] border-gray-500 text-gray-300 p-2"
+              className="bg-primary-focus p-2"
             />
           </div>
           <div className="flex flex-col py-2">
@@ -68,7 +68,7 @@ const Login = () => {
             <input
               type={"password"}
               onChange={(e) => setPassword(e.target.value)}
-              className="bg-gray-800 border-[1px] border-gray-500 text-gray-300 p-2"
+              className="bg-primary-focus p-2"
             />
           </div>
 

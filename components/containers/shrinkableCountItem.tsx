@@ -22,8 +22,9 @@ const CountableNavItem = (props:CountableItemProps) => {
   return (
 
   <Link href={href} passHref target={t} className={`
-  text-gray-200 
-  hover:text-cyan-300
+  text-opacity-70
+  text-secondary-content 
+  hover:text-opacity-100
   transition-colors ease-linear duration-200
   flex space-x-1 ${className}
   `}>

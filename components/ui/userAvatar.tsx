@@ -44,7 +44,7 @@ export const UserAvatar = (props: userAvProps) => {
       height={imageSize}
       width={imageSize}
       sizes="100vw"
-      className={`rounded-full border-2 border-gray-500 max-w-fit drop-shadow-lg relative z-auto`}
+      className={`rounded-full border-2 border-primary-content max-w-fit drop-shadow-lg relative z-auto`}
     />
   ) : (
     <></>

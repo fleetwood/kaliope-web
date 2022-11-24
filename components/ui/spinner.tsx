@@ -26,7 +26,7 @@ const Spinner = (props: SpinnerProps) => {
 
   return (
     <div role="status">
-      <div className={`border border-orange-200`} style={{ height: height || 20 + "px", width: height || 20 + "px" }}>
+      <div style={{ height: height || 20 + "px", width: height || 20 + "px" }}>
         <svg
           aria-hidden="true"
           className={`animate-spin ${bgColor} ${fgColor} max-w-fit max-h-fit`}

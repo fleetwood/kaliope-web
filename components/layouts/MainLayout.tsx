@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import UserMenu from "../containers/userMenu";
 import Navbar from "../containers/navbar";
 import Section from "../containers/section";
-import Footer from "../containers/footer";
+import Footer from "../containers/Footer";
 
 import { UserAuth } from "../../firebase/AuthContext";
 
@@ -48,11 +48,11 @@ const MainLayout = ({
       <div className="col-span-8">
         <Navbar className="" />
         {useLeftMenu && <UserMenu />}
-        {isMain && (
+        {isMain && 
           <Section sectionTitle={sectionTitle} subTitle={subTitle}>
             {children}
           </Section>
-        )}
+        }
         <Footer className="" />
       </div>
       

@@ -9,16 +9,18 @@ type ShrinkableNavItemProps = LinkProps & {
   className?: string
   iconClassName?: string
   titleClassName?: string
+  linkColor?: string
 }
 
 const ShrinkableNavItem = (props:ShrinkableNavItemProps) => {
-  const { icon, href, title, target, className, iconClassName, titleClassName } = props;
+  const { icon, href, title, target, className, iconClassName, titleClassName, linkColor } = props;
   const t = target || "_self";
   return (
 
   <Link href={href} passHref target={t} className={`
-  text-sky-200 
-  hover:text-gray-200
+  ${linkColor || 'text-secondary-content'}
+  text-opacity-70
+  hover:text-opacity-100
   hover:shadow
   rounded-3xl p-2
   transition-colors ease-linear duration-200

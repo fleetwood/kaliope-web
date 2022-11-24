@@ -8,6 +8,7 @@ import FeedPostItem from "./posts/feedPost";
 import { log } from "../../utils/helpers";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Spinner, { SpinnerSize } from "../ui/spinner";
+import { fetchApi } from "../../utils/api";
 
 export default function MainContent(props?: PostFeedResponse) {
   const [posts, setPosts] = useState<Array<FullPost>>([]);
@@ -22,14 +23,12 @@ export default function MainContent(props?: PostFeedResponse) {
   }, [props]);
 
   const update = async () => {
-    const url = `http://${__host__}:3000/api/post?c=${posts.length||0}`
-    const results = await fetch(url)
-    const more = await results.json()
+    const more = await fetchApi(`post?c=${posts.length||0}`)
     if (more.posts) {
       let set = more.posts
       setPosts((posts) => [...posts, ...set]);
     } else {
-      log(`update return no results from: ${url}`)
+      log(`update return no results`)
     }
   }
 
@@ -44,7 +43,6 @@ export default function MainContent(props?: PostFeedResponse) {
         {posts &&
           posts.map((p) => <FeedPostItem {...p} key={p.postid} />)}
       </InfiniteScroll>
-
       <PageStatus watch={posts} error={error} />
       
     </div>

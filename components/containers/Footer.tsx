@@ -4,7 +4,7 @@ import { classnameProps } from "../../types/props";
 
 const Footer = ({ className }: classnameProps) => {
   return (
-    <footer className={`sticky bottom-0 bg-slate-900 text-gray-500 mt-32 pb-6 min-w-full border-t border-gray-700 pt-6 ${className}`}>
+    <footer className={`sticky bottom-0 bg-secondary text-opacity-70 mt-32 pb-6 min-w-full border-t border-t-secondary-content pt-6 ${className}`}>
       <div className="mx-auto flex max-w-5xl flex-col items-center justify-center px-6 sm:px-12 lg:px-0">
         <div className="flex w-full flex-wrap items-center justify-center gap-4 gap-y-6 text-sm md:justify-between">
          
@@ -14,7 +14,7 @@ const Footer = ({ className }: classnameProps) => {
          
          <div className="order-2 flex flex-wrap justify-center gap-y-2 gap-x-4 sm:order-2">
             <a
-              className="transition hover:text-primary dark:hover:text-gray-300"
+              className="transition hover:text-primary"
               target="_blank"
               rel="noopener noreferrer"
               href="https://github.com/Tailus-UI"
@@ -22,7 +22,7 @@ const Footer = ({ className }: classnameProps) => {
               GitHub
             </a>
             <a
-              className="transition hover:text-primary dark:hover:text-gray-300"
+              className="transition hover:text-primary"
               target="_blank"
               rel="noopener noreferrer"
               href="https://dev.to/tailus"
@@ -30,7 +30,7 @@ const Footer = ({ className }: classnameProps) => {
               Articles
             </a>
             <a
-              className="transition hover:text-primary dark:hover:text-gray-300"
+              className="transition hover:text-primary"
               target="_blank"
               rel="noopener noreferrer"
               href="https://www.youtube.com/c/Tailus-ui/"

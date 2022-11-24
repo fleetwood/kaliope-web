@@ -14,7 +14,7 @@ const ThreadPostAuthor = (props: FullUser) => {
           className="flex"
         >
           {props?.displayName && (
-            <h3 className="text-2xl font-semibold text-gray-800 dark:text-white relative bottom-0">
+            <h3 className="text-xl font-semibold text-secondary-focus relative bottom-0">
               {props.displayName}
             </h3>
           )}

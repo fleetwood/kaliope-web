@@ -15,22 +15,22 @@ const FeedPostItem = (props: FullPost) => {
   const author = {...props.author}
 
   return (
-    <div className="rounded-3xl border border-gray-100 p-8 mb-4 shadow-2xl shadow-cyan-900/10  dark:border-gray-700 dark:bg-gray-800 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900">
+    <div className="rounded-3xl mb-4 border border-base-300 bg-gradient-to-r from-base-300 via-base-200 to-base-300">
       <div className="items-center gap-4">
         {author && 
-          <FeedPostAuthor {...author} />
+          <FeedPostAuthor {...author} containerClass="border-b border-b-secondary-content" />
         }
         {post?.title && 
-          <div className="border-t-slate-300 border border-l-0 border-r-0 border-b-0 mt-10 pt-5">
+          <div className="mt-5 p-5">
             {/* <>{post.postid}</> */}
-            <h1 className="text-sky-500 dark:text-sky-300 font-extralight text-3xl ">
+            <h1 className="text-secondary font-extralight text-3xl ">
               {post.title}
             </h1>
           </div>
         }
         {post && post.subtitle && 
           <div>
-            <h2 className="mt-5 p-2 bg-slate-800 italic text-slate-500">
+            <h2 className="mx-5 p-5 bg-secondary bg-opacity-50 italic text-secondary-content">
               {QuoteLeftIcon} {post.subtitle}
             </h2>
           </div>
@@ -38,11 +38,8 @@ const FeedPostItem = (props: FullPost) => {
       </div>
       {post && post.content && 
         <>
-          <div className="mt-5 px-5 pb-5 text-justify border-b-[1px] border-slate-300 text-gray-600 dark:text-gray-400">
+          <div className="m-5 text-justify text-primary-content border-b border-primary-content border-opacity-50">
             {post.content}
-            {/* <pre>
-            {jsonify(post)}
-            </pre> */}
           </div>
           <div
             className={`flex items-justify justify-between pt-2 mx-8 space-x-6 text-gray-300`}
@@ -72,7 +69,8 @@ const FeedPostItem = (props: FullPost) => {
           </div>
         </>
       }
-      {post?.thread && post.thread.map((p) => <ThreadPostItem {...p} key={p.postid} />)}
+      {post?.thread && post.thread.map((p) => <ThreadPostItem {...p} containerClass="border-t border-secondary-content border-opacity-30 " key={p.postid} />)}
+      <>&nbsp;</>
     </div>
   );
 };

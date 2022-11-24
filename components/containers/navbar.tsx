@@ -9,10 +9,10 @@ const Navbar = ({ className }: classnameProps) => {
 
   return (
     <nav
-      className={`${className} sticky top-0 border-b-[1px] bg-gray-800 border-gray-700 mx-auto flex max-w-5xl flex-col items-center justify-center z-50`}
+      className={`${className} sticky top-0 border-b-[1px] bg-secondary border-b-secondary-content mx-auto flex max-w-5xl flex-col items-center justify-center z-50`}
     >
       <div
-        className={`mx-auto max-w-5xl space-x-6 text-gray-300 mr-2 my-2 flex`}
+        className={`mx-auto max-w-5xl space-x-6 text-secondary-content mr-2 my-2 flex`}
       >
         <ShrinkableNavItem href="/" title="Home" icon={HouseIcon}  className={navbarClass} />
         {!user && (
@@ -21,6 +21,15 @@ const Navbar = ({ className }: classnameProps) => {
         {user && (
           <ShrinkableNavItem href="/account" title="Account" icon={GearsIcon} className={navbarClass}  />
         )}
+        <select data-choose-theme>
+          <option value="kaliope">Kaliope</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="cupcake">Cupcake</option>
+          <option value="autumn">Autumn</option>
+          <option value="retro">Retro</option>
+          <option value="luxury">Luxury</option>
+      </select>
       </div>
     </nav>
   );

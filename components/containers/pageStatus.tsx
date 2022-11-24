@@ -30,7 +30,7 @@ export default function PageStatus(props: StatusProps) {
         <Spinner size={SpinnerSize.lg} />
       ) 
       || (error && (
-        <div className="text-red-400 italic">
+        <div className="text-error italic">
           {error?.code}: {error?.message}
         </div>
       ))}

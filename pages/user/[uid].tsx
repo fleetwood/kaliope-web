@@ -3,19 +3,19 @@ import { GetServerSideProps } from "next";
 import { useEffect, useState } from "react";
 import MainLayout from "../../components/layouts/MainLayout";
 import { av, UserAvatar } from "../../components/ui/userAvatar";
-import { __host__, __port__ } from "../../utils/constants";
 import {
   FirebaseErrors,
   IFirebaseErrorCode,
 } from "../../utils/FirebaseErrors";
 import { jsonify } from "../../utils/helpers";
 import { IUserResponse } from "../api/user/[uid]";
+import { fetchApi } from "../../utils/api";
 
 export const getServerSideProps: GetServerSideProps<IUserResponse|{}> = async (ctx) => {
   const { uid } = ctx.query;
 
   if (uid) {
-    const result = await (await fetch(`http://${__host__}:3000/api/user/${uid}`)).json();
+    const result = await fetchApi(`user/${uid}`)
     return { props: { ...result } };
   }
   return { props: {} };
