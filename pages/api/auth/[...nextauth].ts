@@ -1,9 +1,10 @@
-import NextAuth from 'next-auth';
-import EmailProvider from 'next-auth/providers/email';
-import TwitterProvider from 'next-auth/providers/twitter';
-import GoogleProvider from 'next-auth/providers/google';
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { PrismaClient } from '@prisma/client';
+import NextAuth from "next-auth";
+import EmailProvider from "next-auth/providers/email";
+import TwitterProvider from "next-auth/providers/twitter";
+import GoogleProvider from "next-auth/providers/google";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { PrismaClient } from "@prisma/client";
+import { log } from "../../../utils/helpers";
 // import CredentialsProvider from 'next-auth/providers/credentials';
 
 const prisma = new PrismaClient();
@@ -20,11 +21,11 @@ export default NextAuth({
     }),
     TwitterProvider({
       clientId: process.env.NEXT_PUBLIC_TWITTER_ID!,
-      clientSecret: process.env.NEXT_PUBLIC_TWITTER_SECRET!
+      clientSecret: process.env.NEXT_PUBLIC_TWITTER_SECRET!,
     }),
     GoogleProvider({
       clientId: process.env.NEXT_PUBLIC_GOOGLE_ID!,
-      clientSecret: process.env.NEXT_PUBLIC_GOOGLE_SECRET!
+      clientSecret: process.env.NEXT_PUBLIC_GOOGLE_SECRET!,
     }),
     // CredentialsProvider({
     //   credentials: {
@@ -67,7 +68,7 @@ export default NextAuth({
     // Use JSON Web Tokens for session instead of database sessions.
     // This option can be used with or without a database for users/accounts.
     // Note: `jwt` is automatically set to `true` if no database is specified.
-    strategy: "database"
+    strategy: "database",
 
     // Seconds - How long until an idle session expires and is no longer valid.
     // maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -84,11 +85,11 @@ export default NextAuth({
   // pages is not specified for that route.
   // https://next-auth.js.org/configuration/pages
   pages: {
-    signIn: '/login', // Displays signin buttons
+    signIn: "/login", // Displays signin buttons
     // signOut: '/auth/signout', // Displays form with sign out button
     // error: '/auth/error', // Error code passed in query string as ?error=
     // verifyRequest: '/auth/verify-request', // Used for check email page
-    newUser: '/account', // If set, new users will be directed here on first sign in
+    newUser: "/account", // If set, new users will be directed here on first sign in
   },
 
   // Callbacks are asynchronous functions you can use to control what happens
@@ -104,8 +105,37 @@ export default NextAuth({
   // Events are useful for logging
   // https://next-auth.js.org/configuration/events
   events: {
-    signIn: ({ user, account, profile, isNewUser }) => {
-      console.log(`isNewUser: ${JSON.stringify(isNewUser)}`);
+    signIn: async ({ user, account, profile, isNewUser }) => {
+      if (isNewUser) {
+        log(`We have a new user!!!!!!!!!!`, user);
+        const newUser = await prisma.user.findUnique({
+          where: { email: user.email || undefined },
+        });
+
+        if (newUser) {
+          const newProfile = await prisma.user
+            .update({
+              where: {
+                email: user.email!,
+              },
+              data: {
+                profile: {
+                  create: {
+                    displayName: user.name || user.email,
+                  },
+                },
+              },
+            })
+            .then((u) => {
+              if (u) {
+                log("\tProfile created!");
+              }
+            })
+            .catch((e) => {
+              log("\tFAILED CREATING PROFILE", e);
+            });
+        }
+      }
     },
     // updateUser({ user })
   },

@@ -179,11 +179,11 @@ model Profile {
   totalShares       Int          @default(0)
   totalFollows      Int          @default(0)
   totalFollowers    Int          @default(0)
-  FollowsProfileId  String
-  FollowsProfile    Profile      @relation("profile_follows", fields: [FollowsProfileId], references: [id], onDelete: Cascade)
+  FollowsProfileId  String?
+  FollowsProfile    Profile?      @relation("profile_follows", fields: [FollowsProfileId], references: [id], onDelete: Cascade)
   Follows           Profile[]    @relation("profile_follows")
-  FollowerProfileId String
-  FollowerProfile   Profile      @relation("profile_followers", fields: [FollowerProfileId], references: [id], onDelete: Cascade)
+  FollowerProfileId String?
+  FollowerProfile   Profile?      @relation("profile_followers", fields: [FollowerProfileId], references: [id], onDelete: Cascade)
   Followers         Profile[]    @relation("profile_followers")
   Inbox             Message[]    @relation("message_inbox")
   Outbox            Message[]    @relation("message_outbox")
