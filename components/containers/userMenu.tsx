@@ -4,7 +4,7 @@ import { av, UserAvatar } from "../ui/userAvatar";
 import ShrinkableNavItem from "./shrinkableNavItem";
 
 const UserMenu = () => {
-  const user = null;
+  const user = {};
 
   return (
   <div className="fixed mt-32">
@@ -12,7 +12,7 @@ const UserMenu = () => {
       {user && (
         <li>
           <Link href='./account'>
-            <UserAvatar author={user} size={av.xxl} />
+            <UserAvatar {...user} size={av.xxl} />
           </Link>
         </li>
         )}

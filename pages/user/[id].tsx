@@ -1,4 +1,3 @@
-import { User } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { useEffect, useState } from "react";
 import MainLayout from "../../components/layouts/MainLayout";
@@ -8,21 +7,21 @@ import {
   IFirebaseErrorCode,
 } from "../../utils/FirebaseErrors";
 import { jsonify } from "../../utils/helpers";
-import { IUserResponse } from "../api/user/[uid]";
 import { fetchApi } from "../../utils/api";
+import { FullUserResponse, IFullUser } from "../../types/user/FullUser";
 
-export const getServerSideProps: GetServerSideProps<IUserResponse|{}> = async (ctx) => {
-  const { uid } = ctx.query;
+export const getServerSideProps: GetServerSideProps<FullUserResponse|{}> = async (ctx) => {
+  const { id } = ctx.query;
 
-  if (uid) {
-    const result = await fetchApi(`user/${uid}`)
+  if (id) {
+    const result = await fetchApi(`user/${id}`)
     return { props: { ...result } };
   }
   return { props: {} };
 };
 
-export default function UserPage(props?: IUserResponse) {
-  const [user, setUser] = useState<User | undefined>();
+export default function UserPage(props?: FullUserResponse) {
+  const [user, setUser] = useState<IFullUser | undefined>();
   const [error, setError] = useState<IFirebaseErrorCode>();
 
   useEffect(() => {
@@ -38,7 +37,7 @@ export default function UserPage(props?: IUserResponse) {
 
   return (
     <MainLayout
-      sectionTitle={user?.displayName || "User Profile"}
+      sectionTitle={user?.name || "User Profile"}
     >
       {error && (
         <div className="text-red-400 italic">
@@ -47,7 +46,7 @@ export default function UserPage(props?: IUserResponse) {
       )}
       {user && (
         <div>
-          <UserAvatar author={user} size={av.xxl} />
+          {/* <UserAvatar user={props?.user} size={av.xxl} /> */}
           <pre>
             {jsonify(user)}
           </pre>

@@ -1,24 +1,35 @@
-import { User } from "@prisma/client";
-import { useState } from "react";
+import { Profile } from "@prisma/client";
+import { useEffect, useState } from "react";
+import { FullUserResponse, IFullUser } from "../../../types/user/FullUser";
+import { fetchApi } from "../../../utils/api";
 import { __host__ } from "../../../utils/constants";
 import { UserIcon } from "../../ui/icons";
 import { av, UserAvatar } from "../../ui/userAvatar";
 import Navbar from "../navbar";
 
 type UserAccountProps = {
-  user: User;
+  user: Profile;
 };
 
 const UserAccount = (props: UserAccountProps) => {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<IFullUser>();
+  const [error,setError] = useState()
   const [tab, setTab] = useState();
 
-  const update = async () => {
-    const url = `http://${__host__}:3000/api/user/${user?.uid || 0}`;
-    const results = await fetch(url);
-  };
-
-  const tabSelect = (select: string) => {};
+  useEffect(() => {
+    const url = `http://${__host__}:3000/api/user/${user?.id || 0}`;
+    async () => { 
+      await fetchApi(url)
+        .then((results) => {
+          if (results.user) {
+            setUser(results.user)
+          } else {
+            setError(results.error)
+          }
+        })
+        .catch(e => setError(e))
+    }
+  },[])
 
   return (
     <div>

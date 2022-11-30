@@ -1,6 +1,8 @@
 import { User } from "@prisma/client";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import { IFullProfile, IPostProfile } from "../../types/profile/FullProfile";
+import { IFullUser } from "../../types/user/FullUser";
 
 export enum av {
   xs = 12,
@@ -11,20 +13,25 @@ export enum av {
   xxl = 256,
 }
 
-export type userAvProps = {
+export type AvatarProps = {
+  src?: string|null|undefined
+  profile?: IFullProfile | IPostProfile | undefined
+  user?: IFullUser | User | undefined
   size?: av
-  author: User
 }
 
-export const UserAvatar = (props: userAvProps) => {
+export const UserAvatar = (props: AvatarProps) => {
   const [source, setSource] = useState<string>();
   const [imageSize, setImageSize] = useState<av>(av.md);
-
-  const {size, author} = props;
+  const {size} = props;
+  const src = props.src
+    ||props.profile?.photoURL
+    ||props.user?.image
+    ||null;
 
   useEffect(() => {
-    if (author && author.photoURL) {
-      setSource(author.photoURL);
+    if (src) {
+      setSource(src);
       setImageSize(
         size && size === av.xs ? av.xs
         : size && size === av.sm ? av.sm
@@ -35,7 +42,7 @@ export const UserAvatar = (props: userAvProps) => {
         : av.md
         )
     }
-  }, [author,imageSize]);
+  }, []);
 
   return source ? (
     <Image

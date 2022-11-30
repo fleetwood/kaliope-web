@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Image {
-  imageid      String     @id @default(uuid())
+  imageid      String     @id @default(cuid())
   created_at   DateTime?  @db.Timestamptz(0)
   updated_at   DateTime?  @db.Timestamptz(0)
   url          String     @db.VarChar(255)
@@ -23,7 +23,7 @@ model Image {
 }
 
 model Gallery {
-  galleryid   String     @id @default(uuid())
+  galleryid   String     @id @default(cuid())
   created_at  DateTime?  @db.Timestamptz(0)
   updated_at  DateTime?  @db.Timestamptz(0)
   url         String     @db.VarChar(255)
@@ -31,17 +31,17 @@ model Gallery {
   description String?    @db.VarChar(255)
   chapterid   String?    @unique
   characterid String?    @unique
-  userid      String?    @unique
+  profileid   String?    @unique
   agencyid    String?    @unique
   agency      Agency?    @relation("agency_gallery", fields: [agencyid], references: [agencyid])
-  user        User?      @relation("user_gallery", fields: [userid], references: [uid])
+  profile     Profile?   @relation("profile_gallery", fields: [profileid], references: [id])
   chapter     Chapter?   @relation("chapter_gallery")
   character   Character? @relation("character_gallery")
   images      Image?     @relation("image_gallery")
 }
 
 model Agency {
-  agencyid    String    @id @default(uuid())
+  agencyid    String    @id @default(cuid())
   created_at  DateTime? @db.Timestamptz(0)
   updated_at  DateTime? @db.Timestamptz(0)
   description String
@@ -51,7 +51,7 @@ model Agency {
 }
 
 model Chapter {
-  chapterid        String      @id @default(uuid())
+  chapterid        String      @id @default(cuid())
   created_at       DateTime?   @db.Timestamptz(0)
   updated_at       DateTime?   @db.Timestamptz(0)
   chapterOrder     Int
@@ -64,7 +64,7 @@ model Chapter {
 }
 
 model Character {
-  characterid  String    @id @default(uuid())
+  characterid  String    @id @default(cuid())
   created_at   DateTime? @db.Timestamptz(0)
   updated_at   DateTime? @db.Timestamptz(0)
   bookid       String    @unique
@@ -80,7 +80,7 @@ model Character {
 }
 
 model Book {
-  bookid          String       @id @default(uuid())
+  bookid          String       @id @default(cuid())
   authorid        String       @db.VarChar(255)
   created_at      DateTime?    @db.Timestamptz(0)
   updated_at      DateTime?    @db.Timestamptz(0)
@@ -89,18 +89,17 @@ model Book {
   coverid         String?      @unique
   synopsis        String?
   tagline         String?
-  author          User         @relation("user_books", fields: [authorid], references: [uid])
+  author          Profile      @relation("profile_books", fields: [authorid], references: [id])
   cover           Image?       @relation("book_cover", fields: [coverid], references: [imageid])
   book_ratings    BookRating[] @relation("book_ratings")
   book_chapters   Chapter?     @relation("book_chapters")
   book_characters Character?   @relation("book_characters")
   book_comments   Comment[]    @relation("book_comments")
-  reviewers       Group?       @relation("book_reviewers")
   genres          Genre[]      @relation("book_genre")
 }
 
 model Genre {
-  genreid    String    @id @default(uuid())
+  genreid    String    @id @default(cuid())
   icon       String    @db.VarChar(255)
   label      String    @db.VarChar(255)
   created_at DateTime? @db.Timestamptz(0)
@@ -109,17 +108,17 @@ model Genre {
 }
 
 model BookRating {
-  bookratingid String    @id @default(uuid())
+  bookratingid String    @id @default(cuid())
   authorid     String
   bookid       String
   created_at   DateTime? @db.Timestamptz(0)
   updated_at   DateTime? @db.Timestamptz(0)
-  author       User      @relation("user_ratings", fields: [authorid], references: [uid])
+  author       Profile   @relation("profile_ratings", fields: [authorid], references: [id])
   book         Book      @relation("book_ratings", fields: [bookid], references: [bookid])
 }
 
 model Comment {
-  commentid   String    @id @default(uuid())
+  commentid   String    @id @default(cuid())
   authorid    String
   created_at  DateTime? @db.Timestamptz(0)
   updated_at  DateTime? @db.Timestamptz(0)
@@ -127,77 +126,118 @@ model Comment {
   bookid      String
   chapterid   String
   characterid String
-  author      User      @relation("user_comments", fields: [authorid], references: [uid])
+  author      Profile   @relation("profile_comments", fields: [authorid], references: [id])
   book        Book      @relation("book_comments", fields: [bookid], references: [bookid])
   chapter     Chapter   @relation("chapter_comments", fields: [chapterid], references: [chapterid])
   character   Character @relation("character_comments", fields: [characterid], references: [characterid])
 }
 
 model Post {
-  postid       String    @id @default(uuid())
-  created_at   DateTime? @db.Timestamptz(0)
-  updated_at   DateTime? @db.Timestamptz(0)
-  title        String    @db.VarChar(255)
-  subtitle     String?   @db.VarChar(255)
-  header_image String?   @db.VarChar(255)
-  content      String
-  authorId     String
-  author       User      @relation("user_posts", fields: [authorId], references: [uid])
-  threadParentId     String?
-  threadParent       Post?     @relation("post_thread", fields: [threadParentId], references: [postid])
-  thread        Post[]     @relation("post_thread")
+  postid         String    @id @default(cuid())
+  created_at     DateTime? @db.Timestamptz(0)
+  updated_at     DateTime? @db.Timestamptz(0)
+  visible        Boolean   @default(true)
+  title          String    @db.VarChar(255)
+  subtitle       String?   @db.VarChar(255)
+  header_image   String?   @db.VarChar(255)
+  content        String
+  authorId       String
+  author         Profile   @relation("profile_posts", fields: [authorId], references: [id])
+  threadParentId String?
+  threadParent   Post?     @relation("post_thread", fields: [threadParentId], references: [postid])
+  thread         Post[]    @relation("post_thread")
 }
 
-model Group {
-  groupid       String            @id @default(uuid())
-  created_at    DateTime?         @db.Timestamptz(0)
-  updated_at    DateTime?         @db.Timestamptz(0)
-  title         String
-  description   String?
-  ownerid       String
-  bookreview    String?           @unique @map("bookid")
-  book          Book?             @relation("book_reviewers", fields: [bookreview], references: [bookid])
-  owner         User              @relation("group_owner", fields: [ownerid], references: [uid])
-  memberships   GroupMembership[] @relation("group_memberships")
-  userBlocked   User[]            @relation("user_blocked")
-  userBlocks    User[]            @relation("user_blocks")
-  userFollowers User[]            @relation("user_followers")
-  userFollows   User[]            @relation("user_follows")
+model Message {
+  messageid       String    @id @default(cuid())
+  senderId        String
+  sender          Profile   @relation("message_outbox", fields: [senderId], references: [id])
+  recipientId     String
+  recipient       Profile   @relation("message_inbox", fields: [recipientId], references: [id])
+  visible         Boolean   @default(true)
+  read            Boolean   @default(false)
+  createdAt       DateTime? @db.Timestamptz(0)
+  lastLoginAt     DateTime? @db.Timestamptz(0)
+  content         String
+  messageParentId String?
+  messageParent   Message?  @relation("message_thread", fields: [messageParentId], references: [messageid])
+  messages        Message[] @relation("message_thread")
 }
 
-model GroupMembership {
-  membershipid String    @id @default(uuid())
-  created_at   DateTime? @db.Timestamptz(0)
-  updated_at   DateTime? @db.Timestamptz(0)
-  level        Int       @default(0)
-  groupParent  String
-  memberId     String    @map("userid")
-  group        Group     @relation("group_memberships", fields: [groupParent], references: [groupid])
-  member       User      @relation("user_membership", fields: [memberId], references: [uid])
+model Profile {
+  id                String       @id @default(cuid())
+  displayName       String?
+  photoURL          String?
+  createdAt         DateTime?    @db.Timestamptz(0)
+  lastLoginAt       DateTime?    @db.Timestamptz(0)
+  books             Book[]       @relation("profile_books")
+  ratings           BookRating[] @relation("profile_ratings")
+  comments          Comment[]    @relation("profile_comments")
+  galleries         Gallery?     @relation("profile_gallery")
+  posts             Post[]       @relation("profile_posts")
+  totalLikes        Int          @default(0)
+  totalShares       Int          @default(0)
+  totalFollows      Int          @default(0)
+  totalFollowers    Int          @default(0)
+  FollowsProfileId  String
+  FollowsProfile    Profile      @relation("profile_follows", fields: [FollowsProfileId], references: [id], onDelete: Cascade)
+  Follows           Profile[]    @relation("profile_follows")
+  FollowerProfileId String
+  FollowerProfile   Profile      @relation("profile_followers", fields: [FollowerProfileId], references: [id], onDelete: Cascade)
+  Followers         Profile[]    @relation("profile_followers")
+  Inbox             Message[]    @relation("message_inbox")
+  Outbox            Message[]    @relation("message_outbox")
+  user              User         @relation(fields: [id], references: [id])
+}
+
+model AccountStatus {
+  modelid String @id @default(cuid())
+}
+
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?
+  access_token       String?
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?
+  session_state      String?
+  oauth_token_secret String?
+  oauth_token        String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
-  uid            String            @id @unique(map: "user_uid_unique")
-  email          String            @unique(map: "user_email_unique")
-  emailVerified  Boolean?          @default(false)
-  isAnonymous    Boolean?          @default(true)
-  displayName    String?
-  photoURL       String?
-  createdAt      DateTime?         @db.Timestamptz(0)
-  lastLoginAt    DateTime?         @db.Timestamptz(0)
-  blockedGroup   String?
-  blocksGroup    String?
-  followersGroup String?
-  followsGroup   String?
-  blocked        Group?            @relation("user_blocked", fields: [blockedGroup], references: [groupid])
-  blocks         Group?            @relation("user_blocks", fields: [blocksGroup], references: [groupid])
-  followers      Group?            @relation("user_followers", fields: [followersGroup], references: [groupid])
-  follows        Group?            @relation("user_follows", fields: [followsGroup], references: [groupid])
-  books          Book[]            @relation("user_books")
-  ratings        BookRating[]      @relation("user_ratings")
-  comments       Comment[]         @relation("user_comments")
-  galleries      Gallery?          @relation("user_gallery")
-  ownedGroups    Group[]           @relation("group_owner")
-  memberships    GroupMembership[] @relation("user_membership")
-  posts          Post[]            @relation("user_posts")
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  profile       Profile?
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }

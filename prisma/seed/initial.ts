@@ -5,7 +5,7 @@ import { now, log, logError, todo } from "./../../utils/helpers";
 const prisma = new PrismaClient();
 
 import { LoremIpsum } from "lorem-ipsum";
-import { randomUUID } from "crypto";
+
 const lorem = new LoremIpsum({
   sentencesPerParagraph: {
     max: 5,
@@ -83,159 +83,159 @@ const mockUserPosts = (
 };
 
 const confirm = async (user: any) => {
-  log(`Seeded ${user.displayName} (${user.uid})`);
-  let result = await prisma.user.findFirst({ where: { uid: user.uid } });
+  log(`Seeded ${user.displayName} (${user.id})`);
+  let result = await prisma.user.findFirst({ where: { id: user.id } });
   log(`\t${JSON.stringify(result, null, 2)}`);
   log(">>>>>>>>>>>>>>>>");
   return;
 };
 
 async function main() {
-  const tamiko = await prisma.user.create({
-    data: {
-      uid: randomUUID(),
-      email: "TamikoRittenburg@test.com",
-      displayName: "Tamiko Rittenburg",
-      photoURL: "https://xsgames.co/randomusers/assets/avatars/female/68.jpg",
-      posts: { create: mockPosts(51) },
-    },
-  });
-  await confirm(tamiko);
+  // const tamiko = await prisma.user.create({
+  //   data: {
+  //     id: randomUID(),
+  //     email: "TamikoRittenburg@test.com",
+  //     displayName: "Tamiko Rittenburg",
+  //     photoURL: "https://xsgames.co/randomusers/assets/avatars/female/68.jpg",
+  //     posts: { create: mockPosts(51) },
+  //   },
+  // });
+  // await confirm(tamiko);
 
-  const delinda = await prisma.user.create({
-    data: {
-      uid: randomUUID(),
-      email: "DelindaLicup@test.com",
-      displayName: "Delinda Licup",
-      photoURL: "https://xsgames.co/randomusers/assets/avatars/female/62.jpg",
-      posts: { create: mockPosts(105) },
-    },
-  });
-  await confirm(delinda);
+  // const delinda = await prisma.user.create({
+  //   data: {
+  //     id: randomUID(),
+  //     email: "DelindaLicup@test.com",
+  //     displayName: "Delinda Licup",
+  //     photoURL: "https://xsgames.co/randomusers/assets/avatars/female/62.jpg",
+  //     posts: { create: mockPosts(105) },
+  //   },
+  // });
+  // await confirm(delinda);
 
-  const julian = await prisma.user.create({
-    data: {
-      uid: randomUUID(),
-      email: "JulianTaillon@test.com",
-      displayName: "Julian Taillon",
-      photoURL: "https://xsgames.co/randomusers/assets/avatars/female/61.jpg",
-      posts: { create: mockPosts(45) },
-    },
-  });
-  await confirm(julian);
+  // const julian = await prisma.user.create({
+  //   data: {
+  //     id: randomUID(),
+  //     email: "JulianTaillon@test.com",
+  //     displayName: "Julian Taillon",
+  //     photoURL: "https://xsgames.co/randomusers/assets/avatars/female/61.jpg",
+  //     posts: { create: mockPosts(45) },
+  //   },
+  // });
+  // await confirm(julian);
 
-  const kitty = await prisma.user.create({
-    data: {
-      uid: randomUUID(),
-      email: "KittyBratta@test.com",
-      displayName: "Kitty Bratta",
-      photoURL: "https://xsgames.co/randomusers/assets/avatars/female/36.jpg",
+  // const kitty = await prisma.user.create({
+  //   data: {
+  //     id: randomUID(),
+  //     email: "KittyBratta@test.com",
+  //     displayName: "Kitty Bratta",
+  //     photoURL: "https://xsgames.co/randomusers/assets/avatars/female/36.jpg",
       
       
-      posts: { create: mockPosts(500) },
-    },
-  });
-  await confirm(kitty);
+  //     posts: { create: mockPosts(500) },
+  //   },
+  // });
+  // await confirm(kitty);
 
-  const kary = await prisma.user.create({
-    data: {
-      uid: randomUUID(),
-      email: "KaryRarig@test.com",
-      displayName: "Kary Rarig",
-      photoURL: "https://xsgames.co/randomusers/assets/avatars/female/53.jpg",
+  // const kary = await prisma.user.create({
+  //   data: {
+  //     id: randomUID(),
+  //     email: "KaryRarig@test.com",
+  //     displayName: "Kary Rarig",
+  //     photoURL: "https://xsgames.co/randomusers/assets/avatars/female/53.jpg",
       
       
-      posts: { create: mockPosts(50) },
-    },
-  });
-  await confirm(kary);
+  //     posts: { create: mockPosts(50) },
+  //   },
+  // });
+  // await confirm(kary);
 
-  const elvis = await prisma.user.create({
-    data: {
-      // password: 'BjDTQE9HNSbhE7kJmY',
-      uid: "T5byvnfjKrSuDwBkppcFIJMOl2I2",
-      email: "elvis.walsh@ethereal.email",
-      displayName: "Elvis Walsh",
-      photoURL: faker.image.avatar(),
+  // const elvis = await prisma.user.create({
+  //   data: {
+  //     // password: 'BjDTQE9HNSbhE7kJmY',
+  //     id: "T5byvnfjKrSuDwBkppcFIJMOl2I2",
+  //     email: "elvis.walsh@ethereal.email",
+  //     displayName: "Elvis Walsh",
+  //     photoURL: faker.image.avatar(),
       
       
-      posts: { create: mockPosts(50) },
-    },
-  });
-  await confirm(elvis);
+  //     posts: { create: mockPosts(50) },
+  //   },
+  // });
+  // await confirm(elvis);
 
-  const wei = await prisma.user.create({
-    data: {
-      uid: randomUUID(),
-      email: "WeiGonyaw@test.com",
-      displayName: "Wei Gonyaw",
-      photoURL: "https://xsgames.co/randomusers/assets/avatars/female/12.jpg",
+  // const wei = await prisma.user.create({
+  //   data: {
+  //     id: randomUID(),
+  //     email: "WeiGonyaw@test.com",
+  //     displayName: "Wei Gonyaw",
+  //     photoURL: "https://xsgames.co/randomusers/assets/avatars/female/12.jpg",
       
       
-      posts: { create: mockPosts(5) },
-    },
-  });
-  await confirm(wei);
+  //     posts: { create: mockPosts(5) },
+  //   },
+  // });
+  // await confirm(wei);
 
-  const marisha = await prisma.user.create({
-    data: {
-      uid: randomUUID(),
-      email: "MarishaKealy@test.com",
-      displayName: "Marisha Kealy",
-      photoURL: "https://xsgames.co/randomusers/assets/avatars/female/23.jpg",
+  // const marisha = await prisma.user.create({
+  //   data: {
+  //     id: randomUID(),
+  //     email: "MarishaKealy@test.com",
+  //     displayName: "Marisha Kealy",
+  //     photoURL: "https://xsgames.co/randomusers/assets/avatars/female/23.jpg",
       
       
-      posts: { create: mockPosts(5) },
-    },
-  });
-  await confirm(marisha);
+  //     posts: { create: mockPosts(5) },
+  //   },
+  // });
+  // await confirm(marisha);
 
-  const nydia = await prisma.user.create({
-    data: {
-      uid: randomUUID(),
-      email: "NydiaGrazzini@test.com",
-      displayName: "Nydia Grazzini",
-      photoURL: "https://xsgames.co/randomusers/assets/avatars/female/98.jpg",
+  // const nydia = await prisma.user.create({
+  //   data: {
+  //     id: randomUID(),
+  //     email: "NydiaGrazzini@test.com",
+  //     displayName: "Nydia Grazzini",
+  //     photoURL: "https://xsgames.co/randomusers/assets/avatars/female/98.jpg",
       
       
-      posts: { create: mockPosts(5) },
-    },
-  });
-  await confirm(nydia);
+  //     posts: { create: mockPosts(5) },
+  //   },
+  // });
+  // await confirm(nydia);
 
-  const users = [tamiko, delinda, julian, kitty, kary, elvis, marisha, nydia];
+  // const users = [tamiko, delinda, julian, kitty, kary, elvis, marisha, nydia];
   
-  let all = 0;
-  users.forEach(async (u: User) => {
-    log('Seeding posts for ',u.displayName)
-    let user = await prisma.user.findUnique({
-      where: { uid: u.uid },
-      include: { posts: true },
-    });
-    user?.posts.forEach(async (post) => {
-      let replier = await prisma.user.findUnique({
-        where: { uid: users[rand(users.length - 1)].uid },
-      });
-      let count = rand(1,5),
-        total = count;
-      do{
-        await prisma.post.create({
-          data: {
-            created_at: date(),
-            updated_at: date(),
-            authorId: replier!.uid,
-            title: sentences(),
-            subtitle: subtitleMaybe(),
-            threadParentId: post.postid,
-            content: lorem.generateParagraphs(rand(2)),
-          }
-        });
-      }
-      while (--count > 0);
-      log(`\tCreated ${total} replies`)
-    });
-  });
-}
+  // let all = 0;
+  // users.forEach(async (u: User) => {
+  //   // log('Seeding posts for ',u.displayName)
+  //   let user = await prisma.user.findUnique({
+  //     where: { id: u.id },
+  //     include: { posts: true },
+  //   });
+    // user?.posts.forEach(async (post) => {
+    //   let replier = await prisma.user.findUnique({
+    //     where: { id: users[rand(users.length - 1)].id },
+    //   });
+    //   let count = rand(1,5),
+    //     total = count;
+    //   do{
+    //     await prisma.post.create({
+    //       data: {
+    //         created_at: date(),
+    //         updated_at: date(),
+    //         authorId: replier!.id,
+    //         title: sentences(),
+    //         subtitle: subtitleMaybe(),
+    //         threadParentId: post.postid,
+    //         content: lorem.generateParagraphs(rand(2)),
+    //       }
+    //     });
+    //   }
+    //   while (--count > 0);
+    //   log(`\tCreated ${total} replies`)
+    // });
+//   });
+// }
 main()
   .then(async () => {
     await prisma.$disconnect();
@@ -246,3 +246,4 @@ main()
     await prisma.$disconnect();
     process.exit(1);
   });
+}
