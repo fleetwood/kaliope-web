@@ -2,48 +2,20 @@ import { FormEvent, useState } from "react";
 import Link from "next/link";
 import Router from "next/router";
 import MainLayout from "../components/layouts/MainLayout";
-import { UserAuth } from "../firebase/AuthContext";
+
 import { FirebaseErrors, IFirebaseErrorCode, convertToFirebaseError } from "../utils/FirebaseErrors";
 import { log } from "../utils/helpers";
 
 const Login = () => {
-  const {login, googleLogin} = UserAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState<IFirebaseErrorCode>();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setError(undefined);
-    let error = FirebaseErrors.loginSubmit;
-    try {
-      const user = await login(email, password);
-      if (user) {
-        Router.push("./");
-        return;
-      }
-    } catch (e) {
-      log('LOGIN FAIL',e);
-      error = convertToFirebaseError(e, error);
-    }
     setError(error)
   };
 
   const handleGoogleLogin = async (e: FormEvent) => {
     e.preventDefault();
-    setError(undefined)
-    let error = FirebaseErrors.loginSubmit
-    try {
-      const user = await googleLogin();
-      if (user) {
-          Router.push("./");
-          return;
-      }
-    }
-    catch(e) {
-      log('GOOGLE LOGIN FAIL',e)
-      error=convertToFirebaseError(e,error)
-    }
     setError(error)
   }
 
@@ -59,7 +31,6 @@ const Login = () => {
             <label>Email address</label>
             <input
               type={"email"}
-              onChange={(e) => setEmail(e.target.value)}
               className="bg-primary-focus p-2"
             />
           </div>
@@ -67,7 +38,6 @@ const Login = () => {
             <label>Password</label>
             <input
               type={"password"}
-              onChange={(e) => setPassword(e.target.value)}
               className="bg-primary-focus p-2"
             />
           </div>

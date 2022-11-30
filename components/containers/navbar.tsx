@@ -1,10 +1,9 @@
 import { UserIcon, GearsIcon, HouseIcon } from "../ui/icons";
 import { classnameProps } from "../../types/props";
-import { UserAuth } from "../../firebase/AuthContext";
 import ShrinkableNavItem from "./shrinkableNavItem";
 
 const Navbar = ({ className }: classnameProps) => {
-  const { user } = UserAuth();
+  const user = null;
   const navbarClass = ''
 
   return (

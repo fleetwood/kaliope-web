@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { AwesomeIcon, CircleQuestionIcon, ClipboardIcon } from "../ui/icons";
-import { UserAuth } from "../../firebase/AuthContext";
 import { av, UserAvatar } from "../ui/userAvatar";
 import ShrinkableNavItem from "./shrinkableNavItem";
 
 const UserMenu = () => {
-  const {user} = UserAuth();
+  const user = null;
 
   return (
   <div className="fixed mt-32">

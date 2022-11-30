@@ -1,7 +1,6 @@
 import "../styles/globals.css";
 
 import type { AppProps } from "next/app";
-import { AuthContextProvider } from "../firebase/AuthContext";
 import { NextComponentType, NextPageContext } from "next/types";
 import CachePage from "./_cachePage";
 
@@ -13,11 +12,7 @@ type ExtendedAppProps<P = {}> = AppProps<P> & {
 };
 
 function KaliopeWebApp({ Component, pageProps }: ExtendedAppProps) {
-  return (
-    <AuthContextProvider>
-      <Component {...pageProps} />
-    </AuthContextProvider>
-  );
+  return <Component {...pageProps} />;
 }
 
 export default KaliopeWebApp;
