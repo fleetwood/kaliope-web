@@ -16,8 +16,15 @@ export default NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
     EmailProvider({
-      server: process.env.NEXT_PUBLIC_SENDINBLUE_SMTP,
-      from: process.env.NEXT_PUBLIC_SENDINBLUE_FROM,
+      server: {
+        host: process.env.NEXT_PUBLIC_EMAIL_SERVER_HOST,
+        port: process.env.NEXT_PUBLIC_EMAIL_SERVER_PORT,
+        auth: {
+          user: process.env.NEXT_PUBLIC_EMAIL_SERVER_USER,
+          pass: process.env.NEXT_PUBLIC_EMAIL_SERVER_PASSWORD
+        }
+      },
+      from: process.env.NEXT_PUBLIC_EMAIL_FROM
     }),
     TwitterProvider({
       clientId: process.env.NEXT_PUBLIC_TWITTER_ID!,
@@ -106,13 +113,14 @@ export default NextAuth({
   // https://next-auth.js.org/configuration/events
   events: {
     signIn: async ({ user, account, profile, isNewUser }) => {
+      let prismaUser = await prisma.user.findUnique({
+        where: { email: user.email || undefined },
+        include: { profile: true },
+      });
       if (isNewUser) {
         log(`We have a new user!!!!!!!!!!`, user);
-        const newUser = await prisma.user.findUnique({
-          where: { email: user.email || undefined },
-        });
 
-        if (newUser) {
+        if (prismaUser) {
           const newProfile = await prisma.user
             .update({
               where: {
@@ -122,11 +130,13 @@ export default NextAuth({
                 profile: {
                   create: {
                     displayName: user.name || user.email,
+                    createdAt: Date.now().toString(),
+                    lastLoginAt: Date.now().toString(),
                   },
                 },
               },
             })
-            .then((u) => {
+            .then(async (u) => {
               if (u) {
                 log("\tProfile created!");
               }
@@ -135,6 +145,24 @@ export default NextAuth({
               log("\tFAILED CREATING PROFILE", e);
             });
         }
+      } else {
+        await prisma.profile
+          .update({
+            where: {
+              id: prismaUser?.profile?.id,
+            },
+            data: {
+              lastLoginAt: Date.now().toString(),
+            },
+          })
+          .then((r) => {
+            if (r) {
+              log("\tUpdated last login");
+            }
+          })
+          .catch((e) => {
+            log("\tFAILED UPDATING last login!", e, prismaUser);
+          });
       }
     },
     // updateUser({ user })
