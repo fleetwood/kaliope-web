@@ -1,9 +1,10 @@
 import { UserIcon, GearsIcon, HouseIcon } from "../ui/icons";
 import { classnameProps } from "../../types/props";
 import ShrinkableNavItem from "./shrinkableNavItem";
+import {UserSession} from './../hooks/session'
 
 const Navbar = ({ className }: classnameProps) => {
-  const user = null;
+  const [user,setUser] = UserSession()
   const navbarClass = ''
 
   return (

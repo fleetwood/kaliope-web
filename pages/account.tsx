@@ -10,17 +10,11 @@ import PageStatus from "../components/containers/pageStatus";
 import UserAccount from "../components/containers/user/userAccount";
 import { useSession } from "../lib/next-auth-react-query";
 import { IFullUser } from "../types/user/FullUser";
+import { signOut } from "next-auth/react";
 
 const Account = () => {
   const [user, setUser] = useState<IFullUser | undefined>();
-  const [session, loading] = useSession({
-    required: true,
-    redirectTo: "./login",
-    queryConfig: {
-      staleTime: 60 * 1000 * 60 * 3, // 3 hours
-      refetchInterval: 60 * 1000 * 5, // 5 minutes
-    },
-  });
+  const [session, loading] = useSession({required: true});
   // const [email, setEmail] = useState("");
   // const [name, setName] = useState("");
   // const [password, setPassword] = useState("");
@@ -36,7 +30,7 @@ const Account = () => {
   const handleLogout = async () => {
     setError(undefined);
     try {
-      Router.push("./");
+      signOut()
     } catch (e) {
       log("logout error", e);
       setError(convertToFirebaseError(e));
