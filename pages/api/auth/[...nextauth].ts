@@ -2,6 +2,8 @@ import NextAuth from "next-auth";
 import EmailProvider from "next-auth/providers/email";
 import TwitterProvider from "next-auth/providers/twitter";
 import GoogleProvider from "next-auth/providers/google";
+import FacebookProvider from "next-auth/providers/facebook";
+import WordpressProvider from "next-auth/providers/wordpress";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 import { log } from "../../../utils/helpers";
@@ -34,6 +36,14 @@ export default NextAuth({
       clientId: process.env.NEXT_PUBLIC_GOOGLE_ID!,
       clientSecret: process.env.NEXT_PUBLIC_GOOGLE_SECRET!,
     }),
+    FacebookProvider({
+      clientId: process.env.NEXT_PUBLIC_FACEBOOK_ID!,
+      clientSecret: process.env.NEXT_PUBLIC_FACEBOOK_SECRET!,
+    }),
+    WordpressProvider({
+      clientId: process.env.NEXT_PUBLIC_WORDPRESS_ID!,
+      clientSecret: process.env.NEXT_PUBLIC_WORDPRESS_SECRET!,
+    })
     // CredentialsProvider({
     //   credentials: {
     //     email: { label: 'Email', type: 'text ', placeholder: 'jsmith@example.com' },

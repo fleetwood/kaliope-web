@@ -12,6 +12,12 @@ import { useSession } from "../lib/next-auth-react-query";
 import MainLayout from "../components/layouts/MainLayout";
 import { IFullUser } from "../types/user/FullUser";
 import { log } from "../utils/helpers";
+import {
+  FacebookSVG,
+  GoogleSVG,
+  TwitterSVG,
+  WordpressSVG,
+} from "../components/ui/svgs";
 
 const Login: FC = (props) => {
   const [providers, setproviders] = useState<Record<
@@ -57,33 +63,66 @@ const Login: FC = (props) => {
         {session && (
           <>
             Signed in as {session.user?.email} <br />
-            <button 
+            <button
               onClick={() => signOut()}
-              className="bg-primary hover:bg-primary-focus text-primary-content p-2 w-full transition-colors duration-200 ease-in-out"
-              >
+              className="bg-primary hover:bg-primary-focus text-primary-content p-2 mx-2 transition-colors duration-200 ease-in-out"
+            >
               Sign out
             </button>
           </>
         )}
         {!session && (
           <>
-            <form action="http://localhost:3000/api/auth/signin/email" method="POST">
-            <input name="csrfToken" type="hidden" defaultValue={props.csrfToken} />
-            <input id="input-email-for-email-provider" type="text" name="email" placeholder="email@example.com" className="p-2 w-full bg-base-200 text-primary-content" />
-                <button
-                  type="submit"
-                  className="bg-orange-600 hover:bg-orange-500 text-gray-200 hover:text-white p-2 w-full transition-colors duration-200 ease-in-out"
-                >
-                  Email Login
-                </button>
-            </form>
-            <>--------or--------</>
-            <button
-              onClick={() => signIn(providers?.google.id)}
-              className="bg-blue-600 hover:bg-blue-500 text-gray-200 hover:text-white p-2 w-full transition-colors duration-200 ease-in-out"
+            <form
+              action="http://localhost:3000/api/auth/signin/email"
+              method="POST"
             >
-              Google Login
-            </button>
+              <input
+                name="csrfToken"
+                type="hidden"
+                defaultValue={props.csrfToken}
+              />
+              <input
+                id="input-email-for-email-provider"
+                type="text"
+                name="email"
+                placeholder="email@example.com"
+                className="p-2 mx-2 bg-base-200 text-primary-content"
+              />
+              <button
+                type="submit"
+                className="bg-orange-600 hover:bg-orange-500 text-gray-200 hover:text-white p-2 w-full transition-colors duration-200 ease-in-out"
+              >
+                Email Login
+              </button>
+            </form>
+            <p className="border-t border-t-secondary opacity-50 my-4">Or login with any of the following existing accounts</p>
+            <div className="flex justify-evenly space-x-2">
+              <button
+                onClick={() => signIn(providers?.google.id)}
+                className="transition-colors duration-200 ease-in-out flex"
+              >
+                <GoogleSVG />
+              </button>
+              <button
+                onClick={() => signIn(providers?.twitter.id)}
+                className="transition-colors duration-200 ease-in-out flex"
+              >
+                <TwitterSVG />
+              </button>
+              <button
+                onClick={() => signIn(providers?.facebook.id)}
+                className="transition-colors duration-200 ease-in-out flex"
+              >
+                <FacebookSVG />
+              </button>
+              <button
+                onClick={() => signIn(providers?.wordpress.id)}
+                className="transition-colors duration-200 ease-in-out flex"
+              >
+                <WordpressSVG />
+              </button>
+            </div>
           </>
         )}
       </div>
@@ -92,14 +131,13 @@ const Login: FC = (props) => {
 };
 
 export async function getServerSideProps(context: any) {
-  const csrfToken = await  getCsrfToken(context)
-  log('Login SSP',csrfToken)
+  const csrfToken = await getCsrfToken(context);
+  log("Login SSP", csrfToken);
   return {
     props: {
-      csrfToken
+      csrfToken,
     },
-  }
+  };
 }
-
 
 export default Login;

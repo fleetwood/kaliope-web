@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AwesomeIcon, CircleQuestionIcon, ClipboardIcon } from "../ui/icons";
+import { GoogleSVG } from "../ui/svgs";
 import { av, UserAvatar } from "../ui/userAvatar";
 import ShrinkableNavItem from "./shrinkableNavItem";
 
@@ -24,6 +25,9 @@ const UserMenu = () => {
       </li>
       <li className="">
         <ShrinkableNavItem href="https://fontawesome.com/search?o=r&m=free" target="_blank" icon={AwesomeIcon} linkColor="secondary-content" title="FontAwesome" />
+      </li>
+      <li className="">
+        <Link href="https://materialdesignicons.com/" title="Material Icons"><GoogleSVG /></Link>
       </li>
     </ul>
   </div>
