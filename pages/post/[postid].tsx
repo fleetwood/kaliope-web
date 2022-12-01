@@ -5,7 +5,7 @@ import ThreadPostItem from "../../components/containers/posts/threadPost";
 import Section from "../../components/containers/section";
 import MainLayout from "../../components/layouts/MainLayout";
 import { av, UserAvatar } from "../../components/ui/userAvatar";
-import { FullPostResponse, FullPost } from "../../types/post/FullPost";
+import { FullPostResponse, IFullPost } from "../../types/post/FullPost";
 import { __host__, __port__ } from "../../utils/constants";
 import { jsonify } from "../../utils/helpers";
 
@@ -22,7 +22,7 @@ export const getServerSideProps: GetServerSideProps<FullPostResponse | {}> = asy
 };
 
 export default function PostPage(props?: FullPostResponse) {
-  const [post, setPost] = useState<(FullPost) | undefined>();
+  const [post, setPost] = useState<(IFullPost) | undefined>();
 
   useEffect(() => {
     if(props?.post) {
@@ -34,7 +34,7 @@ export default function PostPage(props?: FullPostResponse) {
     <MainLayout sectionTitle={""}>
       <PageStatus error={props?.error} watch={post} />
       
-      {post && <UserAvatar author={post.author} size={av.xl} />}
+      {post && <UserAvatar src={post?.author.photoURL} size={av.xl} />}
 
       <div className="py-1">
         {post && (

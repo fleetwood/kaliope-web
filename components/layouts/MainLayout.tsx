@@ -4,8 +4,6 @@ import Navbar from "../containers/navbar";
 import Section from "../containers/section";
 import Footer from "../containers/Footer";
 
-import { UserAuth } from "../../firebase/AuthContext";
-
 export enum Layouts {
   MAIN = "MAIN",
   LEFT_MENU = "LEFTMENU",
@@ -29,7 +27,6 @@ const MainLayout = ({
 }: MainLayoutProps) => {
   const isMain = !variant || variant === Layouts.MAIN;
   const useLeftMenu = variant && variant === Layouts.LEFT_MENU;
-  const {user} = UserAuth()
 
   return (
     <div className={`
@@ -40,9 +37,7 @@ const MainLayout = ({
     ${className}`
     }>
       <div className="col-span-2">
-        {user && (
-          <UserMenu />
-        )}
+        <UserMenu />
       </div>
 
       <div className="col-span-8">

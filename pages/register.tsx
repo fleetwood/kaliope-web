@@ -2,7 +2,6 @@ import Link from "next/link";
 import Router from "next/router";
 import React, { FormEvent, useState } from "react";
 import MainLayout from "../components/layouts/MainLayout";
-import { UserAuth } from "../firebase/AuthContext";
 import {
   FirebaseErrors,
   IFirebaseErrorCode,
@@ -11,7 +10,7 @@ import {
 import { log } from "../utils/helpers";
 
 const Register = () => {
-  const {createUser} = UserAuth()
+  const user = null;
   const [email,setEmail] = useState('')
   const [password,setPassword] = useState('')
   const [error, setError] = useState<IFirebaseErrorCode>()
@@ -21,7 +20,6 @@ const Register = () => {
     setError(undefined);
     let error = FirebaseErrors.registerSubmit;
     try {
-      const user = await createUser(email, password);
       if (user) {
         Router.push("./");
         return;

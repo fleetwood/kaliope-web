@@ -1,11 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import { prisma } from "../../../prisma/prismaContext"
-import { FullPost, FullPostRelations } from "../../../types/post/FullPost";
+import { IFullPost, FullPostRelations } from "../../../types/post/FullPost";
 import { IErrorResponse } from "../../../utils/FirebaseErrors";
 import { jsonify, log, logError } from "../../../utils/helpers"
 
 export type PostFeedResponse = IErrorResponse & {
-    posts?: FullPost[]
+    posts?: IFullPost[]
   };
 
 export default async function handle (req:NextApiRequest, res:NextApiResponse<PostFeedResponse>) {

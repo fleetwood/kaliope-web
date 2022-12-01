@@ -1,93 +1,143 @@
-import { FormEvent, useState } from "react";
-import Link from "next/link";
-import Router from "next/router";
+import React, { FC, useState, useEffect } from "react";
+import {
+  getProviders,
+  signOut,
+  signIn,
+  ClientSafeProvider,
+  LiteralUnion,
+  getCsrfToken,
+} from "next-auth/react";
+import { BuiltInProviderType } from "next-auth/providers";
+import { useSession } from "../lib/next-auth-react-query";
 import MainLayout from "../components/layouts/MainLayout";
-import { UserAuth } from "../firebase/AuthContext";
-import { FirebaseErrors, IFirebaseErrorCode, convertToFirebaseError } from "../utils/FirebaseErrors";
+import { IFullUser } from "../types/user/FullUser";
 import { log } from "../utils/helpers";
+import {
+  FacebookSVG,
+  GoogleSVG,
+  TwitterSVG,
+  WordpressSVG,
+} from "../components/ui/svgs";
 
-const Login = () => {
-  const {login, googleLogin} = UserAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<IFirebaseErrorCode>();
+const Login: FC = (props) => {
+  const [providers, setproviders] = useState<Record<
+    LiteralUnion<BuiltInProviderType, string>,
+    ClientSafeProvider
+  > | null>();
+  const [user, setUser] = useState<IFullUser | undefined>();
+  const [session, loading] = useSession({
+    required: true,
+    redirectTo: "./login",
+    queryConfig: {
+      staleTime: 60 * 1000 * 60 * 3, // 3 hours
+      refetchInterval: 60 * 1000 * 5, // 5 minutes
+    },
+  });
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setError(undefined);
-    let error = FirebaseErrors.loginSubmit;
-    try {
-      const user = await login(email, password);
-      if (user) {
-        Router.push("./");
-        return;
-      }
-    } catch (e) {
-      log('LOGIN FAIL',e);
-      error = convertToFirebaseError(e, error);
-    }
-    setError(error)
-  };
+  useEffect(() => {
+    const setTheProviders = async () => {
+      const setupProviders = await getProviders();
+      setproviders(setupProviders);
+    };
+    setTheProviders();
+  }, []);
 
-  const handleGoogleLogin = async (e: FormEvent) => {
-    e.preventDefault();
-    setError(undefined)
-    let error = FirebaseErrors.loginSubmit
-    try {
-      const user = await googleLogin();
-      if (user) {
-          Router.push("./");
-          return;
-      }
+  useEffect(() => {
+    if (session?.user) {
+      setUser(session.user);
     }
-    catch(e) {
-      log('GOOGLE LOGIN FAIL',e)
-      error=convertToFirebaseError(e,error)
-    }
-    setError(error)
-  }
+  }, [session]);
 
   return (
     <MainLayout
       sectionTitle="Login"
-      subTitle="Sign in to your account"
+      subTitle={
+        user
+          ? user.profile?.displayName || user.name || user.email || undefined
+          : "Please login"
+      }
       className="text-gray-400"
     >
       <div className="m-0">
-        <form className="space-y-4 m-0" onSubmit={handleSubmit}>
-          <div className="flex flex-col py-2">
-            <label>Email address</label>
-            <input
-              type={"email"}
-              onChange={(e) => setEmail(e.target.value)}
-              className="bg-primary-focus p-2"
-            />
-          </div>
-          <div className="flex flex-col py-2">
-            <label>Password</label>
-            <input
-              type={"password"}
-              onChange={(e) => setPassword(e.target.value)}
-              className="bg-primary-focus p-2"
-            />
-          </div>
-
-          {error && <div className="text-red-400 italic">{error.code }: {error.message}</div>}
-
-          <button className="bg-orange-600 hover:bg-orange-500 text-gray-200 hover:text-white p-2 w-full transition-colors duration-200 ease-in-out">
-            Sign In
-          </button>
-
-          <button onClick={handleGoogleLogin} className="bg-blue-600 hover:bg-blue-500 text-gray-200 hover:text-white p-2 w-full transition-colors duration-200 ease-in-out">
-            Google Login
-          </button>
-        </form>
-
-        <p className="mt-12">
-          Don't have an account yet? <Link href="./register">Register now</Link>
-        </p>
+        {/* {error && <div className="text-red-400 italic">{error.code }: {error.message}</div>} */}
+        {session && (
+          <>
+            Signed in as {session.user?.email} <br />
+            <button
+              onClick={() => signOut()}
+              className="bg-primary hover:bg-primary-focus text-primary-content p-2 mx-2 transition-colors duration-200 ease-in-out"
+            >
+              Sign out
+            </button>
+          </>
+        )}
+        {!session && (
+          <>
+            <form
+              action="http://localhost:3000/api/auth/signin/email"
+              method="POST"
+            >
+              <input
+                name="csrfToken"
+                type="hidden"
+                defaultValue={props.csrfToken}
+              />
+              <input
+                id="input-email-for-email-provider"
+                type="text"
+                name="email"
+                placeholder="email@example.com"
+                className="p-2 mx-2 bg-base-200 text-primary-content"
+              />
+              <button
+                type="submit"
+                className="bg-orange-600 hover:bg-orange-500 text-gray-200 hover:text-white p-2 w-full transition-colors duration-200 ease-in-out"
+              >
+                Email Login
+              </button>
+            </form>
+            <p className="border-t border-t-secondary opacity-50 my-4">Or login with any of the following existing accounts</p>
+            <div className="flex justify-evenly space-x-2">
+              <button
+                onClick={() => signIn(providers?.google.id)}
+                className="transition-colors duration-200 ease-in-out flex"
+              >
+                <GoogleSVG />
+              </button>
+              <button
+                onClick={() => signIn(providers?.twitter.id)}
+                className="transition-colors duration-200 ease-in-out flex"
+              >
+                <TwitterSVG />
+              </button>
+              <button
+                onClick={() => signIn(providers?.facebook.id)}
+                className="transition-colors duration-200 ease-in-out flex"
+              >
+                <FacebookSVG />
+              </button>
+              <button
+                onClick={() => signIn(providers?.wordpress.id)}
+                className="transition-colors duration-200 ease-in-out flex"
+              >
+                <WordpressSVG />
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </MainLayout>
-  );};
-  
+  );
+};
+
+export async function getServerSideProps(context: any) {
+  const csrfToken = await getCsrfToken(context);
+  log("Login SSP", csrfToken);
+  return {
+    props: {
+      csrfToken,
+    },
+  };
+}
+
 export default Login;

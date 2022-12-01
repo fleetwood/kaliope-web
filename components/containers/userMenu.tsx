@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { AwesomeIcon, CircleQuestionIcon, ClipboardIcon } from "../ui/icons";
-import { UserAuth } from "../../firebase/AuthContext";
+import { GoogleSVG } from "../ui/svgs";
 import { av, UserAvatar } from "../ui/userAvatar";
 import ShrinkableNavItem from "./shrinkableNavItem";
 
 const UserMenu = () => {
-  const {user} = UserAuth();
+  const user = {};
 
   return (
   <div className="fixed mt-32">
@@ -13,7 +13,7 @@ const UserMenu = () => {
       {user && (
         <li>
           <Link href='./account'>
-            <UserAvatar author={user} size={av.xxl} />
+            <UserAvatar {...user} size={av.xxl} />
           </Link>
         </li>
         )}
@@ -25,6 +25,9 @@ const UserMenu = () => {
       </li>
       <li className="">
         <ShrinkableNavItem href="https://fontawesome.com/search?o=r&m=free" target="_blank" icon={AwesomeIcon} linkColor="secondary-content" title="FontAwesome" />
+      </li>
+      <li className="">
+        <Link href="https://materialdesignicons.com/" title="Material Icons"><GoogleSVG /></Link>
       </li>
     </ul>
   </div>

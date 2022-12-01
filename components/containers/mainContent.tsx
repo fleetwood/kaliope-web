@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { FirebaseErrors, IFirebaseErrorCode } from "../../utils/FirebaseErrors";
 import { __host__ } from "../../utils/constants";
 import { PostFeedResponse } from "../../pages/api/post";
-import { FullPost } from "../../types/post/FullPost";
+import { IFullPost } from "../../types/post/FullPost";
 import PageStatus from "./pageStatus";
 import FeedPostItem from "./posts/feedPost";
 import { log } from "../../utils/helpers";
@@ -11,7 +11,7 @@ import Spinner, { SpinnerSize } from "../ui/spinner";
 import { fetchApi } from "../../utils/api";
 
 export default function MainContent(props?: PostFeedResponse) {
-  const [posts, setPosts] = useState<Array<FullPost>>([]);
+  const [posts, setPosts] = useState<Array<IFullPost>>([]);
   const [error, setError] = useState<IFirebaseErrorCode>();
 
   useEffect(() => {

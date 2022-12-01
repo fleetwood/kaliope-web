@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FullPost } from "../../../types/post/FullPost";
+import { IFullPost } from "../../../types/post/FullPost";
 import {
   CommentIcon,
   HeartIcon,
@@ -10,7 +10,7 @@ import ShrinkableNavItem from "../shrinkableNavItem";
 import FeedPostAuthor from "../user/feedPostAuthor";
 import ThreadPostItem from "./threadPost";
 
-const FeedPostItem = (props: FullPost) => {
+const FeedPostItem = (props: IFullPost) => {
   const post = {...props};
   const author = {...props.author}
 
@@ -18,7 +18,7 @@ const FeedPostItem = (props: FullPost) => {
     <div className="rounded-3xl mb-4 border border-base-300 bg-gradient-to-r from-base-300 via-base-200 to-base-300">
       <div className="items-center gap-4">
         {author && 
-          <FeedPostAuthor {...author} containerClass="border-b border-b-secondary-content" />
+          <FeedPostAuthor {...props.author} containerClass="border-b border-b-secondary-content" />
         }
         {post?.title && 
           <div className="mt-5 p-5">
