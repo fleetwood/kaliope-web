@@ -1,11 +1,13 @@
 import Link from "next/link";
+import { IFullUser } from "../../types/user/FullUser";
+import { UserSession } from "../hooks/session";
 import { AwesomeIcon, CircleQuestionIcon, ClipboardIcon } from "../ui/icons";
 import { GoogleSVG } from "../ui/svgs";
 import { av, UserAvatar } from "../ui/userAvatar";
 import ShrinkableNavItem from "./shrinkableNavItem";
 
 const UserMenu = () => {
-  const user = {};
+  const [user] = UserSession()
 
   return (
   <div className="fixed mt-32">
@@ -13,7 +15,7 @@ const UserMenu = () => {
       {user && (
         <li>
           <Link href='./account'>
-            <UserAvatar {...user} size={av.xxl} />
+            <UserAvatar user={user as IFullUser} size={av.xxl} />
           </Link>
         </li>
         )}

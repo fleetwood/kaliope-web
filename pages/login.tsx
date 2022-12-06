@@ -26,8 +26,7 @@ const Login: FC = (props) => {
   > | null>();
   const [user, setUser] = useState<IFullUser | undefined>();
   const [session, loading] = useSession({
-    required: true,
-    redirectTo: "./login",
+    required: false,
     queryConfig: {
       staleTime: 60 * 1000 * 60 * 3, // 3 hours
       refetchInterval: 60 * 1000 * 5, // 5 minutes
@@ -80,7 +79,10 @@ const Login: FC = (props) => {
               <input
                 name="csrfToken"
                 type="hidden"
-                defaultValue={props.csrfToken}
+                defaultValue={
+                  // @ts-ignore
+                  props.csrfToken
+                }
               />
               <input
                 id="input-email-for-email-provider"

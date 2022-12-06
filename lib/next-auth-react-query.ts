@@ -16,7 +16,11 @@ export type SessionProps = {
     queryConfig?: {} | undefined;
 }
 
-export function useSession({ required, redirectTo = '/api/auth/signin?error=SessionExpired', queryConfig = {} }:SessionProps) {
+export function useSession({ 
+  required, 
+  redirectTo = '/api/auth/signin', 
+  queryConfig = {} 
+}:SessionProps) {
   const router = useRouter();
   const query = useQuery(['session'], fetchSession, {
     ...queryConfig,
