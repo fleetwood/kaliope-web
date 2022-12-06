@@ -1,55 +1,45 @@
-import { GetServerSideProps } from "next";
 import { useEffect, useState } from "react";
 import MainLayout from "../../components/layouts/MainLayout";
 import { av, UserAvatar } from "../../components/ui/userAvatar";
-import {
-  FirebaseErrors,
-  IFirebaseErrorCode,
-} from "../../utils/FirebaseErrors";
-import { jsonify } from "../../utils/helpers";
+import { convertToFirebaseError, IFirebaseErrorCode } from "../../utils/FirebaseErrors";
+import { jsonify, log } from "../../utils/helpers";
 import { fetchApi } from "../../utils/api";
-import { FullUserResponse, IFullUser } from "../../types/user/FullUser";
+import {
+  IFullUser,
+} from "../../types/user/FullUser";
+import PageStatus from "../../components/containers/pageStatus";
+import { useRouter } from "next/router";
 
-export const getServerSideProps: GetServerSideProps<FullUserResponse|{}> = async (ctx) => {
-  const { id } = ctx.query;
-
-  if (id) {
-    const result = await fetchApi(`user/${id}`)
-    return { props: { ...result } };
-  }
-  return { props: {} };
-};
-
-export default function UserPage(props?: FullUserResponse) {
+export default function UserPage() {
+  const router = useRouter()
+  const { id } = router.query
   const [user, setUser] = useState<IFullUser | undefined>();
   const [error, setError] = useState<IFirebaseErrorCode>();
 
   useEffect(() => {
-    if (props?.user) {
-      setError(undefined);
-      setUser(props.user);
-    } else if (props?.error) {
-      setError(props.error);
+    if (id) {
+      fetchApi(`/user/${id}`)
+        .then((u) => {
+          log('fullUser return',u)
+          // @ts-ignore
+          setUser(u !== null ? u : undefined)}
+        )
+        .catch((e) => {
+          log("\tfullUser error", e.message);
+          setError(convertToFirebaseError(e));
+        });
     } else {
-        setError(FirebaseErrors.generic)
+      log('No slug')
     }
-  }, [user, error]);
+  }, []);
 
   return (
-    <MainLayout
-      sectionTitle={user?.name || "User Profile"}
-    >
-      {error && (
-        <div className="text-red-400 italic">
-          {error.code}: {error.message}
-        </div>
-      )}
+    <MainLayout sectionTitle={user?.profile?.displayName || user?.name || "User Profile"}>
+      <PageStatus error={error} watch={user} />
       {user && (
         <div>
-          {/* <UserAvatar user={props?.user} size={av.xxl} /> */}
-          <pre>
-            {jsonify(user)}
-          </pre>
+          <UserAvatar user={user} size={av.xxl} />
+          <pre>{jsonify(user)}</pre>
         </div>
       )}
     </MainLayout>
