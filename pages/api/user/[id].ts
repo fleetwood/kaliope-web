@@ -1,4 +1,3 @@
-import { User } from "@prisma/client"
 import type { NextApiRequest, NextApiResponse } from "next"
 import { prisma } from "../../../prisma/prismaContext"
 import { FullUserRelations, FullUserResponse } from "../../../types/user/FullUser"
