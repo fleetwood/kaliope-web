@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { useState, useEffect } from "react";
-import { useSession } from "../../lib/next-auth-react-query";
 import { IFullUser } from "../../types/user/FullUser";
 import { UserSession } from "../hooks/session";
 import { AwesomeIcon, CircleQuestionIcon, ClipboardIcon } from "../ui/icons";
@@ -17,7 +15,6 @@ const UserMenu = () => {
       {user && (
         <li>
           <Link href='./account'>
-            {user.name}
             <UserAvatar user={user as IFullUser} size={av.xxl} />
           </Link>
         </li>

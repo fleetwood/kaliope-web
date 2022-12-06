@@ -1,6 +1,5 @@
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import MainLayout from "./../components/layouts/MainLayout";
-import Router from "next/router";
 import {
   convertToFirebaseError,
   IFirebaseErrorCode,
@@ -8,29 +7,37 @@ import {
 import { log } from "../utils/helpers";
 import PageStatus from "../components/containers/pageStatus";
 import UserAccount from "../components/containers/user/userAccount";
-import { useSession } from "../lib/next-auth-react-query";
 import { IFullUser } from "../types/user/FullUser";
 import { signOut } from "next-auth/react";
+import { useSession } from "../lib/next-auth-react-query";
+import { fetchApi } from "../utils/api";
 
 const Account = () => {
-  const [user, setUser] = useState<IFullUser | undefined>();
-  const [session, loading] = useSession({required: true});
-  // const [email, setEmail] = useState("");
-  // const [name, setName] = useState("");
-  // const [password, setPassword] = useState("");
+  const [user, setUser] = useState<IFullUser>();
+  const [session] = useSession({ required: true });
+  const [error, setError] = useState<IFirebaseErrorCode>();
 
   useEffect(() => {
-    if (session?.user) {
-      setUser(session.user);
+    if (session?.user.email) {
+      fetchApi(`/user/email/${session.user.email}`)
+        .then((u) => {
+          log('fullUser return',u)
+          // @ts-ignore
+          setUser(u !== null ? u : undefined)}
+        )
+        .catch((e) => {
+          log("\tfullUser error", e.message);
+          setError(convertToFirebaseError(e));
+        });
+    } else {
+      log('Something broke on session dammit',session)
     }
   }, [session]);
-
-  const [error, setError] = useState<IFirebaseErrorCode>();
 
   const handleLogout = async () => {
     setError(undefined);
     try {
-      signOut()
+      signOut();
     } catch (e) {
       log("logout error", e);
       setError(convertToFirebaseError(e));
@@ -40,11 +47,18 @@ const Account = () => {
   return (
     <MainLayout
       sectionTitle="Account"
-      subTitle={user ? user.name || user.email || "Anonymous" : "Please login"}
+      // @ts-ignore
+      subTitle={
+        user
+          ? user.profile?.displayName || user?.name || "Anonymous"
+          : "Please login"
+      }
     >
       <PageStatus error={error} watch={user} />
-      {/* <UserAccount profile={user?.profile} /> */}
-      {user && <h2>Welcome back {user?.name || user?.email}</h2>}
+      {user && 
+        <UserAccount {...user} />
+      }
+      
       <button onClick={handleLogout} className="btn btn-secondary">
         Logout
       </button>

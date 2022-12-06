@@ -30,12 +30,13 @@ const MainLayout = ({
 
   return (
     <div className={`
-    max-w-7xl mx-auto 
-    grid grid-cols-12
-    text-gray-400 
-    border-2 sm:border-red-300 lg:border-yellow-200 xl:border-emerald-300 
-    ${className}`
-    }>
+      max-w-7xl mx-auto 
+      grid grid-cols-12
+      text-gray-400 
+      border-2 sm:border-red-300 lg:border-yellow-200 xl:border-emerald-300 
+      ${className}`
+    }
+    >
       <div className="col-span-2">
         <UserMenu />
       </div>

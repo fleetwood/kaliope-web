@@ -79,7 +79,10 @@ const Login: FC = (props) => {
               <input
                 name="csrfToken"
                 type="hidden"
-                defaultValue={props.csrfToken}
+                defaultValue={
+                  // @ts-ignore
+                  props.csrfToken
+                }
               />
               <input
                 id="input-email-for-email-provider"

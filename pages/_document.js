@@ -2,10 +2,10 @@ import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
   return (
-    <Html data-theme="kaliope">
+    <Html>
       <Head>
       </Head>
-      <body>
+      <body data-theme>
         <Main />
         <NextScript />
       </body>
