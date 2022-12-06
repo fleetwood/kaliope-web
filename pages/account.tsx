@@ -9,30 +9,11 @@ import PageStatus from "../components/containers/pageStatus";
 import UserAccount from "../components/containers/user/userAccount";
 import { IFullUser } from "../types/user/FullUser";
 import { signOut } from "next-auth/react";
-import { useSession } from "../lib/next-auth-react-query";
-import { fetchApi } from "../utils/api";
+import UserSessionLayout from "../components/layouts/UserSession";
 
 const Account = () => {
   const [user, setUser] = useState<IFullUser>();
-  const [session] = useSession({ required: true });
   const [error, setError] = useState<IFirebaseErrorCode>();
-
-  useEffect(() => {
-    if (session?.user.email) {
-      fetchApi(`/user/email/${session.user.email}`)
-        .then((u) => {
-          log('fullUser return',u)
-          // @ts-ignore
-          setUser(u !== null ? u : undefined)}
-        )
-        .catch((e) => {
-          log("\tfullUser error", e.message);
-          setError(convertToFirebaseError(e));
-        });
-    } else {
-      log('Something broke on session dammit',session)
-    }
-  }, [session]);
 
   const handleLogout = async () => {
     setError(undefined);
@@ -54,14 +35,14 @@ const Account = () => {
           : "Please login"
       }
     >
-      <PageStatus error={error} watch={user} />
-      {user && 
-        <UserAccount {...user} />
-      }
-      
-      <button onClick={handleLogout} className="btn btn-secondary">
-        Logout
-      </button>
+      <UserSessionLayout setUser={setUser} setError={setError}>
+        <PageStatus error={error} watch={user} />
+        {user && <UserAccount {...user} />}
+
+        <button onClick={handleLogout} className="btn btn-secondary">
+          Logout
+        </button>
+      </UserSessionLayout>
     </MainLayout>
   );
 };
