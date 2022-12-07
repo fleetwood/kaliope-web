@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import MainLayout from "../../components/layouts/MainLayout";
 import { av, UserAvatar } from "../../components/ui/userAvatar";
 import { convertToFirebaseError, IFirebaseErrorCode } from "../../utils/FirebaseErrors";
-import { jsonify, log } from "../../utils/helpers";
-import { fetchApi } from "../../utils/api";
+import { jsonify, log, logError } from "../../utils/helpers";
+import { getApi } from "../../utils/api";
 import {
   IFullUser,
 } from "../../types/user/FullUser";
@@ -18,18 +18,17 @@ export default function UserPage() {
 
   useEffect(() => {
     if (id) {
-      fetchApi(`/user/${id}`)
+      getApi(`/user/${id}`)
         .then((u) => {
-          log('fullUser return',u)
           // @ts-ignore
           setUser(u !== null ? u : undefined)}
         )
         .catch((e) => {
-          log("\tfullUser error", e.message);
+          logError("\tUserPage error", e.message);
           setError(convertToFirebaseError(e));
         });
     } else {
-      log('No slug')
+      logError('UserPage error: No slug')
     }
   }, []);
 
