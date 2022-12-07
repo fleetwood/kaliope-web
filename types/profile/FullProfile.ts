@@ -10,10 +10,30 @@ export const FullProfileRelations = Prisma.validator<Prisma.ProfileArgs>()({
     posts: true,
     Follows: true,
     Followers: true,
-    Inbox: true,
-    Outbox: true,
+    Inbox: {
+      where: {
+        messageParentId: {
+          equals: null,
+        },
+      },
+      include: {
+        sender: true,
+        messages: true,
+      },
+    },
+    Outbox: {
+      where: {
+        messageParentId: {
+          equals: null,
+        },
+      },
+      include: {
+        recipient: true,
+        messages: true,
+      },
+    },
     user: true,
-  }
+  },
 });
 
 export const PostProfileRelations = Prisma.validator<Prisma.ProfileArgs>()({
@@ -34,9 +54,13 @@ export const PostProfileRelations = Prisma.validator<Prisma.ProfileArgs>()({
   },
 });
 
-export type IPostProfile = Prisma.ProfileGetPayload<typeof PostProfileRelations>;
+export type IPostProfile = Prisma.ProfileGetPayload<
+  typeof PostProfileRelations
+>;
 
-export type IFullProfile = Prisma.ProfileGetPayload<typeof FullProfileRelations>;
+export type IFullProfile = Prisma.ProfileGetPayload<
+  typeof FullProfileRelations
+>;
 
 export type FullProfileResponse = IErrorResponse & {
   profile?: IFullProfile;

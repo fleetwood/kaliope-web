@@ -24,16 +24,16 @@
 
 @layer components {
     h1 {
-        @apply text-xl text-primary-content
-    }
-    h1.title {
-        @apply text-4xl md:text-5xl lg:text-6xl py-2 text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary font-extrabold
-    }
-    h1.subtitle {
-        @apply text-2xl md:text-3xl lg:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-secondary to-accent
+        @apply text-4xl md:text-5xl lg:text-6xl text-primary-content
     }
     h2 {
-        @apply text-lg text-primary-content
+        @apply text-2xl md:text-3xl lg:text-4xl text-primary-content
+    }
+    .title {
+        @apply py-2 text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary font-extrabold
+    }
+    .subtitle {
+        @apply text-transparent bg-clip-text bg-gradient-to-r from-secondary to-accent
     }
     .stroke-white {
         -webkit-text-stroke-width: 0.5px;
