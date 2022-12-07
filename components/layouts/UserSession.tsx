@@ -1,6 +1,6 @@
 import { ReactNode, useEffect } from "react";
 import { useSession } from "../../lib/next-auth-react-query";
-import { fetchApi } from "../../utils/api";
+import { getApi } from "../../utils/api";
 import { convertToFirebaseError } from "../../utils/FirebaseErrors";
 import { logError } from "../../utils/helpers";
 
@@ -15,7 +15,7 @@ const UserSessionLayout = ({setUser, setError, children}: UserSessionProps) => {
 
   useEffect(() => {
     if (session?.user.email) {
-      fetchApi(`/user/email/${session.user.email}`)
+      getApi(`/user/email/${session.user.email}`)
         .then((u) => {
           // @ts-ignore
           setUser(u !== null ? u : undefined)}

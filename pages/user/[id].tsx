@@ -3,7 +3,7 @@ import MainLayout from "../../components/layouts/MainLayout";
 import { av, UserAvatar } from "../../components/ui/userAvatar";
 import { convertToFirebaseError, IFirebaseErrorCode } from "../../utils/FirebaseErrors";
 import { jsonify, log, logError } from "../../utils/helpers";
-import { fetchApi } from "../../utils/api";
+import { getApi } from "../../utils/api";
 import {
   IFullUser,
 } from "../../types/user/FullUser";
@@ -18,7 +18,7 @@ export default function UserPage() {
 
   useEffect(() => {
     if (id) {
-      fetchApi(`/user/${id}`)
+      getApi(`/user/${id}`)
         .then((u) => {
           // @ts-ignore
           setUser(u !== null ? u : undefined)}

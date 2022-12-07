@@ -5,7 +5,7 @@ interface AccountInboxProps  {
 const AccountInbox = (props:AccountInboxProps) => {
     return (
     <div className={props.className}>
-        <h1>Inbox</h1>
+    <h1 className="subtitle">Inbox</h1>
     </div>
 )}
  

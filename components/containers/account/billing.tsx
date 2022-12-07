@@ -5,7 +5,7 @@ interface AccountBillingProps  {
 const AccountBilling = (props:AccountBillingProps) => {
     return (
     <div className={props.className}>
-        <h1>Billing</h1>
+        <h1 className="subtitle">Billing</h1>
     </div>
 )}
  

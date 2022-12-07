@@ -33,7 +33,7 @@ const MainLayout = ({
       max-w-7xl mx-auto 
       grid grid-cols-12
       text-gray-400 
-      border-2 sm:border-red-300 lg:border-yellow-200 xl:border-emerald-300 
+      border-2 sm:border-red-300 md:border-purple-300 lg:border-yellow-200 xl:border-emerald-300 
       ${className}`
     }
     >
