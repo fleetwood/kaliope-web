@@ -13,6 +13,7 @@
     "rebuild": "yarn clean && yarn watch",
     "dev": "next dev",
     "dev:debug": "next dev --inspect-brk=5858",
+    "studio": "npx prisma studio",
     "build": "next build",
     "start": "next start",
     "start:redis": "redis-server --daemonize yes",

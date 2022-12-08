@@ -8,10 +8,11 @@ type UserSessionProps = {
   setUser: React.Dispatch<React.SetStateAction<any>>
   setError: React.Dispatch<React.SetStateAction<any>>
   children?: ReactNode
+  required?: boolean
 };
 
-const UserSessionLayout = ({setUser, setError, children}: UserSessionProps) => {
-  const [session] = useSession({ required: true });
+const UserSessionLayout = ({setUser, setError, required = true, children}: UserSessionProps) => {
+  const [session] = useSession({ required });
 
   useEffect(() => {
     if (session?.user.email) {

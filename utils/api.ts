@@ -1,4 +1,5 @@
 import { __host__, __port__ } from "./constants"
+import { log } from "./helpers"
 
 const apiUrl = (url:string) => `http://${__host__}:${__port__}/api/${url}`
 const postData = (data:any) => {
@@ -15,5 +16,8 @@ export const getApi = async (url:string) => {
 }
 
 export const sendApi = async (url:string, data:any) => {
-    return await (await fetch(apiUrl(url), postData(data))).json()
+    const sendTo = apiUrl(url),
+        post = postData(data)
+    log('sendApi',sendTo,post)
+    return await (await fetch(sendTo, post)).json()
 }

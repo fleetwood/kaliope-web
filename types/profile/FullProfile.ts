@@ -1,8 +1,27 @@
 import { Prisma } from "@prisma/client";
 import { IErrorResponse } from "../../utils/FirebaseErrors";
 
-export const FullProfileRelations = Prisma.validator<Prisma.ProfileArgs>()({
+export const FollowerRelations = Prisma.validator<Prisma.UserArgs>()({
   include: {
+    profile: {
+      select: {
+        Followers: true,
+        FollowerProfile: true,
+        Follows: true,
+        FollowsProfile: true,
+        totalFollowers: true,
+        totalFollows: true,
+      },
+    },
+  },
+});
+
+export type IUserFollowers = Prisma.UserGetPayload<typeof FollowerRelations>;
+
+export const FullProfileRelations = Prisma.validator<Prisma.ProfileArgs>()({
+  select: {
+    displayName: true,
+    photoURL: true,
     books: true,
     ratings: true,
     comments: true,
@@ -10,6 +29,14 @@ export const FullProfileRelations = Prisma.validator<Prisma.ProfileArgs>()({
     posts: true,
     Follows: true,
     Followers: true,
+    totalFollowers: true,
+    totalFollows: true,
+    _count: {
+      select: {
+        Follows: true,
+        Followers: true
+      }
+    },
     Inbox: {
       where: {
         messageParentId: {
@@ -19,6 +46,9 @@ export const FullProfileRelations = Prisma.validator<Prisma.ProfileArgs>()({
       include: {
         sender: true,
         messages: true,
+      },
+      orderBy: {
+        lastLoginAt: "desc"
       },
     },
     Outbox: {
@@ -30,6 +60,9 @@ export const FullProfileRelations = Prisma.validator<Prisma.ProfileArgs>()({
       include: {
         recipient: true,
         messages: true,
+      },
+      orderBy: {
+        lastLoginAt: "desc"
       },
     },
     user: true,
