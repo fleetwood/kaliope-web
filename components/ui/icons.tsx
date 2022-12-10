@@ -18,7 +18,9 @@ import {
   faHeart,
   faComment,
   faComments,
-  faMessage
+  faMessage,
+  faCircleXmark,
+  faEye
 } from "@fortawesome/free-solid-svg-icons";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
@@ -36,6 +38,8 @@ export const StarIcon = <FontAwesomeIcon icon={faStar} />;
 export const HeartIcon = <FontAwesomeIcon icon={faHeart} />;
 export const AddUserIcon = <FontAwesomeIcon icon={faUserPlus} />;
 export const MessageIcon = <FontAwesomeIcon icon={faMessage} />;
+export const XCircleIcon = <FontAwesomeIcon icon={faCircleXmark} />;
+export const EyeIcon = <FontAwesomeIcon icon={faEye} />;
 
 export const CommentIcon = <FontAwesomeIcon icon={faComment} />;
 export const FollowsIcon = <FontAwesomeIcon icon={faUserGroup} />;

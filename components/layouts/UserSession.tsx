@@ -16,7 +16,7 @@ const UserSessionLayout = ({setUser, setError, required = true, children}: UserS
 
   useEffect(() => {
     if (session?.user.email) {
-      getApi(`/user/email/${session.user.email}`)
+      getApi(`/user/byEmail/${session.user.email}`)
         .then((u) => {
           // @ts-ignore
           setUser(u !== null ? u : undefined)}

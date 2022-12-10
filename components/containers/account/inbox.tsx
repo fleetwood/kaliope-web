@@ -1,7 +1,7 @@
 import { Message } from "@prisma/client";
 import { FormEvent, useEffect, useState } from "react";
 import { IFullUser } from "../../../types/user/FullUser";
-import { log } from "../../../utils/helpers";
+import { log, todo } from "../../../utils/helpers";
 import MessageThreadItem from "./MessageThreadItem";
 
 interface AccountInboxProps  {
@@ -14,6 +14,8 @@ const now = new Date();//.toString();
 const AccountInbox = (props:AccountInboxProps) => {
     const [inbox, setInbox] = useState<Array<Message>>(Array<Message>(0))
     const [message, setMessage] = useState<string|null>()
+    todo('Instead of using IFullUser to provide the Inbox, get it from the API directly.')
+    todo('Once the Inbox is coming from API, remove it from the IFullUser.')
 
     useEffect(() => {
         const messages = [...props.user.profile?.Inbox || [], ...props.user.profile?.Outbox || []]
