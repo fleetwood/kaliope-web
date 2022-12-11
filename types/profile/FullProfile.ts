@@ -1,156 +1,116 @@
 import { Prisma } from "@prisma/client";
 import { IErrorResponse } from "../../utils/FirebaseErrors";
 
-export const FollowerRelations = Prisma.validator<Prisma.ProfileArgs>()({
-    select: {
-      id: true,
-      displayName: true,
-      photoURL: true,
-      Followers: true,
-      Follows: true,
-      totalFollowers: true,
-      totalFollows: true,
-    },
-});
-
-export type IUserFollowers = Prisma.ProfileGetPayload<typeof FollowerRelations>;
-
-export const FullProfileRelations = Prisma.validator<Prisma.ProfileArgs>()({
+export const BaseProfileRelations = Prisma.validator<Prisma.ProfileArgs>()({
   select: {
+    id: true,
     displayName: true,
     photoURL: true,
-    books: true,
-    ratings: true,
-    comments: true,
-    galleries: true,
-    posts: true,
-    Follows: true,
-    Followers: true,
-    totalFollowers: true,
+    createdAt: true,
+    lastLoginAt: true,
+    totalLikes: true,
+    totalShares: true,
     totalFollows: true,
+    totalFollowers: true,  
     _count: {
       select: {
-        Follows: true,
-        Followers: true
+        books: true,
+        ratings: true,
+        comments: true,
+        posts: true,
       }
     },
-    Inbox: {
-      where: {
-        messageParentId: {
-          equals: null,
-        },
-        visible: {
-          equals: true
-        }
-      },
-      include: {
-        sender: true,
-        messages: {
-          orderBy: {
-            lastLoginAt: "asc"
-          },
-        },
-      },
-      orderBy: {
-        lastLoginAt: "desc"
-      },
-    },
-    Outbox: {
-      where: {
-        messageParentId: {
-          equals: null,
-        },
-        visible: {
-          equals: true
-        }
-      },
-      include: {
-        recipient: true,
-        messages: {
-          orderBy: {
-            lastLoginAt: "asc"
-          },
-        },
-      },
-      orderBy: {
-        lastLoginAt: "desc"
-      },
-    },
-    user: true,
   },
 });
 
-export const FullInboxRelations = Prisma.validator<Prisma.ProfileArgs>()({
-  ...FollowerRelations,
+export const FollowerProfileRelations = Prisma.validator<Prisma.ProfileArgs>()({
   select: {
+    ...BaseProfileRelations.select,
+    Followers: {...BaseProfileRelations},
+    Follows: {...BaseProfileRelations},
+  },
+});
+
+export const FullProfileRelations = Prisma.validator<Prisma.ProfileArgs>()({
+  select: {
+    ...FollowerProfileRelations.select,
+    comments: true,
+    galleries: true,
+    books: true,
     Inbox: {
       where: {
         messageParentId: {
           equals: null,
         },
-      },
-      orderBy: {
-        lastLoginAt: "desc"
+        visible: {
+          equals: true,
+        },
       },
       include: {
         sender: {
-          ...FollowerRelations
-        }
-      }
+          ...BaseProfileRelations,
+        },
+        messages: {
+          orderBy: {
+            lastLoginAt: "asc",
+          },
+        },
+      },
+      orderBy: {
+        lastLoginAt: "desc",
+      },
     },
     Outbox: {
       where: {
         messageParentId: {
           equals: null,
+        },
+        visible: {
+          equals: true,
         },
       },
       include: {
         recipient: {
-          ...FollowerRelations
-        }
+          ...BaseProfileRelations,
+        },
+        messages: {
+          orderBy: {
+            lastLoginAt: "asc",
+          },
+        },
       },
       orderBy: {
-        lastLoginAt: "desc"
+        lastLoginAt: "desc",
       },
+    },
+    _count: {
+      select: {
+        comments: true,
+        books: true,
+        posts: true,
+      }
     },
     user: true,
   },
 });
 
-export const PostProfileRelations = Prisma.validator<Prisma.ProfileArgs>()({
-  select: {
-    photoURL: true,
-    displayName: true,
-    id: true,
-    books: true,
-    ratings: true,
-    comments: true,
-    galleries: true,
-    posts: true,
-    Follows: true,
-    Followers: true,
-    Inbox: true,
-    Outbox: true,
-    user: true,
-  },
-});
-
-export type IPostProfile = Prisma.ProfileGetPayload<
-  typeof PostProfileRelations
+export type IBaseProfile = Prisma.ProfileGetPayload<
+  typeof BaseProfileRelations
 >;
+export type BaseProfileResponse = IErrorResponse & {
+  profile?: IBaseProfile;
+};
+
+export type IFollowersProfile = Prisma.ProfileGetPayload<
+  typeof FollowerProfileRelations
+>;
+export type FollowersProfileResponse = IErrorResponse & {
+  profile?: IFollowersProfile;
+};
 
 export type IFullProfile = Prisma.ProfileGetPayload<
   typeof FullProfileRelations
 >;
-
-export type IInboxProfile = Prisma.ProfileGetPayload<
-  typeof FullInboxRelations
->;
-
 export type FullProfileResponse = IErrorResponse & {
   profile?: IFullProfile;
-};
-
-export type FullInboxResponse = IErrorResponse & {
-  inbox?: IInboxProfile;
 };

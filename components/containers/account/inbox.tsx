@@ -18,7 +18,10 @@ const AccountInbox = (props:AccountInboxProps) => {
     todo('Once the Inbox is coming from API, remove it from the IFullUser.')
 
     useEffect(() => {
-        const messages = [...props.user.profile?.Inbox || [], ...props.user.profile?.Outbox || []]
+        const messages = [
+            ...props.user.profile?.Inbox || [], 
+            ...props.user.profile?.Outbox || []
+        ]
         setInbox(messages)
     }, [])
 

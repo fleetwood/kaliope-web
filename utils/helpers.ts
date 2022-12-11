@@ -39,6 +39,16 @@ export const todo = (...params: any) => log(`!!!TODO!!!`, ...params);
 
 export const now = () => new Date();
 
+export const ymd = (date: Date = now()): string => {
+  let year = date.getFullYear();
+  let month = (1 + date.getMonth()).toString().padStart(2, "0");
+  let day = date.getDate().toString().padStart(2, "0");
+  let hour = date.getHours().toString().padStart(2, "0");
+  let min = date.getMinutes().toString().padStart(2, "0");
+  let sec = date.getSeconds().toString().padStart(2, "0");
+  return year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec;
+};
+
 export const valToLabel = (val: number) => {
   let result = val.toString();
   const tolerances: Array<{ x: number; l: string; d: number; p: number }> = [

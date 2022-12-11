@@ -1,30 +1,10 @@
-import { Message, Profile } from "prisma/prisma-client";
-import { IFullUser } from "../../../types/user/FullUser";
+import { Message } from "prisma/prisma-client";
+import { MessageProps } from "../../../types/message/MessageInfo";
 import { sendApi } from "../../../utils/api";
 import { log } from "../../../utils/helpers";
 import { EyeIcon, MessageIcon, XCircleIcon } from "../../ui/icons";
 import ShrinkableIconButton from "../../ui/shrinkableIconButton";
-
-type Messager = {      id: string;
-  displayName: string | null;
-  photoURL: string | null;
-  totalFollows: number;
-  totalFollowers: number;
-  Follows: Profile[];
-  Followers: Profile[];
-}
-
-interface MessageProps {
-  className?: string;
-  key: string;
-  message: Message & {
-    sender?: Messager
-    recipient?: Messager
-    messages?: Message[]
-  };
-  user: IFullUser;
-  showReply?: Boolean
-}
+import MessagerInfo from "./MessagerInfo";
 
 const MessageThreadItem = (props: MessageProps) => {
   const { message, user, key, className, showReply = true} = { ...props };
@@ -44,29 +24,14 @@ const MessageThreadItem = (props: MessageProps) => {
     const results = await sendApi(`message/delete`, {messageId});
     log(results)
   }
+  
   return (
     <div
       className={`bg-base-200 odd:bg-opacity-50 even:bg-opacity-80 mt-2 p-4 ${className}`}
       key={key}
     >
-      {message.senderId !== user.id && message.sender && (
-        <div className="border-b border-primary border-opacity-30 pb-2 font-bold">
-          From:{" "}
-          {
-            message.sender?.displayName || ""
-          }
-        </div>
-      )}
-      {
-        message.senderId === user.id && message.recipient && (
-          <div className="border-b border-primary border-opacity-30 pb-2 font-bold">
-            To:{" "}
-            {
-              message.recipient?.displayName || ""
-            }
-          </div>
-        )
-      }
+      <MessagerInfo {...message} />
+
       <div className="pl-4">{message.content}</div>
       {message.messages && message.messages!.map((reply:Message) => (
           <MessageThreadItem

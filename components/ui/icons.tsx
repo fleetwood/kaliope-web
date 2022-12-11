@@ -20,7 +20,9 @@ import {
   faComments,
   faMessage,
   faCircleXmark,
-  faEye
+  faEye,
+  faLeftLong,
+  faRightLong
 } from "@fortawesome/free-solid-svg-icons";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
@@ -40,6 +42,8 @@ export const AddUserIcon = <FontAwesomeIcon icon={faUserPlus} />;
 export const MessageIcon = <FontAwesomeIcon icon={faMessage} />;
 export const XCircleIcon = <FontAwesomeIcon icon={faCircleXmark} />;
 export const EyeIcon = <FontAwesomeIcon icon={faEye} />;
+export const LeftLongIcon = <FontAwesomeIcon icon={faLeftLong} />;
+export const RightLongIcon = <FontAwesomeIcon icon={faRightLong} />;
 
 export const CommentIcon = <FontAwesomeIcon icon={faComment} />;
 export const FollowsIcon = <FontAwesomeIcon icon={faUserGroup} />;

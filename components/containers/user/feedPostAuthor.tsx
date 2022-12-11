@@ -1,7 +1,7 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { faBookOpen, faComments, faUserGroup, faUsers } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
-import { IPostProfile } from "../../../types/profile/FullProfile";
+import { IBaseProfile } from "../../../types/profile/FullProfile";
 import { valToLabel } from "../../../utils/helpers";
 import {FaIcon} from "../../ui/icons";
 import { av, UserAvatar } from "../../ui/userAvatar";
@@ -18,7 +18,7 @@ const FeedPostDetails = (props: {className: string|null, icon: IconProp; label: 
   </div>
 )
 
-const FeedPostAuthor = (props: IPostProfile & {containerClass?:string}) => {
+const FeedPostAuthor = (props: IBaseProfile & {containerClass?:string}) => {
   // log('FeedPostAuthor',jsonify(props));
   const name = props.displayName || undefined;
 
@@ -38,10 +38,10 @@ const FeedPostAuthor = (props: IPostProfile & {containerClass?:string}) => {
         </Link>
       </div>
 
-      <FeedPostDetails className={"feed-author-follow"} icon={faUsers} label="Follows" value={0} />
-      <FeedPostDetails className={"feed-author-followers"} icon={faUserGroup} label="Followers" value={0} />
-      <FeedPostDetails className={"feed-author-books"} icon={faBookOpen} label="Books" value={props.books.length} />
-      <FeedPostDetails className={"feed-author-posts"} icon={faComments} label="Posts" value={props.posts.length} />
+      <FeedPostDetails className={"feed-author-follow"} icon={faUsers} label="Follows" value={props.totalFollows} />
+      <FeedPostDetails className={"feed-author-followers"} icon={faUserGroup} label="Followers" value={props.totalFollowers} />
+      <FeedPostDetails className={"feed-author-books"} icon={faBookOpen} label="Books" value={props._count.books} />
+      <FeedPostDetails className={"feed-author-posts"} icon={faComments} label="Posts" value={props._count.comments} />
 
     </div>
   );

@@ -1,9 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { IErrorResponse } from "../../utils/FirebaseErrors";
-import { FollowerRelations } from "./FullProfile";
 
 export const FullInboxRelations = Prisma.validator<Prisma.ProfileArgs>()({
-  ...FollowerRelations,
   include: {
     Inbox: {
       where: {
@@ -15,9 +13,7 @@ export const FullInboxRelations = Prisma.validator<Prisma.ProfileArgs>()({
         lastLoginAt: "desc"
       },
       include: {
-        recipient: {
-          ...FollowerRelations
-        }
+        recipient: true
       }
     },
     Outbox: {
@@ -27,9 +23,7 @@ export const FullInboxRelations = Prisma.validator<Prisma.ProfileArgs>()({
         },
       },
       include: {
-        sender: {
-          ...FollowerRelations
-        },
+        sender: true,
         messages: true
       },
       orderBy: {

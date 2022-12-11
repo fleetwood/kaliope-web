@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { IErrorResponse } from "../../utils/FirebaseErrors";
-import { IPostProfile, PostProfileRelations } from "../profile/FullProfile";
+import { BaseProfileRelations, IBaseProfile } from "../profile/FullProfile";
 
 export const FullPostRelations = Prisma.validator<Prisma.PostArgs>()({
     include: {
@@ -10,7 +10,7 @@ export const FullPostRelations = Prisma.validator<Prisma.PostArgs>()({
         },
       },
       author: {
-        ...PostProfileRelations
+        ...BaseProfileRelations
       },
       thread: {
           include: {
@@ -20,7 +20,7 @@ export const FullPostRelations = Prisma.validator<Prisma.PostArgs>()({
               }
             },
             author: {
-              ...PostProfileRelations
+              ...BaseProfileRelations
             },
         },
       },
@@ -28,7 +28,7 @@ export const FullPostRelations = Prisma.validator<Prisma.PostArgs>()({
   });
   
   export type IFullPost = Prisma.PostGetPayload<typeof FullPostRelations> & {
-    author: IPostProfile
+    author: IBaseProfile
   };
   
   export type FullPostResponse = IErrorResponse & {

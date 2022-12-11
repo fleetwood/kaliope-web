@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import { prisma } from "../../../../prisma/prismaContext"
-import { FullInboxRelations, FullInboxResponse } from "../../../../types/profile/FullProfile"
+import { FullProfileRelations, FullProfileResponse } from "../../../../types/profile/FullProfile"
 import { jsonify, log, logError } from "../../../../utils/helpers"
 
-export default async function handle (req:NextApiRequest, res:NextApiResponse<FullInboxResponse>) {
+export default async function handle (req:NextApiRequest, res:NextApiResponse<FullProfileResponse>) {
     const id = req.query.id || ''
     log('/api/user/messages/[id]',id)
     try {
@@ -11,7 +11,7 @@ export default async function handle (req:NextApiRequest, res:NextApiResponse<Fu
             where: {
                 id: id?.toString()
             },
-            ...FullInboxRelations
+            ...FullProfileRelations
         })
         res.status(200).json({error:undefined,...user})
     }
