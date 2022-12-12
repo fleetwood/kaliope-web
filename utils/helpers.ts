@@ -49,6 +49,92 @@ export const ymd = (date: Date = now()): string => {
   return year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec;
 };
 
+const isOne = (num: number, label: string) =>
+  num !== 1 ? `${num} ${label}s ago` : `${num} ${label} ago`;
+
+const dayOf = (day: any) => {
+  switch (day) {
+    case 7:
+      return "Sat";
+    case 6:
+      return "Fri";
+    case 5:
+      return "Thu";
+    case 4:
+      return "Wed";
+    case 3:
+      return "Tue";
+    case 2:
+      return "Mon";
+    default:
+      return "Sun";
+  }
+};
+
+const monthOf = (month: any) => {
+  switch (month) {
+    case 11:
+      return "Dec";
+    case 10:
+      return "Nov";
+    case 9:
+      return "Oct";
+    case 8:
+      return "Sep";
+    case 7:
+      return "Aug";
+    case 6:
+      return "Jul";
+    case 5:
+      return "Jun";
+    case 4:
+      return "May";
+    case 3:
+      return "Apr";
+    case 2:
+      return "Mar";
+    case 1:
+      return "Feb";
+    default:
+      return "Jan";
+  }
+};
+
+export const timeDifference = (from:Date|string) => {
+  if (from === null) {
+    return ''
+  }
+  const fromDate = new Date(from.toString())
+  const datetime = fromDate.getTime();
+  const current = now().getTime();
+  if (isNaN(datetime)) {
+    return "";
+  }
+  console.log(datetime + " " + current);
+  const milisec_diff = current - datetime;
+  var days = Math.floor(milisec_diff / 1000 / 60 / (60 * 24));
+  var date_diff = new Date(milisec_diff);
+  const ago = {
+    weeks: Math.floor(days / 7),
+    days,
+    hours: date_diff.getHours(),
+    minutes: date_diff.getMinutes(),
+  };
+  if (ago.weeks > 3) {
+    return `${dayOf(fromDate.getDay())}, ${fromDate.getFullYear()} ${monthOf(fromDate.getMonth())}-${fromDate.getDate() > 9 ? fromDate.getDate() : "0" + fromDate.getDate()}`;
+  } else if (ago.weeks > 0) {
+    return isOne(ago.weeks, " week");
+  } else if (ago.days > 0) {
+    return isOne(ago.days, " day");
+  } else if (ago.hours > 0) {
+    return isOne(ago.hours, " hour");
+  } else if (ago.minutes >= 2) {
+    return ago.minutes + " minutes ago";
+  } else {
+    return "Just now";
+  }
+}
+
 export const valToLabel = (val: number) => {
   let result = val.toString();
   const tolerances: Array<{ x: number; l: string; d: number; p: number }> = [

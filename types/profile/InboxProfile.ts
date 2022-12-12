@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { IErrorResponse } from "../../utils/ResponseErrors";
-import { FullProfileRelations } from "./FullProfile";
+import { BaseProfileRelations, FullProfileRelations } from "./FullProfile";
 
 export const FullInboxRelations = Prisma.validator<Prisma.ProfileArgs>()({
   select: {
@@ -19,6 +19,14 @@ export const FullInboxRelations = Prisma.validator<Prisma.ProfileArgs>()({
           ...FullProfileRelations,
         },
         messages: {
+          select: {
+            createdAt: true,
+            content: true,
+            visible: true,
+            read: true,
+            sender: BaseProfileRelations,
+            recipient: BaseProfileRelations,
+          },
           orderBy: {
             lastLoginAt: "asc",
           },
@@ -42,6 +50,14 @@ export const FullInboxRelations = Prisma.validator<Prisma.ProfileArgs>()({
           ...FullProfileRelations,
         },
         messages: {
+          select: {
+            createdAt: true,
+            content: true,
+            visible: true,
+            read: true,
+            sender: BaseProfileRelations,
+            recipient: BaseProfileRelations,
+          },
           orderBy: {
             lastLoginAt: "asc",
           },

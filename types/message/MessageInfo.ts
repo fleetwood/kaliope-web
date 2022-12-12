@@ -1,6 +1,7 @@
 import { Message } from "@prisma/client";
 import { IErrorCode } from "../../utils/ResponseErrors";
 import { IBaseProfile, IFollowersProfile } from "../profile/FullProfile";
+import { IInboxProfile } from "../profile/InboxProfile";
 import { IFullUser } from "../user/FullUser";
 
 export type Messager = {
@@ -18,13 +19,17 @@ export type MessagerInfoProps = Message & {
   sender?: IFollowersProfile | undefined;
   recipient?: IFollowersProfile | undefined;
   messages?: Message[] | undefined;
+  createdAt: Date
+  visible: boolean
+  read: boolean
 };
 
 export interface MessageProps {
   className?: string;
-  key: string;
+  // key: string;
   message: MessagerInfoProps;
   user: IFullUser;
+  sendAndUpdate: Function,
   showReply?: Boolean;
 }
 

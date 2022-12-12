@@ -1,12 +1,9 @@
 import { Message } from "@prisma/client";
-import { GetServerSideProps } from "next";
 import { FormEvent, useEffect, useState } from "react";
-import { MessageResponse } from "../../../types/message/MessageInfo";
 import { IFullUser } from "../../../types/user/FullUser";
-import { getApi, getMessage, sendApi } from "../../../utils/api";
+import { getApi, sendApi } from "../../../utils/api";
 import { __host__ } from "../../../utils/constants";
 import { log, logError, todo } from "../../../utils/helpers";
-import { UserSession } from "../../hooks/session";
 import MessageThreadItem from "./MessageThreadItem";
 
 interface AccountInboxProps {
@@ -14,62 +11,82 @@ interface AccountInboxProps {
   user: IFullUser;
 }
 
+type SendMessageProps = {
+    content: string,
+    messageParentId?: string,
+    recipientId: string,
+    senderId: string,
+}
+
 const AccountInbox = (props: AccountInboxProps) => {
-  const [inbox, setInbox] = useState<Array<Message>|null>(null);
+  const [inbox, setInbox] = useState<Array<Message> | null>(null);
   const [message, setMessage] = useState<string | null>();
   const [recipient, setRecipient] = useState<string | null>();
 
-  const sendMessage = async (e: FormEvent<HTMLFormElement>) => {
+  const sendAndUpdate = async (message: SendMessageProps) => {
+    const blank = () => Array<Message>(0);
+    try {
+      const newInbox = await sendApi("message/create", message);
+      if (newInbox.error) {
+        throw newInbox.error;
+      }
+      log('message created....',[
+        ...inbox || blank(),
+        ...newInbox.results?.Inbox || blank(),
+        ...newInbox.results?.Outbox || blank()
+      ])
+      todo('Sort the Inbox')
+      setInbox([
+        ...inbox || blank(),
+        ...newInbox.results?.Inbox || blank(),
+        ...newInbox.results?.Outbox || blank()
+      ]);
+    } catch (error) {
+      logError(error);
+    }
+  };
+
+  const sendMessage = (e: FormEvent<HTMLFormElement>) => {
     todo("Obtain recipient+id list from Follows+Followers");
     todo("Read/Unread need to be specific to sender/recipient");
     todo("Support markup in messages");
-    e.preventDefault();
-    if (message) {
-      const msg: MessageResponse = await sendApi("message/create", {
-        senderId: props.user.id,
-        recipientId: recipient,
-        read: false,
-        content: message,
-      });
-      if (msg.error) {
-        log(`sendReply FAIL: ${msg.error}`);
-        return;
-      }
-      setMessage(null);
-      setInbox([])
-      fetchInbox()
+    if (message && recipient) {
+        const msg:SendMessageProps = {
+            senderId: props.user.id,
+            recipientId: recipient,
+            content: message,
+          }
+      sendAndUpdate(msg);
     }
   };
 
   const fetchInbox = async () => {
-    log('fetch Inbox....')
-    const data = await getMessage(`message/${props.user.id}`);
+    log("fetch Inbox....");
     try {
-    if (!data.error) {
-      log("....messages received",data);
-      const messages = data.data?.results 
-      setInbox([...messages?.Inbox || [], ...messages?.Outbox || []]);
-    } else {
+      const messages = await getApi(`message/${props.user.id}`);
+      if (messages.error) {
+        throw messages.error;
+      } else {
+        setInbox([...messages.results.Inbox, ...messages.results.Outbox]);
+      }
+    } catch (error) {
       logError(
         "No messages received from API...",
-        data.error || " and no error either..."
+        error || " and no error either..."
       );
     }
-    }
-    catch(error){
-        logError(
-            "No messages received from API...",
-            error || " and no error either..."
-          );
-    }
   };
+
+  useEffect(() => {
+    fetchInbox();
+  }, []);
 
   return (
     // @ts-ignore
     <div className={props?.className || ""}>
       <form
         onSubmit={(e) => sendMessage(e)}
-        className="border-b border-accent-focus border-opacity-50 pb-6 relative"
+        className="pb-6 relative"
       >
         <h2 className="subtitle mt-8">Compose</h2>
         <input
@@ -90,35 +107,19 @@ const AccountInbox = (props: AccountInboxProps) => {
           Send!
         </button>
       </form>
-      <h2 className="subtitle mt-8">Inbox</h2>
+      <div className="flex space-x-2 mt-8 align-text-bottom">
+        <h2 className="subtitle bottom-0">Inbox </h2>
+        <h2 className="subtitle bottom-0">({inbox?.length})</h2>
+      </div>
       {inbox?.map((message) => (
-          <MessageThreadItem
-            user={props.user}
-            message={message}
-            key={message.messageid}
-          />
-        ))}
+        <MessageThreadItem
+          user={props.user}
+          message={message}
+          sendAndUpdate={sendAndUpdate}
+        />
+      ))}
     </div>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const [user] = UserSession();
-  const userid = (user as IFullUser).id;
-
-  if (user) {
-    const api = await getMessage(`message/${userid}`);
-    if (!api.error && api.data?.results) {
-        const inbox = [...[api.data.results.Inbox],...[api.data.results.Outbox]]
-        return {
-            props: { inbox },
-        };
-    }
-    else if (api.error) {
-        logError('account/inbox getServerSideProps()', api.error)
-    }
-  }
-  return { props: {} };
 };
 
 export default AccountInbox;
