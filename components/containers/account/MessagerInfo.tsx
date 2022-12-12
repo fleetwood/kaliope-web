@@ -5,7 +5,7 @@ import { av, UserAvatar } from "../../ui/userAvatar";
 
 const MessagerInfo = (message: MessagerInfoProps) => {
   return (
-    <div className="border-b border-primary border-opacity-30 pb-2">
+    <div className="pb-2">
       {message.sender && 
         <div className="w-full flex space-x-1">
           <div>{LeftLongIcon}</div>

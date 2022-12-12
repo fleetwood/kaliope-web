@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import MainLayout from "./../components/layouts/MainLayout";
 import {
-  convertToFirebaseError,
-  IFirebaseErrorCode,
-} from "../utils/FirebaseErrors";
+  convertToResponseError,
+  IErrorCode,
+} from "../utils/ResponseErrors";
 import { log } from "../utils/helpers";
 import PageStatus from "../components/containers/pageStatus";
 import UserAccount from "../components/containers/user/userAccount";
@@ -13,7 +13,7 @@ import UserSessionLayout from "../components/layouts/UserSession";
 
 const Account = () => {
   const [user, setUser] = useState<IFullUser>();
-  const [error, setError] = useState<IFirebaseErrorCode>();
+  const [error, setError] = useState<IErrorCode>();
 
   const handleLogout = async () => {
     setError(undefined);
@@ -21,7 +21,7 @@ const Account = () => {
       signOut();
     } catch (e) {
       log("logout error", e);
-      setError(convertToFirebaseError(e));
+      setError(convertToResponseError(e));
     }
   };
 

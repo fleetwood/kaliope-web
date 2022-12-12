@@ -1,11 +1,11 @@
 import { Profile } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
-import { convertToFirebaseError, IFirebaseErrorCode } from "../../../utils/FirebaseErrors";
+import { convertToResponseError, IErrorCode } from "../../../utils/ResponseErrors";
 import { log, logError } from "../../../utils/helpers";
 
 type ProfileUpdateResponse = {
   profile?: Profile
-  error?: IFirebaseErrorCode
+  error?: IErrorCode
 }
 
 export default async function handler(
@@ -41,7 +41,7 @@ export default async function handler(
     }
     res.status(200).json({error: undefined, ...profile})
   } catch(e) {
-    const error = convertToFirebaseError(e)
+    const error = convertToResponseError(e)
     log("api/profile/update", e || 'Uknown error');
     res.status(200).json({profile: undefined, error})
   }

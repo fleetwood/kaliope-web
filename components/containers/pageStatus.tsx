@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-import { IFirebaseErrorCode } from "../../utils/FirebaseErrors";
+import { IErrorCode } from "../../utils/ResponseErrors";
 import Spinner, { SpinnerSize } from "../ui/spinner";
 
 export type StatusProps = {
   watch?: any,
   isLoading?: boolean;
-  error?: IFirebaseErrorCode;
+  error?: IErrorCode;
 };
 
 export default function PageStatus(props: StatusProps) {
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<IFirebaseErrorCode|null>(null)
+  const [error, setError] = useState<IErrorCode|null>(null)
   const [watch] = useState(undefined)
 
   useEffect(() => {

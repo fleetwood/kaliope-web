@@ -1,7 +1,7 @@
 import { ReactNode, useEffect } from "react";
 import { useSession } from "../../lib/next-auth-react-query";
 import { getApi } from "../../utils/api";
-import { convertToFirebaseError } from "../../utils/FirebaseErrors";
+import { convertToResponseError } from "../../utils/ResponseErrors";
 import { logError } from "../../utils/helpers";
 
 type UserSessionProps = {
@@ -23,7 +23,7 @@ const UserSessionLayout = ({setUser, setError, required = true, children}: UserS
         )
         .catch((e) => {
           logError("\tUserSession error fetching unique user", e.message);
-          setError(convertToFirebaseError(e));
+          setError(convertToResponseError(e));
         });
     } else {
       logError('UserSession could not determine user email',session)

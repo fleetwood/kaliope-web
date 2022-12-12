@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import MainLayout from "../../components/layouts/MainLayout";
 import { av, UserAvatar } from "../../components/ui/userAvatar";
-import { convertToFirebaseError, IFirebaseErrorCode } from "../../utils/FirebaseErrors";
+import { convertToResponseError, IErrorCode } from "../../utils/ResponseErrors";
 import { jsonify, log, logError } from "../../utils/helpers";
 import { getApi, sendApi } from "../../utils/api";
 import {
@@ -16,7 +16,7 @@ export default function UserPage() {
   const { id } = router.query
   const [user, setUser] = useState<IFullUser | undefined>();
   const [sessionUser, setSessionUser] = useState<IFullUser>();
-  const [error, setError] = useState<IFirebaseErrorCode>();
+  const [error, setError] = useState<IErrorCode>();
 
   useEffect(() => {
     if (id) {
@@ -27,7 +27,7 @@ export default function UserPage() {
         )
         .catch((e) => {
           logError("\tUserPage error", e.message);
-          setError(convertToFirebaseError(e));
+          setError(convertToResponseError(e));
         });
     } else {
       logError('UserPage error: No slug')

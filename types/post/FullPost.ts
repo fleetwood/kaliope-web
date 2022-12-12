@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { IErrorResponse } from "../../utils/FirebaseErrors";
+import { IErrorResponse } from "../../utils/ResponseErrors";
 import { BaseProfileRelations, IBaseProfile } from "../profile/FullProfile";
 
 export const FullPostRelations = Prisma.validator<Prisma.PostArgs>()({
@@ -31,6 +31,4 @@ export const FullPostRelations = Prisma.validator<Prisma.PostArgs>()({
     author: IBaseProfile
   };
   
-  export type FullPostResponse = IErrorResponse & {
-    post?: IFullPost;
-  };
+  export type FullPostResponse = IErrorResponse<IFullPost>;

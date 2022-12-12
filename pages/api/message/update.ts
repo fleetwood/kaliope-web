@@ -1,12 +1,10 @@
 import { Message, Prisma } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../../prisma/prismaContext";
-import { IErrorResponse } from "../../../utils/FirebaseErrors";
+import { IErrorResponse } from "../../../utils/ResponseErrors";
 import { jsonify, log, logError } from "../../../utils/helpers";
 
-type MessageResponse = IErrorResponse & {
-  message?: Message;
-};
+type MessageResponse = IErrorResponse<Message>;
 
 export default async function handle(
   req: NextApiRequest,

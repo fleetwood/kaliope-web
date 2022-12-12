@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FirebaseErrors, IFirebaseErrorCode } from "../../utils/FirebaseErrors";
+import { ResponseErrors, IErrorCode } from "../../utils/ResponseErrors";
 import { __host__ } from "../../utils/constants";
 import { PostFeedResponse } from "../../pages/api/post";
 import { IFullPost } from "../../types/post/FullPost";
@@ -12,13 +12,13 @@ import { getApi } from "../../utils/api";
 
 export default function MainContent(props?: PostFeedResponse) {
   const [posts, setPosts] = useState<Array<IFullPost>>([]);
-  const [error, setError] = useState<IFirebaseErrorCode>();
+  const [error, setError] = useState<IErrorCode>();
 
   useEffect(() => {
-    if (props?.posts) {
-      setPosts(props.posts);
+    if (props?.results) {
+      setPosts(props.results);
     } else {
-      setError(FirebaseErrors.postNotfound);
+      setError(ResponseErrors.postNotfound);
     }
   }, [props]);
 

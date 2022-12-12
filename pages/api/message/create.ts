@@ -1,11 +1,11 @@
 import { Message } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../../prisma/prismaContext";
-import { IErrorResponse } from "../../../utils/FirebaseErrors";
-import { jsonify, log, logError, ymd } from "../../../utils/helpers";
+import { IErrorResponse } from "../../../utils/ResponseErrors";
+import { jsonify, log, logError, todo, ymd } from "../../../utils/helpers";
 
-type MessageResponse = IErrorResponse & {
-  message?: Message;
+type MessageResponse = IErrorResponse<Message> & {
+  results?: Message;
 };
 
 export default async function handle(
@@ -22,25 +22,29 @@ export default async function handle(
     method,
   } = req;
 
-  if (!content || !messageParentId || !recipientId || !senderId) {
-    log("api/message/create missing properties");
-    res
-      .status(405)
-      .json({ error: { code: "api/error", message: `Missing properties` } });
-  }
+  todo('Validate message properties')
 
   try {
+    log(`/api/message/create: ${jsonify({
+      content,
+      messageParentId,
+      recipientId,
+      senderId,
+      createdAt: new Date(),
+      lastLoginAt: new Date()
+    })}`)
     const message = await prisma.message.create({
         data: {
             content,
             messageParentId,
             recipientId,
             senderId,
-            createdAt: ymd(),
-            lastLoginAt: ymd()
+            createdAt: new Date(),
+            lastLoginAt: new Date()
         }
     });
     res.status(200).json({ error: undefined, ...message });
+
   } catch (e) {
     logError("\tFAIL", e);
     res.status(400).json({ error: { code: "api/error", message: jsonify(e) } });

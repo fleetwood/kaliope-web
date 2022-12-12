@@ -1,13 +1,44 @@
 import { Message } from "prisma/prisma-client";
-import { MessageProps } from "../../../types/message/MessageInfo";
+import { FormEvent, useState } from "react";
+import { MessageProps, MessageResponse } from "../../../types/message/MessageInfo";
 import { sendApi } from "../../../utils/api";
-import { log } from "../../../utils/helpers";
+import { log, now, todo } from "../../../utils/helpers";
 import { EyeIcon, MessageIcon, XCircleIcon } from "../../ui/icons";
 import ShrinkableIconButton from "../../ui/shrinkableIconButton";
 import MessagerInfo from "./MessagerInfo";
 
 const MessageThreadItem = (props: MessageProps) => {
-  const { message, user, key, className, showReply = true} = { ...props };
+  const { 
+    message, 
+    user, 
+    key, 
+    className, 
+    showReply = true, 
+  } = { ...props };
+
+  const [currentMessage, setCurrentMessage] = useState<string|null>()
+
+  const sendReply = async (e:FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
+      if (currentMessage) {
+          const msg:MessageResponse = await sendApi(
+            'message/create',
+            {
+              messageid: "dsalkjfghjakFL293814ERW7QHIFUSDAKCJF928RFHIUSCN",
+              senderId: user.id,
+              recipientId: message.senderId || message.recipientId,
+              visible: true,
+              read: false,
+              content: currentMessage,
+              messageParentId: message.messageid
+          })
+          if (msg.error) {
+            log(`sendReply FAIL: ${msg.error}`);
+            return;
+          }
+          setCurrentMessage('')
+      }
+  }
 
   const markAsRead = async (messageId:string, markAs:boolean) => {
     log('markAsRead',messageId)
@@ -32,7 +63,9 @@ const MessageThreadItem = (props: MessageProps) => {
     >
       <MessagerInfo {...message} />
 
-      <div className="pl-4">{message.content}</div>
+      <div className={`px-2 border-primary border-opacity-30 ${showReply ? 'border-t py-4' : '' }`}>
+        {message.content}
+      </div>
       {message.messages && message.messages!.map((reply:Message) => (
           <MessageThreadItem
             user={user}
@@ -43,11 +76,20 @@ const MessageThreadItem = (props: MessageProps) => {
           />
         ))
       }
+
       {showReply && 
-      <div className="flex justify-evenly space-x-2 mt-4 pt-4 border-t border-t-primary-content border-opacity-50">
+
+      <div className="mt-4 pt-4">
+        <div className="flex justify-evenly space-x-2 min-w-full">
         <ShrinkableIconButton icon={EyeIcon} label={`Mark as ${message.read ? 'Unread' : 'Read'}`} className="btn-secondary text-secondary-content rounded-full py-2 px-4 justify-start" labelClassName="btn-secondary-content" onClick={() => markAsRead(message.messageid, message.read)} />
         <ShrinkableIconButton icon={MessageIcon} label="Reply" className="btn-secondary text-secondary-content rounded-full py-2 px-4 justify-start" labelClassName="btn-secondary-content" onClick={() => replyTo(message.messageid)} />
         <ShrinkableIconButton icon={XCircleIcon} label="Delete" className="btn-secondary text-secondary-content rounded-full py-2 px-4 justify-start" labelClassName="btn-secondary-content" onClick={() => deleteMessage(message.messageid)} />
+        </div>
+        <form onSubmit={(e) => sendReply(e)} className="pb-6 relative min-w-full">
+            <textarea className="textarea textarea-bordered w-full block my-2" onChange={e => setCurrentMessage(e.currentTarget.value)} placeholder="Hello! Hallå! Привет! 여보세요! שלום!"></textarea>
+            <br />
+            <button className="btn-accent text-accent-content right-0 bottom-0 absolute block rounded-full py-2 px-12" type="submit">Send!</button>
+        </form>
       </div>
       }
     </div>

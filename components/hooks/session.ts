@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSession } from "../../lib/next-auth-react-query";
+import { IFullUser } from "../../types/user/FullUser";
 
 export type SessionUser = {
   name: string,
@@ -17,5 +18,5 @@ export const UserSession = (required=false) => {
     }
   }, [session]);
 
-  return [user,setUser]
+  return [user as IFullUser,setUser]
 }

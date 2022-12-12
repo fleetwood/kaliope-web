@@ -1,4 +1,4 @@
-import { MouseEventHandler, useState } from "react";
+import { useState } from "react";
 import { IFullUser } from "../../../types/user/FullUser";
 import { __host__ } from "../../../utils/constants";
 import AccountBilling from "../account/billing";

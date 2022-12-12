@@ -1,17 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import { prisma } from "../../../prisma/prismaContext"
 import { IFullPost, FullPostRelations } from "../../../types/post/FullPost";
-import { IErrorResponse } from "../../../utils/FirebaseErrors";
+import { IErrorResponse } from "../../../utils/ResponseErrors";
 import { jsonify, log, logError } from "../../../utils/helpers"
 
-export type PostFeedResponse = IErrorResponse & {
-    posts?: IFullPost[]
-  };
+export type PostFeedResponse = IErrorResponse<IFullPost[]>;
 
 export default async function handle (req:NextApiRequest, res:NextApiResponse<PostFeedResponse>) {
     const skip = parseInt(req.query.c ? req.query.c.toString() : '0')
     try {
-        const posts = await prisma.post.findMany({
+        const results = await prisma.post.findMany({
             ...FullPostRelations,
             take: 10,
             skip, 
@@ -23,7 +21,7 @@ export default async function handle (req:NextApiRequest, res:NextApiResponse<Po
             }]
         })
 
-        res.status(200).json({posts})
+        res.status(200).json({results})
     }
     catch(e) {
         logError('\tFAIL',e)

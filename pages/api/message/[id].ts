@@ -1,24 +1,25 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../../prisma/prismaContext";
-import { FullPostRelations, FullPostResponse } from "../../../types/post/FullPost";
+import { FullInboxRelations, FullInboxResponse } from "../../../types/profile/InboxProfile";
 import {
   convertToResponseError,
   ResponseErrors,
 } from "../../../utils/ResponseErrors";
-import { logError } from "../../../utils/helpers";
+import { log, logError } from "../../../utils/helpers";
 
 export default async function handle(
   req: NextApiRequest,
-  res: NextApiResponse<FullPostResponse | null>
+  res: NextApiResponse<FullInboxResponse | null>
 ) {
-  const postid = req.query.postid;
+  const userid = req.query.id;
   let error = ResponseErrors.postNotfound;
-  if (postid) {
+  log(`api/message/${userid||'undefined'}`)
+  if (userid) {
     try {
-      const results = await prisma.post.findUnique({
-        ...FullPostRelations,
+      const results = await prisma.profile.findUnique({
+        ...FullInboxRelations,
         where: {
-          postid: postid.toString(),
+          id: userid.toString(),
         },
       });
       if (results !== undefined && results !== null) {

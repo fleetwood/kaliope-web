@@ -41,6 +41,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-query": "^3.39.2",
     "redis": "^4.5.0",
+    "swr": "^2.0.0",
     "theme-change": "^2.2.0",
     "ts-node": "^10.9.1"
   },

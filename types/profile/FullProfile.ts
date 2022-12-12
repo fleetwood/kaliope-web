@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { IErrorResponse } from "../../utils/FirebaseErrors";
+import { IErrorResponse } from "../../utils/ResponseErrors";
 
 export const BaseProfileRelations = Prisma.validator<Prisma.ProfileArgs>()({
   select: {
@@ -11,14 +11,14 @@ export const BaseProfileRelations = Prisma.validator<Prisma.ProfileArgs>()({
     totalLikes: true,
     totalShares: true,
     totalFollows: true,
-    totalFollowers: true,  
+    totalFollowers: true,
     _count: {
       select: {
         books: true,
         ratings: true,
         comments: true,
         posts: true,
-      }
+      },
     },
   },
 });
@@ -26,8 +26,8 @@ export const BaseProfileRelations = Prisma.validator<Prisma.ProfileArgs>()({
 export const FollowerProfileRelations = Prisma.validator<Prisma.ProfileArgs>()({
   select: {
     ...BaseProfileRelations.select,
-    Followers: {...BaseProfileRelations},
-    Follows: {...BaseProfileRelations},
+    Followers: { ...BaseProfileRelations },
+    Follows: { ...BaseProfileRelations },
   },
 });
 
@@ -37,80 +37,20 @@ export const FullProfileRelations = Prisma.validator<Prisma.ProfileArgs>()({
     comments: true,
     galleries: true,
     books: true,
+    user: true,
     Inbox: {
       where: {
-        messageParentId: {
-          equals: null,
-        },
-        visible: {
-          equals: true,
-        },
-      },
-      include: {
-        sender: {
-          ...BaseProfileRelations,
-        },
-        messages: {
-          orderBy: {
-            lastLoginAt: "asc",
-          },
-        },
-      },
-      orderBy: {
-        lastLoginAt: "desc",
+        read: false,
       },
     },
-    Outbox: {
-      where: {
-        messageParentId: {
-          equals: null,
-        },
-        visible: {
-          equals: true,
-        },
-      },
-      include: {
-        recipient: {
-          ...BaseProfileRelations,
-        },
-        messages: {
-          orderBy: {
-            lastLoginAt: "asc",
-          },
-        },
-      },
-      orderBy: {
-        lastLoginAt: "desc",
-      },
-    },
-    _count: {
-      select: {
-        comments: true,
-        books: true,
-        posts: true,
-      }
-    },
-    user: true,
   },
 });
 
-export type IBaseProfile = Prisma.ProfileGetPayload<
-  typeof BaseProfileRelations
->;
-export type BaseProfileResponse = IErrorResponse & {
-  profile?: IBaseProfile;
-};
+export type IBaseProfile = Prisma.ProfileGetPayload<typeof BaseProfileRelations>;
+export type BaseProfileResponse = IErrorResponse<IBaseProfile>;
 
-export type IFollowersProfile = Prisma.ProfileGetPayload<
-  typeof FollowerProfileRelations
->;
-export type FollowersProfileResponse = IErrorResponse & {
-  profile?: IFollowersProfile;
-};
+export type IFollowersProfile = Prisma.ProfileGetPayload<typeof FollowerProfileRelations>;
+export type FollowersProfileResponse = IErrorResponse<IFollowersProfile>;
 
-export type IFullProfile = Prisma.ProfileGetPayload<
-  typeof FullProfileRelations
->;
-export type FullProfileResponse = IErrorResponse & {
-  profile?: IFullProfile;
-};
+export type IFullProfile = Prisma.ProfileGetPayload<typeof FullProfileRelations>;
+export type FullProfileResponse = IErrorResponse<IFullProfile>;
