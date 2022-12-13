@@ -29,7 +29,8 @@
 				" \t\t<></>",
 				"\t)}",
 		 		"",
-				"export default $1;"]
+				"export default $1;"
+			]
 	},
 	"Javascript Functional Component" : {
 		"scope": "javascript, typescript",
@@ -43,6 +44,16 @@
 				"\t$0",
 				"\t}",
 		 		"",
-				"export default $1;"]
+				"export default $1;"
+			]
+	},
+	"useEffect hook" : {
+		"scope": "javascript, typescript",
+		"prefix": "usf",
+		"description": "useEffect Hook",
+		"body": ["useEffect(() => {",
+			"\t$0",
+			"},[$1])"
+		]
 	},
 }

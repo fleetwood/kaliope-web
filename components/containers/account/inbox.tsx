@@ -22,7 +22,8 @@ type SendMessageProps = {
 const AccountInbox = (props: AccountInboxProps) => {
   const [inbox, setInbox] = useState<Array<Message> | null>(null);
   const [message, setMessage] = useState<string | null>();
-  const [recipient, setRecipient] = useState<string | null>();
+  const [recipientName, setRecipientName] = useState<string | null>();
+  const [recipientId, setRecipientId] = useState<string | null>();
   const [recipients, setRecipients] = useState<KeyVal[]>([]);
 
   const sendAndUpdate = async (message: SendMessageProps) => {
@@ -49,16 +50,18 @@ const AccountInbox = (props: AccountInboxProps) => {
   };
 
   const sendMessage = (e: FormEvent<HTMLFormElement>) => {
-    todo("Obtain recipient+id list from Follows+Followers");
     todo("Read/Unread need to be specific to sender/recipient");
     todo("Support markup in messages");
-    if (message && recipient) {
+    todo(`e.preventDefault(). Find another way to invalidate AGAIN. ¯\_(ツ)_/¯`)
+    if (message && recipientId) {
         const msg:SendMessageProps = {
             senderId: props.user.id,
-            recipientId: recipient,
+            recipientId,
             content: message,
           }
       sendAndUpdate(msg);
+    } else {
+      log('sendMessage',message,recipientName)
     }
   };
 
@@ -78,6 +81,11 @@ const AccountInbox = (props: AccountInboxProps) => {
     }
   };
 
+  const autoInputChange = (option:KeyVal) => {
+    setRecipientName(option.key)
+    setRecipientId(option.value?.toString()||option.key)
+  }
+
   useEffect(() => {
     fetchInbox();
     if (props.user) {
@@ -86,7 +94,7 @@ const AccountInbox = (props: AccountInboxProps) => {
           ...props.user.profile?.Followers||[]
         ].map(a => { return {
           key:a.displayName||a.id,
-          value:a.displayName
+          value:a.id
         }}))
     }
   }, []);
@@ -101,7 +109,7 @@ const AccountInbox = (props: AccountInboxProps) => {
         <h2 className="subtitle mt-8">Compose</h2>
         <AutoInput
           className="input input-bordered w-full mb-2"
-          onUpdate={setRecipient}
+          onUpdate={autoInputChange}
           placeholder="Recipient"
           options={recipients}
         />
