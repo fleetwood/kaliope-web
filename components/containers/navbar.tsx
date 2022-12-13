@@ -1,6 +1,6 @@
 import { UserIcon, GearsIcon, HouseIcon } from "../ui/icons";
 import { classnameProps } from "../../types/props";
-import ShrinkableNavItem from "./shrinkableNavItem";
+import ShrinkableIconLink from "../ui/shrinkableIconLink";
 import { UserSession } from "./../hooks/session";
 
 const Navbar = ({ className }: classnameProps) => {
@@ -15,24 +15,24 @@ const Navbar = ({ className }: classnameProps) => {
         <div
           className={`mx-auto max-w-5xl space-x-6 text-secondary-content mr-2 my-2 flex`}
         >
-          <ShrinkableNavItem
+          <ShrinkableIconLink
             href="/"
-            title="Home"
+            label="Home"
             icon={HouseIcon}
             className={navbarClass}
           />
           {!user && (
-            <ShrinkableNavItem
+            <ShrinkableIconLink
               href="/login"
-              title="Login"
+              label="Login"
               icon={UserIcon}
               className={navbarClass}
             />
           )}
           {user && (
-            <ShrinkableNavItem
+            <ShrinkableIconLink
               href="/account"
-              title="Account"
+              label="Account"
               icon={GearsIcon}
               className={navbarClass}
             />

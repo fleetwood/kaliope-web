@@ -6,7 +6,7 @@ import {
   QuoteLeftIcon,
   ShareIcon,
 } from "../../ui/icons";
-import ShrinkableNavItem from "../shrinkableNavItem";
+import ShrinkableIconLink from "../../ui/shrinkableIconLink";
 import FeedPostAuthor from "../user/feedPostAuthor";
 import ThreadPostItem from "./threadPost";
 
@@ -44,20 +44,20 @@ const FeedPostItem = (props: IFullPost) => {
           <div
             className={`flex items-justify justify-between pt-2 mx-8 space-x-6 text-gray-300`}
           >
-            <ShrinkableNavItem
+            <ShrinkableIconLink
               icon={HeartIcon}
               href={`/post/${post.postid}`}
-              title="1265"
+              label="1265"
             />
-            <ShrinkableNavItem
+            <ShrinkableIconLink
               icon={CommentIcon}
               href={`/post/${post.postid}`}
-              title={post._count?.thread.toString()}
+              label={post._count?.thread.toString()}
             />
-            <ShrinkableNavItem
+            <ShrinkableIconLink
               icon={ShareIcon}
               href={`/post/${post.postid}`}
-              title="48"
+              label="48"
             />
 
             <Link

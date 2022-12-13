@@ -23,7 +23,7 @@ const AccountProfile = (props: AccountProfileProps) => {
   };
 
   const save = async (e: any) => {
-    e.preventDefault();
+    // e.preventDefault();
     log("AccountProfile save...");
     try {
       const results = await sendApi(`profile/update`, profile);
@@ -90,6 +90,7 @@ const AccountProfile = (props: AccountProfileProps) => {
                 id="email"
                 className="border-1  rounded-r px-4 py-2 w-full"
                 type="email"
+                disabled
                 defaultValue={user.email!}
               />
             </div>

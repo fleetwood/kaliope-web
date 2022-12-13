@@ -1,9 +1,9 @@
-export type IFirebaseErrorCode = {
+export type IErrorCode = {
     code: string
     message: string
 }
 
-export const FirebaseErrors = {
+export const ResponseErrors = {
   wrongPassword: {
     code: "auth/wrong-password",
     message: "Password incorrect",
@@ -38,21 +38,22 @@ export const FirebaseErrors = {
   }
 };
 
-export const convertToFirebaseError = (
+export const convertToResponseError = (
   error?: any,
-  defaultTo?: IFirebaseErrorCode
+  defaultTo?: IErrorCode
 ) => {
   try {
-    const e = Object.values(FirebaseErrors).filter(
+    const e = Object.values(ResponseErrors).filter(
       (e) => JSON.stringify(e).indexOf(error.code) >= 0
     )[0];
     if (e) return e;
   } catch (e) {
   }
 
-  return defaultTo || FirebaseErrors.generic;
+  return defaultTo || ResponseErrors.generic;
 };
 
-export type IErrorResponse = {
-  error?: IFirebaseErrorCode
+export type IErrorResponse<T> = {
+  results?: T
+  error?: IErrorCode
 }

@@ -2,9 +2,9 @@ import React, { ReactNode } from "react";
 import Link, { LinkProps } from "next/link";
 import { Url } from "url";
 
-type ShrinkableNavItemProps = LinkProps & {
+type ShrinkableIconLinkProps = LinkProps & {
   icon: JSX.Element
-  title?: string
+  label?: string
   target?: string
   className?: string
   iconClassName?: string
@@ -12,8 +12,8 @@ type ShrinkableNavItemProps = LinkProps & {
   linkColor?: string
 }
 
-const ShrinkableNavItem = (props:ShrinkableNavItemProps) => {
-  const { icon, href, title, target, className, iconClassName, titleClassName, linkColor } = props;
+const ShrinkableIconLink = (props:ShrinkableIconLinkProps) => {
+  const { icon, href, label: title, target, className, iconClassName, titleClassName, linkColor } = props;
   const t = target || "_self";
   return (
 
@@ -31,4 +31,4 @@ const ShrinkableNavItem = (props:ShrinkableNavItemProps) => {
   </Link>
 )};
 
-export default ShrinkableNavItem
+export default ShrinkableIconLink

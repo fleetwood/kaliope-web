@@ -1,8 +1,9 @@
 import { User } from "@prisma/client";
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import { IFullProfile, IPostProfile } from "../../types/profile/FullProfile";
+import Image, { ImageProps } from "next/image";
+import React, { HTMLAttributes, useEffect, useState } from "react";
+import { IBaseProfile, IFollowersProfile, IFullProfile } from "../../types/profile/FullProfile";
 import { IFullUser } from "../../types/user/FullUser";
+import { jsonify, log, logError } from "../../utils/helpers";
 
 export enum av {
   xs = 12,
@@ -15,15 +16,16 @@ export enum av {
 
 export type AvatarProps = {
   src?: string|null|undefined
-  profile?: IFullProfile | IPostProfile | undefined
+  profile?: IBaseProfile | undefined
   user?: IFullUser | User | undefined
   size?: av
+  className?: string
 }
 
 export const UserAvatar = (props: AvatarProps) => {
   const [source, setSource] = useState<string>();
   const [imageSize, setImageSize] = useState<av>(av.md);
-  const {size} = props;
+  const {size, className} = props;
   const src = props.src
     ||props.profile?.photoURL
     ||props.user?.image
@@ -42,6 +44,9 @@ export const UserAvatar = (props: AvatarProps) => {
         : av.md
         )
     }
+    else {
+      logError('Avatar error')
+    }
   }, []);
 
   return source ? (
@@ -51,9 +56,11 @@ export const UserAvatar = (props: AvatarProps) => {
       height={imageSize}
       width={imageSize}
       sizes="100vw"
-      className={`rounded-full border-2 border-primary-content max-w-fit drop-shadow-lg relative z-auto`}
+      className={`rounded-full border-2 border-primary-content max-w-fit drop-shadow-lg relative z-auto ${className}`}
     />
   ) : (
-    <></>
+    <pre>
+      {/* {jsonify(props)} */}
+      </pre>
   );
 };

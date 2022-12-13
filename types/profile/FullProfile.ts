@@ -1,43 +1,56 @@
 import { Prisma } from "@prisma/client";
-import { IErrorResponse } from "../../utils/FirebaseErrors";
+import { IErrorResponse } from "../../utils/ResponseErrors";
 
-export const FullProfileRelations = Prisma.validator<Prisma.ProfileArgs>()({
-  include: {
-    books: true,
-    ratings: true,
-    comments: true,
-    galleries: true,
-    posts: true,
-    Follows: true,
-    Followers: true,
-    Inbox: true,
-    Outbox: true,
-    user: true,
-  }
-});
-
-export const PostProfileRelations = Prisma.validator<Prisma.ProfileArgs>()({
+export const BaseProfileRelations = Prisma.validator<Prisma.ProfileArgs>()({
   select: {
-    photoURL: true,
-    displayName: true,
     id: true,
-    books: true,
-    ratings: true,
-    comments: true,
-    galleries: true,
-    posts: true,
-    Follows: true,
-    Followers: true,
-    Inbox: true,
-    Outbox: true,
-    user: true,
+    displayName: true,
+    photoURL: true,
+    createdAt: true,
+    lastLoginAt: true,
+    totalLikes: true,
+    totalShares: true,
+    totalFollows: true,
+    totalFollowers: true,
+    _count: {
+      select: {
+        books: true,
+        ratings: true,
+        comments: true,
+        posts: true,
+      },
+    },
   },
 });
 
-export type IPostProfile = Prisma.ProfileGetPayload<typeof PostProfileRelations>;
+export const FollowerProfileRelations = Prisma.validator<Prisma.ProfileArgs>()({
+  select: {
+    ...BaseProfileRelations.select,
+    Followers: { ...BaseProfileRelations },
+    Follows: { ...BaseProfileRelations },
+  },
+});
+
+export const FullProfileRelations = Prisma.validator<Prisma.ProfileArgs>()({
+  select: {
+    ...FollowerProfileRelations.select,
+    comments: true,
+    galleries: true,
+    books: true,
+    user: true,
+    Inbox: {
+      where: {
+        read: false,
+      },
+    },
+  },
+});
+
+export type IBaseProfile = Prisma.ProfileGetPayload<typeof BaseProfileRelations>;
+export type BaseProfileResponse = IErrorResponse<IBaseProfile>;
+
+export type IFollowersProfile = Prisma.ProfileGetPayload<typeof FollowerProfileRelations>;
+export type FollowersProfileResponse = IErrorResponse<IFollowersProfile>;
 
 export type IFullProfile = Prisma.ProfileGetPayload<typeof FullProfileRelations>;
-
-export type FullProfileResponse = IErrorResponse & {
-  profile?: IFullProfile;
-};
+export type FullProfileResponse = IErrorResponse<IFullProfile>;

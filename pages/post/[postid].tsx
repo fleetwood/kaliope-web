@@ -25,8 +25,8 @@ export default function PostPage(props?: FullPostResponse) {
   const [post, setPost] = useState<(IFullPost) | undefined>();
 
   useEffect(() => {
-    if(props?.post) {
-      setPost(props.post)
+    if(props?.results) {
+      setPost(props.results)
     }
   },[post])
 

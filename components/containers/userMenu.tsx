@@ -4,7 +4,7 @@ import { UserSession } from "../hooks/session";
 import { AwesomeIcon, CircleQuestionIcon, ClipboardIcon } from "../ui/icons";
 import { GoogleSVG } from "../ui/svgs";
 import { av, UserAvatar } from "../ui/userAvatar";
-import ShrinkableNavItem from "./shrinkableNavItem";
+import ShrinkableIconLink from "../ui/shrinkableIconLink";
 
 const UserMenu = () => {
   const [user] = UserSession()
@@ -20,13 +20,13 @@ const UserMenu = () => {
         </li>
         )}
       <li className="">
-        <ShrinkableNavItem href={'/about'} target="_self" title="About Us" linkColor="secondary-content" icon={CircleQuestionIcon} />
+        <ShrinkableIconLink href={'/about'} target="_self" label="About Us" linkColor="secondary-content" icon={CircleQuestionIcon} />
       </li>
       <li className="">
-        <ShrinkableNavItem href="https://hypercolor.dev/generator" target="_blank" title="Gradients" linkColor="secondary-content"  icon={ClipboardIcon} />
+        <ShrinkableIconLink href="https://hypercolor.dev/generator" target="_blank" label="Gradients" linkColor="secondary-content"  icon={ClipboardIcon} />
       </li>
       <li className="">
-        <ShrinkableNavItem href="https://fontawesome.com/search?o=r&m=free" target="_blank" icon={AwesomeIcon} linkColor="secondary-content" title="FontAwesome" />
+        <ShrinkableIconLink href="https://fontawesome.com/search?o=r&m=free" target="_blank" icon={AwesomeIcon} linkColor="secondary-content" label="FontAwesome" />
       </li>
       <li className="">
         <Link href="https://materialdesignicons.com/" title="Material Icons"><GoogleSVG /></Link>

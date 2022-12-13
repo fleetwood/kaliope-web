@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { IErrorResponse } from "../../utils/FirebaseErrors";
+import { IErrorResponse } from "../../utils/ResponseErrors";
 import { log } from "../../utils/helpers";
 import { FullProfileRelations } from "../profile/FullProfile";
 
@@ -16,10 +16,7 @@ const FullUserRelations = Prisma.validator<Prisma.UserArgs>()({
 type IUser = Prisma.UserGetPayload<Prisma.UserArgs>;
 
 type IFullUser = Prisma.UserGetPayload<typeof FullUserRelations>;
-
-type FullUserResponse = IErrorResponse & {
-  user?: IFullUser;
-};
+type FullUserResponse = IErrorResponse<IFullUser>
 
 type FullUserProps = {
   select?: Prisma.UserSelect | null | undefined;

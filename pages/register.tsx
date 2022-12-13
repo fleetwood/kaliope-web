@@ -3,22 +3,22 @@ import Router from "next/router";
 import React, { FormEvent, useState } from "react";
 import MainLayout from "../components/layouts/MainLayout";
 import {
-  FirebaseErrors,
-  IFirebaseErrorCode,
-  convertToFirebaseError,
-} from "../utils/FirebaseErrors";
+  ResponseErrors,
+  IErrorCode,
+  convertToResponseError,
+} from "../utils/ResponseErrors";
 import { log } from "../utils/helpers";
 
 const Register = () => {
   const user = null;
   const [email,setEmail] = useState('')
   const [password,setPassword] = useState('')
-  const [error, setError] = useState<IFirebaseErrorCode>()
+  const [error, setError] = useState<IErrorCode>()
   
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(undefined);
-    let error = FirebaseErrors.registerSubmit;
+    let error = ResponseErrors.registerSubmit;
     try {
       if (user) {
         Router.push("./");
@@ -26,7 +26,7 @@ const Register = () => {
       }
     } catch (e) {
       log('REGISTER FAIL',e)
-      error = convertToFirebaseError(e, error);
+      error = convertToResponseError(e, error);
     }
     setError(error);
   };

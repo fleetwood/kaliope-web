@@ -5,7 +5,7 @@ import { jsonify, log, logError } from "../../../../utils/helpers"
 
 export default async function handle (req:NextApiRequest, res:NextApiResponse<FullUserResponse>) {
     const email = req.query.email || ''
-    log('/api/user/email/[email',email)
+    log('/api/user/byEmail/[email',email)
     try {
         const user = await prisma.user.findUnique({
             where: {

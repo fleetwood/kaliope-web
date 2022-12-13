@@ -17,6 +17,6 @@ export default async function handle (req:NextApiRequest, res:NextApiResponse<Fu
     }
     catch(e) {
         logError('\tFAIL',e)
-        res.status(300).json({error: {code: "api/error", message: jsonify(e)}})
+        res.status(400).json({error: {code: "api/error", message: jsonify(e)}})
     }
 }
