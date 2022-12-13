@@ -13,8 +13,9 @@ const MessagerInfo = (message: MessagerInfoProps) => {
           <UserAvatar className='' profile={message.sender} size={av.md} />
         </div>
         <div>
-          <div>{message.sender.displayName}</div>
-          <div>Sent: {timeDifference(message.createdAt)}</div>
+          <h3 className="text-secondary-content">{message.sender.displayName}</h3>
+          <div>Sent: {timeDifference(message.createdAt!)}</div>
+          {/* <div>Key: {message.messageid}</div> */}
         </div>
       </div>
       }
@@ -27,8 +28,9 @@ const MessagerInfo = (message: MessagerInfoProps) => {
         </div>
 
         <div>
-          <div>{message.recipient.displayName}</div>
-          <div>Sent: {timeDifference(message.createdAt)}</div>
+          <h3 className="text-accent-content">{message.recipient.displayName}</h3>
+          <div>Sent: {timeDifference(message.createdAt!)}</div>
+          {/* <div>Key: {message.messageid}</div> */}
         </div>
         </div>
       }

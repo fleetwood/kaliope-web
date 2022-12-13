@@ -110,7 +110,6 @@ export const timeDifference = (from:Date|string) => {
   if (isNaN(datetime)) {
     return "";
   }
-  console.log(datetime + " " + current);
   const milisec_diff = current - datetime;
   var days = Math.floor(milisec_diff / 1000 / 60 / (60 * 24));
   var date_diff = new Date(milisec_diff);
@@ -133,6 +132,17 @@ export const timeDifference = (from:Date|string) => {
   } else {
     return "Just now";
   }
+}
+
+export const dedupe = (arr:any[],key:string) => {
+  const a:string[] = [], b:any[] = [];
+  arr.forEach(i => {
+    if (!a.includes(i[key])) {
+      a.push(i[key])
+      b.push(i)
+    }
+  })
+  return b;
 }
 
 export const valToLabel = (val: number) => {

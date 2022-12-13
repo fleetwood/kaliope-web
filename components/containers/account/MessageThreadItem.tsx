@@ -50,22 +50,19 @@ const MessageThreadItem = (props: MessageProps) => {
   return (
     <div
       className={`bg-base-200 odd:bg-opacity-50 even:bg-opacity-80 mt-2 p-4 ${className}`}
-      key={message.messageid}
     >
       <MessagerInfo {...message} />
-
       <div className={`px-2 border-primary border-opacity-30 ${showReply ? 'border-t py-4' : '' }`}>
         {message.content}
       </div>
-      <>{todo('Figure out what TS is complaining about')}</>
       {message.messages && message.messages!.map((reply:Message) => (
           <MessageThreadItem
             user={user}
             message={reply}
-            key={reply.messageid}
-            className="border-l border-l-primary odd:border-opacity-50 even:border-opacity-75 pl-4"
             showReply={false}
             sendAndUpdate={sendAndUpdate}
+            className="border-l border-l-primary odd:border-opacity-50 even:border-opacity-75 pl-4"
+            key={reply.messageid}
           />
         ))
       }

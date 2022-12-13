@@ -1,9 +1,11 @@
 import { Message } from "@prisma/client";
 import { FormEvent, useEffect, useState } from "react";
+import { KeyVal } from "../../../types/props";
 import { IFullUser } from "../../../types/user/FullUser";
 import { getApi, sendApi } from "../../../utils/api";
 import { __host__ } from "../../../utils/constants";
 import { log, logError, todo } from "../../../utils/helpers";
+import AutoInput from "../../ui/autoInput";
 import MessageThreadItem from "./MessageThreadItem";
 
 interface AccountInboxProps {
@@ -22,6 +24,7 @@ const AccountInbox = (props: AccountInboxProps) => {
   const [inbox, setInbox] = useState<Array<Message> | null>(null);
   const [message, setMessage] = useState<string | null>();
   const [recipient, setRecipient] = useState<string | null>();
+  const [recipients, setRecipients] = useState<KeyVal[]>([]);
 
   const sendAndUpdate = async (message: SendMessageProps) => {
     const blank = () => Array<Message>(0);
@@ -61,7 +64,6 @@ const AccountInbox = (props: AccountInboxProps) => {
   };
 
   const fetchInbox = async () => {
-    log("fetch Inbox....");
     try {
       const messages = await getApi(`message/${props.user.id}`);
       if (messages.error) {
@@ -71,7 +73,7 @@ const AccountInbox = (props: AccountInboxProps) => {
       }
     } catch (error) {
       logError(
-        "No messages received from API...",
+        "No Inbox received...",
         error || " and no error either..."
       );
     }
@@ -79,6 +81,15 @@ const AccountInbox = (props: AccountInboxProps) => {
 
   useEffect(() => {
     fetchInbox();
+    if (props.user) {
+      setRecipients([
+          ...props.user.profile?.Follows||[],
+          ...props.user.profile?.Followers||[]
+        ].map(a => { return {
+          key:a.displayName||a.id,
+          value:a.displayName
+        }}))
+    }
   }, []);
 
   return (
@@ -89,10 +100,11 @@ const AccountInbox = (props: AccountInboxProps) => {
         className="pb-6 relative"
       >
         <h2 className="subtitle mt-8">Compose</h2>
-        <input
+        <AutoInput
           className="input input-bordered w-full mb-2"
-          onChange={(e) => setRecipient(e.currentTarget.value)}
+          onUpdate={setRecipient}
           placeholder="Recipient"
+          options={recipients}
         />
         <textarea
           className="textarea textarea-bordered w-full block mb-2"
@@ -116,6 +128,7 @@ const AccountInbox = (props: AccountInboxProps) => {
           user={props.user}
           message={message}
           sendAndUpdate={sendAndUpdate}
+          key={message.messageid}
         />
       ))}
     </div>

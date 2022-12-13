@@ -15,13 +15,9 @@ export type Messager = {
 };
 
 export type MessagerInfoProps = Message & {
-  userId?: string | undefined;
   sender?: IFollowersProfile | undefined;
   recipient?: IFollowersProfile | undefined;
   messages?: Message[] | undefined;
-  createdAt: Date
-  visible: boolean
-  read: boolean
 };
 
 export interface MessageProps {

@@ -25,8 +25,6 @@ const UserSessionLayout = ({setUser, setError, required = true, children}: UserS
           logError("\tUserSession error fetching unique user", e.message);
           setError(convertToResponseError(e));
         });
-    } else {
-      logError('UserSession could not determine user email',session)
     }
   }, [session]);
   

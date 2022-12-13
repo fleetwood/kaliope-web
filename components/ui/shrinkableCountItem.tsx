@@ -1,9 +1,5 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import Link, { LinkProps } from "next/link";
-import { Url } from "url";
-import { count } from "console";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse } from "@fortawesome/free-solid-svg-icons";
 
 type CountableItemProps = LinkProps & {
   icon: JSX.Element

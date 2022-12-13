@@ -20,6 +20,7 @@ export const FullInboxRelations = Prisma.validator<Prisma.ProfileArgs>()({
         },
         messages: {
           select: {
+            messageid: true,
             createdAt: true,
             content: true,
             visible: true,
@@ -51,6 +52,7 @@ export const FullInboxRelations = Prisma.validator<Prisma.ProfileArgs>()({
         },
         messages: {
           select: {
+            messageid: true,
             createdAt: true,
             content: true,
             visible: true,
