@@ -1,6 +1,6 @@
 import { InputHTMLAttributes, KeyboardEvent, MutableRefObject, useEffect, useRef, useState } from "react";
 import { KeyVal } from "../../types/props";
-import { dedupe, log } from "../../utils/helpers";
+import { dedupe, log, todo } from "../../utils/helpers";
 
 type AutoOptionProps =  InputHTMLAttributes<HTMLInputElement> & {
   options: KeyVal[]
@@ -13,10 +13,11 @@ const AutoInput = (props:AutoOptionProps) => {
   const [currentOptions, setCurrentOptions] = useState<KeyVal[]>([])
   const [showList, setShowList] = useState(false)
   const [search, setSearch] = useState('')
+  const [cursor, setCursor] = useState(-1);
   const ref:MutableRefObject<HTMLDivElement|null> = useRef(null)
 
   const getBorder = (index:number, length:number) => {
-    const base = 'px-8 py-2 border-info ',
+    const base = `px-8 py-2 border-info ${index===cursor ? 'bg-base-100 text-info' : ''} `,
     middleItem = base+ 'border-l border-r ',
     topItem = middleItem +'border-t rounded-t-full ',
     bottomItem = middleItem +'border-b rounded-b-full ',
@@ -30,6 +31,11 @@ const AutoInput = (props:AutoOptionProps) => {
       middleItem
   }
 
+  const clearList = () => {
+    setShowList(false)
+    setCursor(-1)
+  }
+
   const updateSearch = (term:string) => {
     setCurrentOptions(
       dedupe(
@@ -40,20 +46,32 @@ const AutoInput = (props:AutoOptionProps) => {
     setSearch(term)
   }
 
-  const optionClick = (option:KeyVal) => {
+  const optionClick = (option?:KeyVal) => {
     log('optionClick',option)
-    setShowList(false)
-    setSearch(option.key)
+    setSearch(option?.key||'')
     onUpdate(option)
+    clearList()
   }
 
   const keyCap = (e:KeyboardEvent) => {
     if(e.key==='Enter') {
       e.preventDefault()
-      setShowList(false)
+      if (cursor>=0) {
+        optionClick(currentOptions[cursor])
+      }
     }
-    if(e.key==='Tab') {
-      setShowList(false)
+    if(e.key==='Tab' || e.key===' ') {
+      if (cursor>=0) {
+        optionClick(currentOptions[cursor])
+      } else if (currentOptions.length>0) {
+        optionClick(currentOptions[0])
+      }
+    }
+    if(e.key==='ArrowDown' && cursor<currentOptions.length-1) {
+      setCursor(cursor+1)
+    }
+    if(e.key==='ArrowUp' && cursor>=0) {
+      setCursor(cursor-1)
     }
   }
 
@@ -65,14 +83,14 @@ const AutoInput = (props:AutoOptionProps) => {
     const autoInputListener = (e:any) => {
       const target = e.target
       if (target && !ref.current?.contains(target)) {
-        setShowList(false)
+        clearList()
       }
     } 
     document.addEventListener("click",autoInputListener)
-    document.addEventListener("keyUp",autoInputListener)
+    document.addEventListener("focusin",autoInputListener)
     return () => {
       document.removeEventListener("click",autoInputListener)
-      document.removeEventListener("keyUp",autoInputListener)
+      document.removeEventListener("focusin",autoInputListener)
     }
   }, []);
 

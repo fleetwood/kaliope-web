@@ -81,9 +81,16 @@ const AccountInbox = (props: AccountInboxProps) => {
     }
   };
 
-  const autoInputChange = (option:KeyVal) => {
-    setRecipientName(option.key)
-    setRecipientId(option.value?.toString()||option.key)
+  const autoInputChange = (option?:KeyVal) => {
+    if (option===null) {
+      log('option is null')
+      setRecipientName(null)
+      setRecipientId(null)
+      return
+    }
+    setRecipientName(option!.key)
+    setRecipientId(option!.value?.toString()||option!.key)
+    log('autoInputChange',recipientId,recipientName)
   }
 
   useEffect(() => {
@@ -91,7 +98,10 @@ const AccountInbox = (props: AccountInboxProps) => {
     if (props.user) {
       setRecipients([
           ...props.user.profile?.Follows||[],
-          ...props.user.profile?.Followers||[]
+          ...props.user.profile?.Followers||[],
+          ...[
+            'Grif','Christina','Kristina','Crystal',"Christopher",'Fleetwood'
+          ].map((i) => {return {id:i,displayName:i}})
         ].map(a => { return {
           key:a.displayName||a.id,
           value:a.id
