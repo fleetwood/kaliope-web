@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes, useEffect, useState } from "react";
+import { InputHTMLAttributes, useEffect, useState } from "react";
 import { KeyVal } from "../../types/props";
 import { dedupe } from "../../utils/helpers";
 

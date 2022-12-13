@@ -2,7 +2,7 @@ import { Message } from "prisma/prisma-client";
 import { FormEvent, useState } from "react";
 import { MessageProps } from "../../../types/message/MessageInfo";
 import { sendApi } from "../../../utils/api";
-import { log, todo } from "../../../utils/helpers";
+import { log } from "../../../utils/helpers";
 import { EyeIcon, MessageIcon, XCircleIcon } from "../../ui/icons";
 import ShrinkableIconButton from "../../ui/shrinkableIconButton";
 import MessagerInfo from "./MessagerInfo";

@@ -3,7 +3,6 @@ import { FormEvent, useEffect, useState } from "react";
 import { KeyVal } from "../../../types/props";
 import { IFullUser } from "../../../types/user/FullUser";
 import { getApi, sendApi } from "../../../utils/api";
-import { __host__ } from "../../../utils/constants";
 import { log, logError, todo } from "../../../utils/helpers";
 import AutoInput from "../../ui/autoInput";
 import MessageThreadItem from "./MessageThreadItem";

@@ -1,9 +1,9 @@
 import { User } from "@prisma/client";
-import Image, { ImageProps } from "next/image";
-import React, { HTMLAttributes, useEffect, useState } from "react";
-import { IBaseProfile, IFollowersProfile, IFullProfile } from "../../types/profile/FullProfile";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { IBaseProfile } from "../../types/profile/FullProfile";
 import { IFullUser } from "../../types/user/FullUser";
-import { jsonify, log, logError } from "../../utils/helpers";
+import { logError } from "../../utils/helpers";
 
 export enum av {
   xs = 12,
