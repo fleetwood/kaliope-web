@@ -4,6 +4,10 @@ export type IErrorCode = {
 }
 
 export const ResponseErrors = {
+  loginRequired: {
+    code: "auth/no-user-session",
+    message: "Please login to continue",
+  },
   wrongPassword: {
     code: "auth/wrong-password",
     message: "Password incorrect",

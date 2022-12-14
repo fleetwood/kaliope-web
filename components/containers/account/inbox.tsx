@@ -43,7 +43,8 @@ const AccountInbox = (props: AccountInboxProps) => {
         ...inbox || blank(),
         ...newInbox.results?.Inbox || blank(),
         ...newInbox.results?.Outbox || blank()
-      ]);
+      ]
+      .sort((a, b) => a.message.createdAt.localeCompare(b.message.createdAt)));
     } catch (error) {
       logError(error);
     }
@@ -71,7 +72,11 @@ const AccountInbox = (props: AccountInboxProps) => {
       if (messages.error) {
         throw messages.error;
       } else {
-        setInbox([...messages.results.Inbox, ...messages.results.Outbox]);
+        setInbox([
+          ...messages.results.Inbox, 
+          ...messages.results.Outbox
+        ]
+        .sort((a, b) => a.createdAt.localeCompare(b.createdAt)*-1));
       }
     } catch (error) {
       logError(
@@ -83,7 +88,6 @@ const AccountInbox = (props: AccountInboxProps) => {
 
   const autoInputChange = (option?:KeyVal) => {
     if (option===null) {
-      log('option is null')
       setRecipientName(null)
       setRecipientId(null)
       return
@@ -102,10 +106,12 @@ const AccountInbox = (props: AccountInboxProps) => {
           ...[
             'Grif','Christina','Kristina','Crystal',"Christopher",'Fleetwood'
           ].map((i) => {return {id:i,displayName:i}})
-        ].map(a => { return {
+        ]
+        .map(a => { return {
           key:a.displayName||a.id,
           value:a.id
-        }}))
+        }})
+        .sort((a, b) => a.key.localeCompare(b.key)))
     }
   }, []);
 

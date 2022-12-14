@@ -15,6 +15,7 @@ export type Messager = {
 };
 
 export type MessagerInfoProps = Message & {
+  showIndicator?: boolean
   sender?: IFollowersProfile | undefined;
   recipient?: IFollowersProfile | undefined;
   messages?: Message[] | undefined;

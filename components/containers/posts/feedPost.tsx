@@ -9,6 +9,7 @@ import {
 import ShrinkableIconLink from "../../ui/shrinkableIconLink";
 import FeedPostAuthor from "../user/feedPostAuthor";
 import ThreadPostItem from "./threadPost";
+import parse from 'html-react-parser'
 
 const FeedPostItem = (props: IFullPost) => {
   const post = {...props};
@@ -39,7 +40,7 @@ const FeedPostItem = (props: IFullPost) => {
       {post && post.content && 
         <>
           <div className="m-5 text-justify text-primary-content border-b border-primary-content border-opacity-50">
-            {post.content}
+            {parse(post.content)}
           </div>
           <div
             className={`flex items-justify justify-between pt-2 mx-8 space-x-6 text-gray-300`}

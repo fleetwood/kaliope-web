@@ -47,7 +47,7 @@ const AutoInput = (props:AutoOptionProps) => {
   }
 
   const optionClick = (option?:KeyVal) => {
-    log('optionClick',option)
+    // log('optionClick',option)
     setSearch(option?.key||'')
     onUpdate(option)
     clearList()

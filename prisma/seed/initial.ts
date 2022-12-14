@@ -1,6 +1,6 @@
 import { PrismaClient, User } from "@prisma/client";
 import { faker } from "@faker-js/faker";
-import { now, log, logError, todo } from "./../../utils/helpers";
+import { now, log, logError, todo, rand } from "./../../utils/helpers";
 
 const prisma = new PrismaClient();
 
@@ -16,14 +16,6 @@ const lorem = new LoremIpsum({
     min: 4,
   },
 });
-
-function rand(min: number = 0, max: number = 1) {
-  if (min && !max) {
-    max = min + 1;
-  }
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
 
 const ymd = (date:Date) => {
   let year = date.getFullYear();

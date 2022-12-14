@@ -145,6 +145,15 @@ export const dedupe = (arr:any[],key:string) => {
   return b;
 }
 
+export const rand = (min: number = 0, max: number = 1) => {
+  if (min && !max) {
+    max = min + 1;
+  }
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+export const randArray = (arr:any[]) => arr[rand(0, arr.length-1)]
+
 export const valToLabel = (val: number) => {
   let result = val.toString();
   const tolerances: Array<{ x: number; l: string; d: number; p: number }> = [

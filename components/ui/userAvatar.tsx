@@ -50,14 +50,16 @@ export const UserAvatar = (props: AvatarProps) => {
   }, []);
 
   return source ? (
-    <Image
-      src={source}
-      alt="User avatar"
-      height={imageSize}
-      width={imageSize}
-      sizes="100vw"
-      className={`rounded-full border-2 border-primary-content max-w-fit drop-shadow-lg relative z-auto ${className}`}
-    />
+    <div className={`h-[${imageSize}]`}>
+      <Image
+        src={source}
+        alt="User avatar"
+        height={imageSize}
+        width={imageSize}
+        sizes="100vw"
+        className={`rounded-full border-2 max-h-fit max-w-fit border-primary-content drop-shadow-lg relative z-auto ${className}`}
+      />
+    </div>
   ) : (
     <pre>
       {/* {jsonify(props)} */}
