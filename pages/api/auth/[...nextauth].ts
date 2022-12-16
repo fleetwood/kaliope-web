@@ -6,7 +6,7 @@ import FacebookProvider from "next-auth/providers/facebook";
 import WordpressProvider from "next-auth/providers/wordpress";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
-import { log } from "../../../utils/helpers";
+import { log, logError } from "../../../utils/helpers";
 // import CredentialsProvider from 'next-auth/providers/credentials';
 
 const prisma = new PrismaClient();
@@ -23,10 +23,10 @@ export default NextAuth({
         port: process.env.NEXT_PUBLIC_EMAIL_SERVER_PORT,
         auth: {
           user: process.env.NEXT_PUBLIC_EMAIL_SERVER_USER,
-          pass: process.env.NEXT_PUBLIC_EMAIL_SERVER_PASSWORD
-        }
+          pass: process.env.NEXT_PUBLIC_EMAIL_SERVER_PASSWORD,
+        },
       },
-      from: process.env.NEXT_PUBLIC_EMAIL_FROM
+      from: process.env.NEXT_PUBLIC_EMAIL_FROM,
     }),
     TwitterProvider({
       clientId: process.env.NEXT_PUBLIC_TWITTER_ID!,
@@ -39,9 +39,9 @@ export default NextAuth({
         params: {
           prompt: "consent",
           access_type: "offline",
-          response_type: "code"
-        }
-      }
+          response_type: "code",
+        },
+      },
     }),
     FacebookProvider({
       clientId: process.env.NEXT_PUBLIC_FACEBOOK_ID!,
@@ -50,7 +50,7 @@ export default NextAuth({
     WordpressProvider({
       clientId: process.env.NEXT_PUBLIC_WORDPRESS_ID!,
       clientSecret: process.env.NEXT_PUBLIC_WORDPRESS_SECRET!,
-    })
+    }),
     // CredentialsProvider({
     //   credentials: {
     //     email: { label: 'Email', type: 'text ', placeholder: 'jsmith@example.com' },
@@ -134,52 +134,49 @@ export default NextAuth({
         where: { email: user.email || undefined },
         include: { profile: true },
       });
-      if (isNewUser) {
-        log(`We have a new user!!!!!!!!!!`, user);
-
-        if (prismaUser) {
-          const newProfile = await prisma.user
-            .update({
+      try {
+        if (isNewUser || prismaUser?.profile===null) {
+          log(`We have a new user!!!!!!!!!!`, user);
+  
+          if (prismaUser) {
+            const newProfile = await prisma.user.update({
               where: {
                 email: user.email!,
               },
               data: {
                 profile: {
-                  create: {
-                    displayName: user.name || user.email,
-                    createdAt: Date.now().toString(),
-                    lastLoginAt: Date.now().toString(),
+                  connectOrCreate: {
+                    where: {id: prismaUser.id},
+                    create: {
+                      displayName: prismaUser.name || prismaUser.email,
+                      photoURL: user.image || null,
+                      createdAt: new Date(),
+                      lastLoginAt: new Date(),
+                    }
                   },
                 },
               },
-            })
-            .then(async (u) => {
-              if (u) {
-                log("\tProfile created!");
-              }
-            })
-            .catch((e) => {
-              log("\tFAILED CREATING PROFILE", e);
             });
-        }
-      } else {
-        await prisma.profile
-          .update({
+            if (!newProfile) {
+              throw new Error("\tFAILED CREATING Profile!");
+            }
+          }
+        } else {
+          const updateProfile = await prisma.profile.update({
             where: {
-              id: prismaUser?.profile?.id,
+              id: prismaUser?.id,
             },
             data: {
-              lastLoginAt: Date.now().toString(),
+              lastLoginAt: new Date()
             },
-          })
-          .then((r) => {
-            if (r) {
-              log("\tUpdated last login");
-            }
-          })
-          .catch((e) => {
-            log("\tFAILED UPDATING last login!", e, prismaUser);
           });
+  
+          if (!updateProfile) {
+            throw new Error("\tFAILED UPDATING last login!");
+          }
+        }
+      } catch (error) {
+        logError('signIn Error',{error,user,prismaUser})
       }
     },
     // updateUser({ user })

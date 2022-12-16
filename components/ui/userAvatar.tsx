@@ -50,14 +50,13 @@ export const UserAvatar = (props: AvatarProps) => {
   }, []);
 
   return source ? (
-    <div className={`h-[${imageSize}]`}>
+    <div className={`w-full`}>
       <Image
         src={source}
         alt="User avatar"
         height={imageSize}
         width={imageSize}
-        sizes="100vw"
-        className={`rounded-full border-2 max-h-fit max-w-fit border-primary-content drop-shadow-lg relative z-auto ${className}`}
+        className={`rounded-full border-2 max-h-fit max-w-fit border-primary-content drop-shadow-lg relative z-auto ${className || ''}`}
       />
     </div>
   ) : (

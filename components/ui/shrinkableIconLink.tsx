@@ -24,10 +24,10 @@ const ShrinkableIconLink = (props:ShrinkableIconLinkProps) => {
   hover:shadow
   rounded-3xl p-2
   transition-colors ease-linear duration-200
-  flex space-x-1 ${className}
+  flex space-x-1 ${className||''}
   `}>
       <span className={iconClassName}>{icon}</span>
-      {title && (<span className={`hidden lg:inline-block ${titleClassName}`}>{title}</span>)}
+      {title && (<span className={`hidden lg:inline-block ${titleClassName||''}`}>{title}</span>)}
   </Link>
 )};
 

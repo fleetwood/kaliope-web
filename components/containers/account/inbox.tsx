@@ -103,9 +103,9 @@ const AccountInbox = (props: AccountInboxProps) => {
       setRecipients([
           ...props.user.profile?.Follows||[],
           ...props.user.profile?.Followers||[],
-          ...[
-            'Grif','Christina','Kristina','Crystal',"Christopher",'Fleetwood'
-          ].map((i) => {return {id:i,displayName:i}})
+          // ...[
+          //   'Grif','Christina','Kristina','Crystal',"Christopher",'Fleetwood'
+          // ].map((i) => {return {id:i,displayName:i}})
         ]
         .map(a => { return {
           key:a.displayName||a.id,
